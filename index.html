@@ -798,9 +798,11 @@
                 margin-bottom: 12px;
             }
             .period-badge {
-                font-size: 8px;
-                padding: 2px 7px;
+                font-size: 10px;
+                padding: 4px 10px;
                 white-space: nowrap;
+                background: #1A1A2E;
+                border: 1px solid #2A2A4E;
             }
 
             /* ─── KPI CHIPS: compact squares, 2×2 grid ─── */
@@ -960,7 +962,7 @@
 </head>
 <body>
     <!-- Password Gate -->
-    <div id="authOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0F0F1A;z-index:99999;display:flex;align-items:center;justify-content:center;">
+    <div id="authOverlay" style="position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;background:#0F0F1A;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;">
         <div style="text-align:center;max-width:360px;width:90%;">
             <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:80px;height:50px;margin-bottom:16px;">
                 <defs><linearGradient id="authGrad" x1="100" y1="0" x2="100" y2="120" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E8A0B8"/><stop offset="50%" stop-color="#C87DAB"/><stop offset="100%" stop-color="#8B6BAE"/></linearGradient></defs>
@@ -990,10 +992,13 @@
             return hash;
         }
         const AUTH_HASH = 3234;
+        // Lock body scroll while auth overlay is visible
+        document.body.style.overflow = 'hidden';
         function checkAuth() {
             const input = document.getElementById('authInput').value;
             if (simpleHash(input) === AUTH_HASH) {
                 document.getElementById('authOverlay').style.display = 'none';
+                document.body.style.overflow = '';
                 sessionStorage.setItem('eg_auth', '1');
             } else {
                 document.getElementById('authError').style.display = 'block';
@@ -1007,6 +1012,7 @@
         // Auto-unlock if already authenticated this session
         if (sessionStorage.getItem('eg_auth') === '1') {
             document.getElementById('authOverlay').style.display = 'none';
+            document.body.style.overflow = '';
         } else {
             setTimeout(() => document.getElementById('authInput').focus(), 100);
         }
@@ -1130,6 +1136,7 @@
                 <div class="header-date" id="headerDate"></div>
             </div>
             <div class="period-dropdown-mobile" id="periodDropdownMobile" style="display:none;">
+                <div id="mobileUpdatedTime" style="font-size:8px;color:#555;text-align:right;margin-bottom:2px;"></div>
                 <select id="periodSelect" onchange="setPeriod(this.value)"></select>
             </div>
             <div class="period-selector" id="periodSelector"></div>
@@ -2044,6 +2051,9 @@
             const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
             document.getElementById('headerDate').innerHTML = dateStr + '<br><span style="font-size:10px;color:#777;">Updated ' + timeStr + '</span>';
+            // Mobile updated time
+            const mobileTime = document.getElementById('mobileUpdatedTime');
+            if (mobileTime) mobileTime.textContent = 'Updated ' + timeStr;
 
             const periods = Object.keys(PERIOD_DATA);
             const selector = document.getElementById('periodSelector');
@@ -4076,9 +4086,12 @@
 
         // Use window.onload to ensure Chart.js CDN is fully loaded before init
         window.onload = function() {
+            window.scrollTo(0, 0);
             init();
             updateActiveChapter();
         };
+        // Also force scroll to top on back/forward navigation
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     </script>
 </body>
 </html>
