@@ -1870,8 +1870,7 @@
         // Get brands for period — blends recent + long-term data for intermediate periods
         function getBrandsForPeriod(period) {
             let raw;
-            // "today" period removed; "yesterday" uses 7d brand data
-            else if (period === "yesterday") raw = BRANDS_7;
+            if (period === "yesterday") raw = BRANDS_7;
             else if (period === "3d") raw = blendBrandArrays(BRANDS_7, BRANDS_30, 0.85);
             else if (period === "7d") raw = BRANDS_7;
             else if (period === "14d") raw = blendBrandArrays(BRANDS_7, BRANDS_30, 0.6);
