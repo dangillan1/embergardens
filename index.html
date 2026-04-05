@@ -1612,6 +1612,9 @@
             {month:"2026-04",net:23504,cost:11675,profit:11829,days:4,avgDaily:5876,margin:"50.3"}
         ];
 
+        // Timestamp of last data pull from Dutchie (set by scheduled task)
+        const DATA_UPDATED = "2026-04-05T00:08:00";
+
         // Actual daily sales from Dutchie (last complete day: 2026-04-04)
         const DAILY_DATA = [
             {date:"2026-03-28",net:5796,cost:2816,profit:2980,gross:6394},
@@ -2056,13 +2059,17 @@
 
         // Initialize header
         function initHeader() {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-            document.getElementById('headerDate').innerHTML = dateStr + '<br><span style="font-size:10px;color:#777;">Updated ' + timeStr + '</span>';
+            // Show last data pull time, not page refresh time
+            const lastPull = new Date(DATA_UPDATED);
+            const lastDataDate = new Date(DAILY_DATA[DAILY_DATA.length - 1].date + 'T12:00:00');
+            const dateStr = lastDataDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            const pullDateStr = lastPull.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const pullTimeStr = lastPull.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+            const updatedLabel = 'Data through ' + dateStr + ' · Pulled ' + pullDateStr + ' ' + pullTimeStr;
+            document.getElementById('headerDate').innerHTML = 'Data through ' + dateStr + '<br><span style="font-size:10px;color:#777;">Last pull: ' + pullDateStr + ' ' + pullTimeStr + '</span>';
             // Mobile updated time — inline next to "Orleans, Cape Cod"
             const mobileTimeInline = document.getElementById('mobileUpdatedInline');
-            if (mobileTimeInline) mobileTimeInline.innerHTML = '<span style="color:#C87DAB;margin:0 5px;">·</span>Updated ' + timeStr;
+            if (mobileTimeInline) mobileTimeInline.innerHTML = '<span style="color:#C87DAB;margin:0 5px;">·</span>Data thru ' + dateStr + ' · ' + pullTimeStr;
 
             const periods = Object.keys(PERIOD_DATA);
             const selector = document.getElementById('periodSelector');
