@@ -1726,6 +1726,7 @@
         function getMonthsForPeriod(period) {
             const months = {
                 "yesterday": ["2026-04"],
+                "mtd": ["2026-04"],
                 "3d": ["2026-04"],
                 "7d": ["2026-04", "2026-03"],
                 "14d": ["2026-04", "2026-03"],
@@ -1806,8 +1807,9 @@
             const periodData = PERIOD_DATA[period];
             if (!periodData) return 1;
 
-            // yesterday and 3d use actual daily data, no scaling needed
+            // yesterday, mtd, and 3d use actual daily data, no scaling needed
             if (period === "yesterday") return 1;
+            if (period === "mtd") return 1;
             if (period === "3d") return 1;
             if (period === "7d") return 7 / 35; // 35 = 31 (Mar) + 4 (Apr 1–4)
             if (period === "14d") return 14 / 35;
@@ -1818,8 +1820,8 @@
 
         // Get category data for period
         function getCategoryDataForPeriod(period) {
-            // For today, yesterday, and 3d, use actual daily category data
-            if ((period === "yesterday" || period === "3d") && DAILY_CAT_DATA.length > 0) {
+            // For yesterday, mtd, and 3d, use actual daily category data
+            if ((period === "yesterday" || period === "mtd" || period === "3d") && DAILY_CAT_DATA.length > 0) {
                 const days = getDailySliceForPeriod(period);
                 const dateSet = new Set(days.map(d => d.date));
                 const catMap = {};
