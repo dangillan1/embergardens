@@ -625,25 +625,25 @@
         .mobile-menu-btn {
             display: none;
             position: fixed;
-            top: 6px;
+            top: 8px;
             left: 8px;
             z-index: 9000;
-            width: 32px;
-            height: 32px;
+            width: 38px;
+            height: 38px;
             background: #1A1A2E;
             border: 1px solid #2A2A4E;
-            border-radius: 6px;
+            border-radius: 8px;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             flex-direction: column;
-            gap: 4px;
-            padding: 6px;
+            gap: 5px;
+            padding: 8px;
         }
         .mobile-menu-btn span {
             display: block;
-            width: 20px;
-            height: 2px;
+            width: 22px;
+            height: 2.5px;
             background: #C87DAB;
             border-radius: 2px;
             transition: all 0.3s ease;
@@ -735,38 +735,53 @@
             header {
                 position: fixed; top: 0; left: 0; right: 0;
                 z-index: 500;
-                padding: 6px 10px 4px 10px;
+                padding: 8px 10px 8px 10px;
                 background-color: #0F0F1A;
                 border-bottom: 1px solid #2A2A4E;
             }
-            body { padding-top: 82px; padding-left: 0; }  /* clear the fixed header */
+            body { padding-top: 60px; padding-left: 0; }  /* clear the fixed header */
 
-            .header-container { display: flex; flex-direction: column; gap: 2px; }
+            .header-container { display: flex; flex-direction: row; align-items: center; gap: 0; justify-content: space-between; }
             .header-top {
-                padding-left: 44px;     /* room for hamburger */
+                padding-left: 48px;     /* room for hamburger */
                 margin-bottom: 0;
                 padding-bottom: 0;
                 gap: 6px;
                 border-bottom: none;
-                min-height: 28px;
+                min-height: 32px;
+                flex: 1;
             }
-            .header-logo svg { width: 18px; height: 13px; }
-            .brand-info h1 { font-size: 13px; letter-spacing: 0.06em; }
+            .header-logo svg { width: 24px; height: 18px; }
+            .brand-info h1 { font-size: 14px; letter-spacing: 0.06em; }
             .brand-info p { font-size: 9px; color: #777; margin: 0; }
             .brand-info p .brand-tagline { display: none; }
             .brand-subtitle-full { display: none; }
             .header-date { display: none; }
 
-            /* Period pills: compact, 2 tight rows */
-            .period-selector {
-                display: flex; flex-wrap: wrap; gap: 2px;
-                padding: 0; padding-left: 44px;
+            /* Period pills: HIDE pills, use dropdown instead */
+            .period-selector { display: none !important; }
+
+            /* Period dropdown: compact select on right side of header */
+            .period-dropdown-mobile {
+                display: block !important;
+                flex-shrink: 0;
+                margin-right: 4px;
             }
-            .period-pill {
-                padding: 2px 6px;
-                font-size: 8px;
-                border-radius: 10px;
-                line-height: 1.2;
+            .period-dropdown-mobile select {
+                background: #1A1A2E;
+                color: #C87DAB;
+                border: 1px solid #2A2A4E;
+                border-radius: 6px;
+                padding: 4px 8px;
+                font-size: 11px;
+                font-weight: 600;
+                cursor: pointer;
+                -webkit-appearance: none;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C87DAB'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 6px center;
+                padding-right: 20px;
             }
 
             /* Container */
@@ -834,19 +849,20 @@
                 align-items: flex-start;
             }
 
-            /* ─── COMPETITION: overview chips 2×3 square grid like KPIs ─── */
-            #competitorOverview {
+            /* ─── COMPETITION: overview chips 2×3 square grid ─── */
+            .comp-overview-grid, #competitorOverview {
+                display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 6px !important;
             }
-            #competitorOverview > div {
+            .comp-overview-grid > div, #competitorOverview > div {
                 overflow: hidden; word-break: break-word; min-width: 0;
                 padding: 8px 6px !important;
                 border-radius: 6px !important;
                 text-align: center;
             }
-            #competitorOverview > div div[style*="font-size:12px"] { font-size: 10px !important; }
-            #competitorOverview > div div[style*="font-size:10px"] { font-size: 9px !important; }
+            .comp-overview-grid > div div[style*="font-size:12px"] { font-size: 10px !important; }
+            .comp-overview-grid > div div[style*="font-size:10px"] { font-size: 9px !important; }
             .comp-header { flex-direction: column; align-items: flex-start; gap: 6px; }
             .comp-cat-pills {
                 width: 100%; overflow-x: auto; flex-wrap: nowrap;
@@ -872,25 +888,27 @@
             #specialsCatPills::-webkit-scrollbar { display: none; }
             #specialsCatPills button { flex-shrink: 0; font-size: 10px !important; padding: 3px 8px !important; }
 
-            /* Specials KPIs: 2×2 compact square chips like KPIs */
-            #specialsKPIs {
+            /* Specials KPIs: 2×2 compact square chips */
+            .specials-kpi-grid, #specialsKPIs {
+                display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 6px !important;
             }
-            #specialsKPIs > div {
+            .specials-kpi-grid > div, #specialsKPIs > div {
                 padding: 8px 6px !important;
                 border-radius: 6px !important;
                 text-align: center;
             }
-            #specialsKPIs > div div[style*="font-size:22px"] { font-size: 16px !important; }
-            #specialsKPIs > div div[style*="font-size:10px"] { font-size: 8px !important; }
+            .specials-kpi-grid > div div[style*="font-size:22px"] { font-size: 16px !important; }
+            .specials-kpi-grid > div div[style*="font-size:10px"] { font-size: 8px !important; }
 
             /* Bundle scorecard: FORCE 1 column on mobile */
             .bundle-scorecard-grid { grid-template-columns: 1fr !important; max-width: 100%; overflow: hidden; }
             .bundle-scorecard-grid > div { min-width: 0; max-width: 100%; box-sizing: border-box; }
 
-            /* Specials table: scrollable with sticky header */
-            #specialsTable { min-width: 500px; }
+            /* Specials table: hide on mobile — all data now in scorecards */
+            .specials-table-wrapper { display: none !important; }
+            #specialsCatPills { display: none !important; }
 
             /* ─── COMPETITOR BUNDLE TABLE ─── */
             #compBundleTable { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -914,22 +932,20 @@
 
         /* ── Small phone (≤480px) ─────────────────────────────────── */
         @media (max-width: 480px) {
-            body { padding-top: 78px; }
-            .header-top { padding-left: 38px; }
-            .brand-info h1 { font-size: 11px; }
+            body { padding-top: 56px; }
+            .header-top { padding-left: 48px; }
+            .brand-info h1 { font-size: 12px; }
             .brand-info p { font-size: 8px; }
-            .period-selector { padding-left: 38px; }
-            .period-pill { padding: 2px 5px; font-size: 7px; }
+            .period-dropdown-mobile select { font-size: 10px; padding: 3px 6px; }
 
             .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 4px; }
             .kpi-card { padding: 6px 4px; }
             .kpi-value { font-size: 14px; }
             .summary-cards { grid-template-columns: 1fr; }
 
-            #competitorOverview,
-            #specialsKPIs {
-                grid-template-columns: 1fr !important;
-            }
+            /* Keep 2-col grids even on small phones */
+            #competitorOverview { grid-template-columns: repeat(2, 1fr) !important; gap: 4px !important; }
+            #specialsKPIs { grid-template-columns: repeat(2, 1fr) !important; gap: 4px !important; }
 
             /* Bundle scorecard: FORCE 1 column on small phones too */
             .bundle-scorecard-grid { grid-template-columns: 1fr !important; }
@@ -1112,6 +1128,9 @@
                     <p><span class="brand-subtitle-full">Analytics Dashboard · </span>Orleans, Cape Cod <span class="brand-tagline" style="color:#555;margin-left:6px;">|</span> <span class="brand-tagline" style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
                 </div>
                 <div class="header-date" id="headerDate"></div>
+            </div>
+            <div class="period-dropdown-mobile" id="periodDropdownMobile" style="display:none;">
+                <select id="periodSelect" onchange="setPeriod(this.value)"></select>
             </div>
             <div class="period-selector" id="periodSelector"></div>
         </div>
@@ -1404,7 +1423,7 @@
             <p style="color:#999;font-size:12px;margin-bottom:16px;">Live pricing scraped from 6 Cape Cod competitors on <span style="color:#C87DAB;">April 4, 2026</span>. Prices shown are listed menu prices before tax.</p>
 
             <!-- Competitor Overview Cards -->
-            <div id="competitorOverview" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;"></div>
+            <div id="competitorOverview" class="comp-overview-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;"></div>
 
             <!-- Category Price Comparison Table -->
             <div style="overflow-x:auto;margin-bottom:20px;">
@@ -1430,10 +1449,10 @@
             <p style="color:#999;font-size:12px;margin-bottom:16px;">Current bundles and specials from <span style="color:#C87DAB;">embergardens.com</span> — scraped <span style="color:#C87DAB;">April 4, 2026</span>. Last 7 days: <strong style="color:#4CAF50;">$3,969</strong> in discounts on $31,547 gross sales (<strong style="color:#D4A843;">12.6% discount rate</strong>).</p>
 
             <!-- KPI Cards -->
-            <div id="specialsKPIs" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;"></div>
+            <div id="specialsKPIs" class="specials-kpi-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;"></div>
 
-            <!-- Specials Table -->
-            <div style="overflow-x:auto;margin-bottom:20px;">
+            <!-- Specials Table (hidden on mobile — data in scorecards) -->
+            <div class="specials-table-wrapper" style="overflow-x:auto;margin-bottom:20px;">
                 <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;" id="specialsTable">
                     <colgroup>
                         <col style="width:30%;">
@@ -1736,6 +1755,12 @@
                 const d = getDailySliceForPeriod("yesterday");
                 return d.length ? fmt(d[0].date) : '';
             }
+            if (period === "mtd") {
+                const d = getDailySliceForPeriod("mtd");
+                if (!d.length) return '';
+                const now = new Date(DAILY_DATA[DAILY_DATA.length - 1].date + 'T12:00:00');
+                return 'Apr 1, ' + now.getFullYear() + ' – ' + fmt(d[d.length-1].date);
+            }
             if (period === "3d") {
                 const d = getDailySliceForPeriod("3d");
                 if (!d.length) return '';
@@ -2029,6 +2054,18 @@
                 btn.onclick = () => setPeriod(p);
                 selector.appendChild(btn);
             });
+
+            // Mobile dropdown
+            const dropSelect = document.getElementById('periodSelect');
+            if (dropSelect) {
+                periods.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p;
+                    opt.textContent = PERIOD_DATA[p].label || PERIOD_DATA[p].pill || p;
+                    if (p === currentPeriod) opt.selected = true;
+                    dropSelect.appendChild(opt);
+                });
+            }
         }
 
         // Set period
@@ -2038,6 +2075,9 @@
             pills.forEach((p, i) => {
                 p.classList.toggle('active', Object.keys(PERIOD_DATA)[i] === period);
             });
+            // Sync mobile dropdown
+            const sel = document.getElementById('periodSelect');
+            if (sel) sel.value = period;
             updateAllCharts();
         }
 
@@ -3476,40 +3516,54 @@
                     <div style="font-size:10px;color:#666;">${maxSavings.name}</div>
                 </div>`;
 
-            // Bundle Success Scorecard
+            // Bundle Success Scorecard — show ALL bundles with deal info
             const scorecardDiv = document.createElement('div');
             scorecardDiv.style.cssText = 'margin:16px 0;padding:16px;background:#0F0F1A;border:1px solid #2A2A4E;border-radius:8px;';
-            // Sort bundles by score and show top 12
-            const scoredBundles = Object.entries(BUNDLE_PERFORMANCE).map(([name, perf]) => {
-                const score = scoreBundleSuccess(perf);
-                return { name, perf, score };
-            }).filter(b => b.score).sort((a, b) => b.score.total - a.score.total);
-            const topBundles = scoredBundles.slice(0, 12);
-            const avgScore = Math.round(scoredBundles.reduce((s, b) => s + b.score.total, 0) / scoredBundles.length);
+
+            // Build complete list: merge SPECIALS_DATA items with BUNDLE_PERFORMANCE scores
+            const allBundleCards = [];
+            Object.entries(SPECIALS_DATA).forEach(([cat, items]) => {
+                items.forEach(item => {
+                    const perf = findBundlePerf(item.bundle);
+                    const score = scoreBundleSuccess(perf);
+                    allBundleCards.push({ cat, item, perf, score, sortScore: score ? score.total : 0 });
+                });
+            });
+            allBundleCards.sort((a, b) => b.sortScore - a.sortScore);
+
+            const scoredBundles = allBundleCards.filter(b => b.score);
+            const avgScore = scoredBundles.length ? Math.round(scoredBundles.reduce((s, b) => s + b.score.total, 0) / scoredBundles.length) : 0;
             const drivingCount = scoredBundles.filter(b => b.score.total >= 70).length;
             const dragCount = scoredBundles.filter(b => b.score.total < 55).length;
 
-            let scHtml = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:14px;">&#9733;</span><span style="font-size:13px;font-weight:600;color:#D4A843;">Bundle Success Scorecard</span><span style="font-size:10px;color:#666;">— Top 12 of ' + scoredBundles.length + ' bundles ranked by performance</span></div><div style="display:flex;gap:12px;font-size:10px;"><span style="color:#4CAF50;">' + drivingCount + ' driving volume</span><span style="color:#D4A843;">' + (scoredBundles.length - drivingCount - dragCount) + ' mixed</span><span style="color:#E57373;">' + dragCount + ' margin drag</span><span style="color:#999;">Avg: ' + avgScore + '/100</span></div></div>';
+            let scHtml = '<div class="scorecard-header-row" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="font-size:14px;">&#9733;</span><span style="font-size:13px;font-weight:600;color:#D4A843;">Bundle Success Scorecard</span><span style="font-size:10px;color:#666;">— All ' + allBundleCards.length + ' bundles</span></div><div style="display:flex;gap:8px;font-size:10px;flex-wrap:wrap;"><span style="color:#4CAF50;">' + drivingCount + ' driving</span><span style="color:#D4A843;">' + (scoredBundles.length - drivingCount - dragCount) + ' mixed</span><span style="color:#E57373;">' + dragCount + ' drag</span><span style="color:#999;">Avg: ' + avgScore + '/100</span></div></div>';
             scHtml += '<div class="bundle-scorecard-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">';
-            topBundles.forEach(({ name, perf, score }) => {
-                const shortName = name.split('—')[0].trim();
-                const marginDelta = perf.marginImpact - perf.regularMargin;
+            allBundleCards.forEach(({ cat, item, perf, score }) => {
+                const pctMatch = item.savings.match(/\((\d+)%\)/);
+                const pct = pctMatch ? parseInt(pctMatch[1]) : 0;
+                const verdictColor = score ? score.verdictColor : '#555';
+                const marginDelta = perf ? (perf.marginImpact - perf.regularMargin) : 0;
                 const deltaColor = marginDelta >= -3 ? '#4CAF50' : marginDelta >= -8 ? '#D4A843' : '#E57373';
-                scHtml += `<div style="background:#1A1A2E;border:1px solid #2A2A4E;border-radius:6px;padding:10px;border-left:3px solid ${score.verdictColor};">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-                        <span style="font-size:11px;font-weight:600;color:#E0E0E0;">${shortName}</span>
-                        <span style="background:${score.verdictColor}22;color:${score.verdictColor};font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px;">${score.grade} (${score.total})</span>
+                const trendIcon = perf ? (perf.monthlyTrend >= 1.05 ? '&#9650;' : perf.monthlyTrend <= 0.95 ? '&#9660;' : '&#9654;') : '';
+                const trendColor = perf ? (perf.monthlyTrend >= 1.05 ? '#4CAF50' : perf.monthlyTrend <= 0.95 ? '#E57373' : '#666') : '#666';
+
+                scHtml += `<div style="background:#1A1A2E;border:1px solid #2A2A4E;border-radius:6px;padding:10px;border-left:3px solid ${verdictColor};">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                        <span style="font-size:11px;font-weight:600;color:#E0E0E0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.bundle}</span>
+                        ${score ? `<span style="background:${verdictColor}22;color:${verdictColor};font-size:11px;font-weight:700;padding:2px 6px;border-radius:6px;flex-shrink:0;margin-left:4px;">${score.grade} ${score.total}</span>` : '<span style="font-size:10px;color:#555;flex-shrink:0;">—</span>'}
                     </div>
-                    <div style="font-size:10px;color:${score.verdictColor};font-weight:600;margin-bottom:4px;">${score.verdict}</div>
-                    <div style="display:flex;gap:8px;font-size:10px;color:#999;">
-                        <span>${perf.weeklyUnits}/wk</span>
-                        <span>$${perf.weeklyRev}/wk</span>
-                        <span style="color:${deltaColor};">${marginDelta >= 0 ? '+' : ''}${marginDelta.toFixed(1)}% margin</span>
-                        <span>${perf.incrementalPct}% incremental</span>
-                    </div>
-                    <div style="margin-top:4px;height:3px;background:#2A2A4E;border-radius:2px;overflow:hidden;">
-                        <div style="height:100%;width:${score.total}%;background:${score.verdictColor};border-radius:2px;"></div>
-                    </div>
+                    <div style="font-size:10px;color:#C87DAB;margin-bottom:4px;">${item.qty} · $${item.unitPrice.toFixed(2)}/ea <span style="text-decoration:line-through;color:#555;">$${item.regPrice.toFixed(2)}</span> <span style="color:#D4A843;">(${pct}% off)</span></div>
+                    ${score ? `<div style="font-size:9px;color:${verdictColor};font-weight:600;margin-bottom:3px;">${score.verdict}</div>` : ''}
+                    ${perf ? `<div style="display:flex;gap:6px;font-size:9px;color:#999;flex-wrap:wrap;">
+                        <span>${perf.weeklyUnits}/wk <span style="color:${trendColor};">${trendIcon}</span></span>
+                        <span style="color:#D4A843;">$${perf.weeklyRev}/wk</span>
+                        <span style="color:${deltaColor};">${marginDelta >= 0 ? '+' : ''}${marginDelta.toFixed(1)}%</span>
+                        <span>${perf.incrementalPct}% incr</span>
+                    </div>` : '<div style="font-size:9px;color:#555;">No performance data</div>'}
+                    ${score ? `<div style="margin-top:4px;height:3px;background:#2A2A4E;border-radius:2px;overflow:hidden;">
+                        <div style="height:100%;width:${score.total}%;background:${verdictColor};border-radius:2px;"></div>
+                    </div>` : ''}
+                    <div style="font-size:8px;color:#555;margin-top:3px;">${cat}</div>
                 </div>`;
             });
             scHtml += '</div>';
