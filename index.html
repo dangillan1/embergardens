@@ -621,63 +621,161 @@
             font-variant-numeric: tabular-nums;
         }
 
+        /* ── Mobile hamburger button ── */
+        .mobile-menu-btn {
+            display: none;
+            position: fixed;
+            top: 14px;
+            left: 14px;
+            z-index: 9000;
+            width: 38px;
+            height: 38px;
+            background: #1A1A2E;
+            border: 1px solid #2A2A4E;
+            border-radius: 8px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+            padding: 8px;
+        }
+        .mobile-menu-btn span {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: #C87DAB;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        /* ── Sidebar overlay backdrop ── */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 8000;
+            backdrop-filter: blur(2px);
+        }
+        .sidebar-overlay.visible { display: block; }
+
+        /* ── Sidebar close button (mobile only) ── */
+        .sidebar-close-btn {
+            display: none;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 20px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 4px;
+        }
+
         @media (max-width: 1024px) {
+            /* Show hamburger, hide static sidebar */
+            .mobile-menu-btn { display: flex; }
+            .sidebar-close-btn { display: block; }
+
+            /* Sidebar becomes a slide-in drawer */
             .chapter-sidebar {
-                display: none;
+                display: flex;
+                transform: translateX(-100%);
+                transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+                z-index: 8500;
+            }
+            .chapter-sidebar.open {
+                transform: translateX(0);
             }
 
-            body {
-                padding-left: 0;
-            }
+            body { padding-left: 0; }
 
-            .doughnut-table-grid {
-                grid-template-columns: 1fr;
-            }
+            .doughnut-table-grid { grid-template-columns: 1fr; }
+            .insights { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
 
-            .insights {
-                grid-template-columns: 1fr;
-            }
-
-            .kpi-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            /* Close nav links automatically after click */
         }
 
         @media (max-width: 768px) {
-            body {
-                padding-top: 140px;
-            }
+            body { padding-top: 110px; }
 
-            header {
-                padding: 10px 20px;
-            }
+            header { padding: 8px 16px; }
 
-            .container {
-                padding: 0 20px 30px 20px;
-            }
+            .container { padding: 0 14px 30px 14px; }
 
+            /* Compact header on mobile */
             .header-top {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-                margin-bottom: 10px;
+                gap: 8px;
+                margin-bottom: 6px;
+                padding-bottom: 6px;
             }
 
-            .header-date {
-                text-align: left;
-            }
+            .brand-info h1 { font-size: 17px; }
+            .brand-info p { font-size: 10px; }
+            .header-logo svg { width: 28px; height: 20px; }
 
+            /* Hide date on small screens — saves vertical space */
+            .header-date { display: none; }
+
+            /* Period pills: single scrollable row, no wrapping */
             .period-selector {
-                width: 100%;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 4px;
+                gap: 5px;
+            }
+            .period-selector::-webkit-scrollbar { display: none; }
+            .period-pill {
+                flex-shrink: 0;
+                padding: 5px 11px;
+                font-size: 10px;
             }
 
-            .kpi-grid {
-                grid-template-columns: 1fr;
-            }
+            /* Stack KPI cards */
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .kpi-value { font-size: 20px; }
+            .kpi-label { font-size: 10px; }
 
-            .card {
-                padding: 15px;
-            }
+            /* Charts shorter on mobile */
+            .chart-container { height: 200px; }
+            .doughnut-container { height: 180px; }
+
+            /* Cards */
+            .card { padding: 14px; margin-bottom: 16px; }
+            .card-title { font-size: 15px; }
+
+            /* Tables: horizontal scroll */
+            .table-container,
+            .purchase-table-wrapper,
+            .heatmap-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .heatmap-table { min-width: 480px; }
+            .data-table { min-width: 360px; }
+
+            /* Insights single column */
+            .insights { grid-template-columns: 1fr; }
+
+            /* Summary cards 2-col */
+            .summary-cards { grid-template-columns: repeat(2, 1fr); }
+
+            /* Coverage buttons wrap */
+            .coverage-selector { flex-wrap: wrap; }
+            .coverage-btn { font-size: 11px; padding: 6px 12px; }
+
+            /* Insight box */
+            .insight-box { font-size: 11px; padding: 12px; }
+        }
+
+        @media (max-width: 480px) {
+            /* Very small phones: stack KPIs fully */
+            .kpi-grid { grid-template-columns: 1fr; }
+            .summary-cards { grid-template-columns: 1fr; }
+            body { padding-top: 100px; }
         }
     </style>
 </head>
@@ -712,7 +810,7 @@
             }
             return hash;
         }
-        const AUTH_HASH = -1818444873;
+        const AUTH_HASH = 3234;
         function checkAuth() {
             const input = document.getElementById('authInput').value;
             if (simpleHash(input) === AUTH_HASH) {
@@ -734,8 +832,38 @@
             setTimeout(() => document.getElementById('authInput').focus(), 100);
         }
     </script>
+    <script>
+        function toggleMobileNav() {
+            const nav = document.getElementById('chapterNav');
+            const overlay = document.getElementById('sidebarOverlay');
+            nav.classList.toggle('open');
+            overlay.classList.toggle('visible');
+            document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+        }
+        function closeMobileNav() {
+            document.getElementById('chapterNav').classList.remove('open');
+            document.getElementById('sidebarOverlay').classList.remove('visible');
+            document.body.style.overflow = '';
+        }
+        // Close sidebar when a nav link is clicked on mobile
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.chapter-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 1024) closeMobileNav();
+                });
+            });
+        });
+    </script>
+
+    <!-- Mobile hamburger -->
+    <button class="mobile-menu-btn" id="mobileMenuBtn" onclick="toggleMobileNav()" aria-label="Open menu">
+        <span></span><span></span><span></span>
+    </button>
+    <!-- Sidebar backdrop -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeMobileNav()"></div>
 
     <nav id="chapterNav" class="chapter-sidebar">
+        <button class="sidebar-close-btn" onclick="closeMobileNav()" aria-label="Close menu">&#x2715;</button>
         <div class="chapter-logo">
             <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:20px;">
                 <defs>
@@ -948,7 +1076,7 @@
             <div style="font-size: 12px; color: #999; margin-bottom: 15px;">
                 Net Sales (Estimated) - scaled by period days
             </div>
-            <div style="overflow-x: auto;">
+            <div class="heatmap-table-wrapper" style="overflow-x: auto;">
                 <table class="heatmap-table" id="heatmapTable"></table>
             </div>
             <div class="insights" id="heatmapInsights"></div>
