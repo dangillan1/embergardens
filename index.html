@@ -770,18 +770,25 @@
             .period-dropdown-mobile select {
                 background: #1A1A2E;
                 color: #C87DAB;
-                border: 1px solid #2A2A4E;
-                border-radius: 6px;
-                padding: 4px 8px;
-                font-size: 11px;
+                border: 1px solid #C87DAB;
+                border-radius: 8px;
+                padding: 6px 10px;
+                font-size: 13px;
                 font-weight: 600;
                 cursor: pointer;
                 -webkit-appearance: none;
                 appearance: none;
                 background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C87DAB'/%3E%3C/svg%3E");
                 background-repeat: no-repeat;
-                background-position: right 6px center;
-                padding-right: 20px;
+                background-position: right 8px center;
+                padding-right: 24px;
+                width: 100%;
+            }
+            .mobile-updated-inline {
+                display: inline !important;
+                color: #555;
+                font-size: 9px;
+                margin-left: 6px;
             }
 
             /* Container */
@@ -938,7 +945,7 @@
             .header-top { padding-left: 48px; }
             .brand-info h1 { font-size: 12px; }
             .brand-info p { font-size: 8px; }
-            .period-dropdown-mobile select { font-size: 10px; padding: 3px 6px; }
+            .period-dropdown-mobile select { font-size: 11px; padding: 5px 8px; }
 
             .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 4px; }
             .kpi-card { padding: 6px 4px; }
@@ -1131,12 +1138,12 @@
                 </svg>
                 <div class="brand-info">
                     <h1>EMBER GARDENS</h1>
-                    <p><span class="brand-subtitle-full">Analytics Dashboard · </span>Orleans, Cape Cod <span class="brand-tagline" style="color:#555;margin-left:6px;">|</span> <span class="brand-tagline" style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
+                    <p><span class="brand-subtitle-full">Analytics Dashboard · </span>Orleans, Cape Cod <span id="mobileUpdatedInline" class="mobile-updated-inline" style="display:none;"></span><span class="brand-tagline" style="color:#555;margin-left:6px;">|</span> <span class="brand-tagline" style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
                 </div>
                 <div class="header-date" id="headerDate"></div>
             </div>
             <div class="period-dropdown-mobile" id="periodDropdownMobile" style="display:none;">
-                <div id="mobileUpdatedTime" style="font-size:8px;color:#555;text-align:right;margin-bottom:2px;"></div>
+                <div style="font-size:8px;color:#777;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;">Date Selector:</div>
                 <select id="periodSelect" onchange="setPeriod(this.value)"></select>
             </div>
             <div class="period-selector" id="periodSelector"></div>
@@ -2051,9 +2058,9 @@
             const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             const timeStr = now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
             document.getElementById('headerDate').innerHTML = dateStr + '<br><span style="font-size:10px;color:#777;">Updated ' + timeStr + '</span>';
-            // Mobile updated time
-            const mobileTime = document.getElementById('mobileUpdatedTime');
-            if (mobileTime) mobileTime.textContent = 'Updated ' + timeStr;
+            // Mobile updated time — inline next to "Orleans, Cape Cod"
+            const mobileTimeInline = document.getElementById('mobileUpdatedInline');
+            if (mobileTimeInline) mobileTimeInline.textContent = '· Updated ' + timeStr;
 
             const periods = Object.keys(PERIOD_DATA);
             const selector = document.getElementById('periodSelector');
