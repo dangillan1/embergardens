@@ -714,7 +714,8 @@
 
             /* Grids with inline minmax: collapse */
             [style*="minmax(200px"] { grid-template-columns: 1fr !important; }
-            .card [style*="auto-fit"] { grid-template-columns: 1fr 1fr !important; }
+            .bundle-scorecard-grid { grid-template-columns: 1fr !important; }
+            .card [style*="auto-fit"]:not(.bundle-scorecard-grid) { grid-template-columns: 1fr 1fr !important; }
 
             /* Competitor overview: 2-col on tablet */
             #competitorOverview { grid-template-columns: 1fr 1fr !important; }
@@ -740,7 +741,7 @@
             }
             body { padding-top: 82px; padding-left: 0; }  /* clear the fixed header */
 
-            .header-container { display: flex; flex-direction: column; gap: 4px; }
+            .header-container { display: flex; flex-direction: column; gap: 2px; }
             .header-top {
                 padding-left: 44px;     /* room for hamburger */
                 margin-bottom: 0;
@@ -751,20 +752,21 @@
             }
             .header-logo svg { width: 18px; height: 13px; }
             .brand-info h1 { font-size: 13px; letter-spacing: 0.06em; }
-            .brand-info p { display: none; }              /* hide subtitle entirely on mobile */
-            .brand-tagline { display: none; }
+            .brand-info p { font-size: 9px; color: #777; margin: 0; }
+            .brand-info p .brand-tagline { display: none; }
+            .brand-subtitle-full { display: none; }
             .header-date { display: none; }
 
-            /* Period pills: compact grid, 2 rows, wrap naturally */
+            /* Period pills: compact, 2 tight rows */
             .period-selector {
-                display: flex; flex-wrap: wrap; gap: 3px;
-                padding: 0;
+                display: flex; flex-wrap: wrap; gap: 2px;
+                padding: 0; padding-left: 44px;
             }
             .period-pill {
-                padding: 3px 8px;
-                font-size: 9px;
-                border-radius: 14px;
-                line-height: 1.3;
+                padding: 2px 6px;
+                font-size: 8px;
+                border-radius: 10px;
+                line-height: 1.2;
             }
 
             /* Container */
@@ -883,8 +885,9 @@
             #specialsKPIs > div div[style*="font-size:22px"] { font-size: 16px !important; }
             #specialsKPIs > div div[style*="font-size:10px"] { font-size: 8px !important; }
 
-            /* Bundle scorecard chips: 1 column, no overhang */
-            [style*="minmax(200px"] { grid-template-columns: 1fr !important; }
+            /* Bundle scorecard: FORCE 1 column on mobile */
+            .bundle-scorecard-grid { grid-template-columns: 1fr !important; max-width: 100%; overflow: hidden; }
+            .bundle-scorecard-grid > div { min-width: 0; max-width: 100%; box-sizing: border-box; }
 
             /* Specials table: scrollable with sticky header */
             #specialsTable { min-width: 500px; }
@@ -913,8 +916,10 @@
         @media (max-width: 480px) {
             body { padding-top: 78px; }
             .header-top { padding-left: 38px; }
-            .brand-info h1 { font-size: 12px; }
-            .period-pill { padding: 2px 6px; font-size: 8px; }
+            .brand-info h1 { font-size: 11px; }
+            .brand-info p { font-size: 8px; }
+            .period-selector { padding-left: 38px; }
+            .period-pill { padding: 2px 5px; font-size: 7px; }
 
             .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 4px; }
             .kpi-card { padding: 6px 4px; }
@@ -925,6 +930,9 @@
             #specialsKPIs {
                 grid-template-columns: 1fr !important;
             }
+
+            /* Bundle scorecard: FORCE 1 column on small phones too */
+            .bundle-scorecard-grid { grid-template-columns: 1fr !important; }
 
             /* Comp bundle table: hide last 2 competitor cols */
             #compBundleTable th:nth-child(4),
@@ -1101,7 +1109,7 @@
                 </svg>
                 <div class="brand-info">
                     <h1>EMBER GARDENS</h1>
-                    <p>Analytics Dashboard · Orleans, Cape Cod <span class="brand-tagline" style="color:#555;margin-left:6px;">|</span> <span class="brand-tagline" style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
+                    <p><span class="brand-subtitle-full">Analytics Dashboard · </span>Orleans, Cape Cod <span class="brand-tagline" style="color:#555;margin-left:6px;">|</span> <span class="brand-tagline" style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
                 </div>
                 <div class="header-date" id="headerDate"></div>
             </div>
@@ -1472,17 +1480,18 @@
     <script>
         // Data Constants
         const PERIOD_DATA = {
-            "yesterday": { days: 1, label: "Yesterday", pill: "Yesterday" },
-            "3d": { days: 3, label: "3-Day Data" },
-            "7d": { days: 7, label: "7-Day Data" },
-            "14d": { days: 14, label: "14-Day Data" },
-            "30d": { days: 30, label: "30-Day Data" },
-            "60d": { days: 60, label: "60-Day Data" },
-            "90d": { days: 90, label: "90-Day Data" },
-            "120d": { days: 120, label: "120-Day Data" },
-            "180d": { days: 180, label: "180-Day Data" },
-            "365d": { days: 365, label: "365-Day Data" },
-            "lifetime": { days: 627, label: "Lifetime", pill: "LIFETIME" }
+            "yesterday": { days: 1, label: "Yesterday", pill: "Yest" },
+            "mtd": { days: new Date().getDate(), label: "This Month", pill: "MTD" },
+            "3d": { days: 3, label: "3-Day Data", pill: "3D" },
+            "7d": { days: 7, label: "7-Day Data", pill: "7D" },
+            "14d": { days: 14, label: "14-Day Data", pill: "14D" },
+            "30d": { days: 30, label: "30-Day Data", pill: "30D" },
+            "60d": { days: 60, label: "60-Day Data", pill: "60D" },
+            "90d": { days: 90, label: "90-Day Data", pill: "90D" },
+            "120d": { days: 120, label: "120-Day Data", pill: "120D" },
+            "180d": { days: 180, label: "180-Day Data", pill: "180D" },
+            "365d": { days: 365, label: "365-Day Data", pill: "365D" },
+            "lifetime": { days: 627, label: "Lifetime", pill: "ALL" }
         };
         // Bundle performance data — derived from Dutchie discount reports & transaction data
         // weeklyUnits: avg bundle transactions/week, weeklyRev: gross bundle revenue/week
@@ -1707,6 +1716,12 @@
         // "yesterday" = last complete day in DAILY_DATA (wall-clock yesterday)
         function getDailySliceForPeriod(period) {
             if (period === "yesterday") return DAILY_DATA.slice(-1);
+            if (period === "mtd") {
+                // Return days in current month from DAILY_DATA
+                const now = new Date(DAILY_DATA[DAILY_DATA.length - 1].date + 'T12:00:00');
+                const monthStr = now.toISOString().slice(0, 7);
+                return DAILY_DATA.filter(d => d.date.startsWith(monthStr));
+            }
             if (period === "3d") return DAILY_DATA.slice(-3);
             return DAILY_DATA.slice(-1);
         }
@@ -1904,6 +1919,7 @@
         function getBrandsForPeriod(period) {
             let raw;
             if (period === "yesterday") raw = BRANDS_7;
+            else if (period === "mtd") raw = blendBrandArrays(BRANDS_7, BRANDS_30, 0.7);
             else if (period === "3d") raw = blendBrandArrays(BRANDS_7, BRANDS_30, 0.85);
             else if (period === "7d") raw = BRANDS_7;
             else if (period === "14d") raw = blendBrandArrays(BRANDS_7, BRANDS_30, 0.6);
@@ -2093,7 +2109,7 @@
 
                 // For short periods with actual daily data, use real DAILY_DATA values and dates
                 // For longer periods, generate estimates anchored to last known data date
-                const useActual = (currentPeriod === "yesterday" || currentPeriod === "3d");
+                const useActual = (currentPeriod === "yesterday" || currentPeriod === "mtd" || currentPeriod === "3d");
                 let netData, costData, profitData;
 
                 if (useActual) {
@@ -3474,7 +3490,7 @@
             const dragCount = scoredBundles.filter(b => b.score.total < 55).length;
 
             let scHtml = '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:14px;">&#9733;</span><span style="font-size:13px;font-weight:600;color:#D4A843;">Bundle Success Scorecard</span><span style="font-size:10px;color:#666;">— Top 12 of ' + scoredBundles.length + ' bundles ranked by performance</span></div><div style="display:flex;gap:12px;font-size:10px;"><span style="color:#4CAF50;">' + drivingCount + ' driving volume</span><span style="color:#D4A843;">' + (scoredBundles.length - drivingCount - dragCount) + ' mixed</span><span style="color:#E57373;">' + dragCount + ' margin drag</span><span style="color:#999;">Avg: ' + avgScore + '/100</span></div></div>';
-            scHtml += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">';
+            scHtml += '<div class="bundle-scorecard-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">';
             topBundles.forEach(({ name, perf, score }) => {
                 const shortName = name.split('—')[0].trim();
                 const marginDelta = perf.marginImpact - perf.regularMargin;
