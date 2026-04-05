@@ -735,11 +735,11 @@
             header {
                 position: fixed; top: 0; left: 0; right: 0;
                 z-index: 500;
-                padding: 8px 10px 8px 10px;
+                padding: 12px 12px 12px 12px;
                 background-color: #0F0F1A;
                 border-bottom: 1px solid #2A2A4E;
             }
-            body { padding-top: 60px; padding-left: 0; }  /* clear the fixed header */
+            body { padding-top: 68px; padding-left: 0; }  /* clear the fixed header */
 
             .header-container { display: flex; flex-direction: row; align-items: center; gap: 0; justify-content: space-between; }
             .header-top {
@@ -932,7 +932,7 @@
 
         /* ── Small phone (≤480px) ─────────────────────────────────── */
         @media (max-width: 480px) {
-            body { padding-top: 56px; }
+            body { padding-top: 64px; }
             .header-top { padding-left: 48px; }
             .brand-info h1 { font-size: 12px; }
             .brand-info p { font-size: 8px; }
@@ -1501,15 +1501,15 @@
         const PERIOD_DATA = {
             "yesterday": { days: 1, label: "Yesterday", pill: "Yesterday", mobilePill: "Yest" },
             "mtd": { days: new Date().getDate(), label: "This Month", pill: "MTD", mobilePill: "MTD" },
-            "3d": { days: 3, label: "3-Day Data", pill: "3 Days", mobilePill: "3D" },
-            "7d": { days: 7, label: "7-Day Data", pill: "7 Days", mobilePill: "7D" },
-            "14d": { days: 14, label: "14-Day Data", pill: "14 Days", mobilePill: "14D" },
-            "30d": { days: 30, label: "30-Day Data", pill: "30 Days", mobilePill: "30D" },
-            "60d": { days: 60, label: "60-Day Data", pill: "60 Days", mobilePill: "60D" },
-            "90d": { days: 90, label: "90-Day Data", pill: "90 Days", mobilePill: "90D" },
-            "120d": { days: 120, label: "120-Day Data", pill: "120 Days", mobilePill: "120D" },
-            "180d": { days: 180, label: "180-Day Data", pill: "180 Days", mobilePill: "180D" },
-            "365d": { days: 365, label: "365-Day Data", pill: "365 Days", mobilePill: "365D" },
+            "3d": { days: 3, label: "3 Days", pill: "3 Days", mobilePill: "3D" },
+            "7d": { days: 7, label: "7 Days", pill: "7 Days", mobilePill: "7D" },
+            "14d": { days: 14, label: "14 Days", pill: "14 Days", mobilePill: "14D" },
+            "30d": { days: 30, label: "30 Days", pill: "30 Days", mobilePill: "30D" },
+            "60d": { days: 60, label: "60 Days", pill: "60 Days", mobilePill: "60D" },
+            "90d": { days: 90, label: "90 Days", pill: "90 Days", mobilePill: "90D" },
+            "120d": { days: 120, label: "120 Days", pill: "120 Days", mobilePill: "120D" },
+            "180d": { days: 180, label: "180 Days", pill: "180 Days", mobilePill: "180D" },
+            "365d": { days: 365, label: "365 Days", pill: "365 Days", mobilePill: "365D" },
             "lifetime": { days: 627, label: "Lifetime", pill: "Lifetime", mobilePill: "All" }
         };
         // Bundle performance data — derived from Dutchie discount reports & transaction data
