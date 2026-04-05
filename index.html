@@ -700,199 +700,205 @@
             /* Close nav links automatically after click */
         }
 
-        @media (max-width: 768px) {
-            body { padding-top: 110px; }
+        /* (old 768px and 480px rules consolidated into new mobile CSS block below) */
 
-            header { padding: 8px 16px; }
+        /* ═══════════════════════════════════════════════════════════
+           MOBILE / TABLET OVERRIDES
+           ═══════════════════════════════════════════════════════════ */
 
-            .container { padding: 0 14px 30px 14px; }
-
-            /* Compact header on mobile */
-            .header-top {
-                gap: 8px;
-                margin-bottom: 6px;
-                padding-bottom: 6px;
-            }
-
-            .brand-info h1 { font-size: 17px; }
-            .brand-info p { font-size: 10px; }
-            .header-logo svg { width: 28px; height: 20px; }
-
-            /* Hide date on small screens — saves vertical space */
-            .header-date { display: none; }
-
-            /* Period pills: single scrollable row, no wrapping */
-            .period-selector {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                padding-bottom: 4px;
-                gap: 5px;
-            }
-            .period-selector::-webkit-scrollbar { display: none; }
-            .period-pill {
-                flex-shrink: 0;
-                padding: 5px 11px;
-                font-size: 10px;
-            }
-
-            /* Stack KPI cards */
-            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-            .kpi-value { font-size: 20px; }
-            .kpi-label { font-size: 10px; }
-
-            /* Charts shorter on mobile */
-            .chart-container { height: 200px; }
-            .doughnut-container { height: 180px; }
-
-            /* Cards */
-            .card { padding: 14px; margin-bottom: 16px; }
-            .card-title { font-size: 15px; }
-
-            /* Tables: horizontal scroll */
-            .table-container,
-            .purchase-table-wrapper,
-            .heatmap-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            .heatmap-table { min-width: 480px; }
-            .data-table { min-width: 360px; }
-
-            /* Insights single column */
-            .insights { grid-template-columns: 1fr; }
-
-            /* Summary cards 2-col */
-            .summary-cards { grid-template-columns: repeat(2, 1fr); }
-
-            /* Coverage buttons wrap */
-            .coverage-selector { flex-wrap: wrap; }
-            .coverage-btn { font-size: 11px; padding: 6px 12px; }
-
-            /* Insight box */
-            .insight-box { font-size: 11px; padding: 12px; }
-        }
-
-        @media (max-width: 480px) {
-            /* Very small phones: stack KPIs fully */
-            .kpi-grid { grid-template-columns: 1fr; }
-            .summary-cards { grid-template-columns: 1fr; }
-            body { padding-top: 100px; }
-        }
-
-        /* ── Mobile global overflow prevention ───────────────────────── */
+        /* ── Tablet (≤1024px) ─────────────────────────────────────── */
         @media (max-width: 1024px) {
             html, body { overflow-x: hidden; max-width: 100vw; }
+            .container [style*="grid-template-columns"] { max-width: 100%; box-sizing: border-box; }
+            .card > div, .card > div > div { min-width: 0; box-sizing: border-box; }
 
-            /* Prevent hamburger/logo overlap — indent header brand on mobile */
-            .header-top { padding-left: 52px; }
+            /* Grids with inline minmax: collapse */
+            [style*="minmax(200px"] { grid-template-columns: 1fr !important; }
+            .card [style*="auto-fit"] { grid-template-columns: 1fr 1fr !important; }
 
-            /* All inline-generated chip grids must constrain to viewport */
-            .container [style*="grid-template-columns"] {
-                max-width: 100%;
-                box-sizing: border-box;
-            }
+            /* Competitor overview: 2-col on tablet */
+            #competitorOverview { grid-template-columns: 1fr 1fr !important; }
+            #competitorOverview > div { overflow: hidden; word-break: break-word; min-width: 0; }
 
-            /* Dynamic chip containers (brand margin, purchasing, competition, bundles) */
-            /* Any chip-style card/div must not exceed viewport width */
-            .card > div, .card > div > div {
-                min-width: 0;
-                box-sizing: border-box;
-            }
+            /* Bundle & specials KPIs: 2-col on tablet */
+            #specialsKPIs { grid-template-columns: repeat(2, 1fr) !important; }
 
-            /* Prevent images/media from causing horizontal overflow */
-            img { max-width: 100%; height: auto; }
-
-            /* Competitor category chips: wrap instead of overflow */
-            #competitorOverview {
-                grid-template-columns: 1fr 1fr !important;
-            }
-
-            /* Purchasing strategy chips: single column on mobile */
-            #purchasingPlanCards {
-                grid-template-columns: 1fr !important;
-            }
-
-            /* Bundle chips: single column */
-            #specialsKPIs {
-                grid-template-columns: repeat(2, 1fr) !important;
-            }
-
-            /* Brand margin chips: don't let text overflow chip boundary */
-            #brandMarginContent .card,
-            #brandMarginContent > div {
-                overflow: hidden;
-                word-break: break-word;
-            }
-
-            /* Competition chips: wrap text, no horizontal overflow */
-            #competitorOverview > div {
-                overflow: hidden;
-                word-break: break-word;
-                min-width: 0;
-            }
-
-            /* All chip-style summary items fit in container */
-            [style*="minmax(200px"] {
-                grid-template-columns: 1fr !important;
-            }
-            [style*="minmax(180px"] {
-                grid-template-columns: 1fr 1fr !important;
-            }
+            /* Two-col grids collapse to 1 col */
+            .purchasing-gap-grid, .two-col-grid { grid-template-columns: 1fr !important; }
         }
 
+        /* ── Phone (≤768px) ───────────────────────────────────────── */
         @media (max-width: 768px) {
-            /* Competition section: vertical list instead of scrolling grid */
-            #competitorOverview {
-                grid-template-columns: 1fr !important;
-            }
+            body { padding-top: 0; }
 
-            /* Bundle KPIs: 2-col */
-            #specialsKPIs {
-                grid-template-columns: repeat(2, 1fr) !important;
+            /* ─── HEADER: compact, sticky, always visible ─── */
+            header { padding: 6px 10px 6px 10px; position: sticky; top: 0; z-index: 100; }
+            .header-container { display: flex; flex-direction: column; gap: 6px; }
+            .header-top {
+                padding-left: 44px;   /* room for hamburger */
+                margin-bottom: 0;
+                padding-bottom: 4px;
+                gap: 8px;
+                border-bottom: none;
             }
+            .header-logo svg { width: 22px; height: 16px; }
+            .brand-info h1 { font-size: 15px; letter-spacing: 0.04em; }
+            .brand-info p { font-size: 9px; }
+            .brand-tagline { display: none; }          /* hide QUALITY OVER EVERYTHING */
+            .header-date { display: none; }
 
-            /* Any auto-fit grid inside cards: collapse to 1 col */
-            .card [style*="auto-fit"] {
-                grid-template-columns: 1fr !important;
+            /* Period pills: horizontal scroll, no wrap */
+            .period-selector {
+                flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+                scrollbar-width: none; gap: 4px; padding-bottom: 2px;
             }
+            .period-selector::-webkit-scrollbar { display: none; }
+            .period-pill { flex-shrink: 0; padding: 4px 10px; font-size: 10px; }
 
-            /* Period badge: allow text wrap for date sub-label */
+            /* Container */
+            .container { padding: 0 10px 24px 10px; }
+
+            /* ─── CARDS ─── */
+            .card { padding: 12px; margin-bottom: 14px; border-radius: 10px; }
+            .card-title { font-size: 14px; }
+
+            /* Card header: wrap so badge goes below title on narrow */
+            .card-header {
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-bottom: 14px;
+            }
             .period-badge {
-                max-width: 160px;
-                text-align: right;
                 font-size: 9px;
+                padding: 3px 8px;
+                max-width: none;
+                white-space: nowrap;
             }
 
-            /* Purchasing gap grid and 2-col brand grid: single column on mobile */
-            .purchasing-gap-grid,
-            .two-col-grid {
-                grid-template-columns: 1fr !important;
+            /* ─── KPI CHIPS: small squares, 2×2 grid ─── */
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 8px;
+                margin-bottom: 14px;
+            }
+            .kpi-card {
+                padding: 10px;
+                border-radius: 6px;
+                text-align: center;
+                border-left: none;
+                border-top: 3px solid #C87DAB;
+            }
+            .kpi-card:nth-child(2) { border-top-color: #8B6BAE; border-left: none; }
+            .kpi-card:nth-child(3) { border-top-color: #4CAF50; border-left: none; }
+            .kpi-card:nth-child(4) { border-top-color: #D4A843; border-left: none; }
+            .kpi-value { font-size: 18px; }
+            .kpi-label { font-size: 9px; margin-bottom: 3px; }
+            .kpi-subtext { font-size: 9px; }
+
+            /* ─── CHARTS ─── */
+            .chart-container { height: 180px; }
+            .doughnut-container { height: 160px; }
+            .doughnut-table-grid { grid-template-columns: 1fr; }
+
+            /* ─── TABLES ─── */
+            .table-container, .purchase-table-wrapper, .heatmap-table-wrapper {
+                overflow-x: auto; -webkit-overflow-scrolling: touch;
+            }
+            .heatmap-table { min-width: 480px; }
+            .data-table { min-width: 340px; }
+
+            /* ─── INVENTORY TABLE: hide last column (Potential Profit) ─── */
+            #inventoryTableBody tr td:last-child,
+            #inventoryTableBody + thead tr th:last-child { display: none; }
+            /* Target the header row in the inventory table */
+            .card:has(#inventoryKPIs) .data-table thead th:last-child,
+            .card:has(#inventoryKPIs) .data-table tbody td:last-child { display: none; }
+
+            /* ─── INSIGHTS ─── */
+            .insights { grid-template-columns: 1fr; }
+            .insight-box { font-size: 11px; padding: 10px; }
+
+            /* ─── PURCHASING HEADER: stack coverage pills below title ─── */
+            #section-purchasing .card-header > div:first-child {
+                flex-wrap: wrap;
+                gap: 8px;
             }
 
-            /* Competition category pills: wrap nicely */
+            /* ─── COMPETITION: 1 col, pills scrollable ─── */
+            #competitorOverview { grid-template-columns: 1fr !important; }
+            .comp-header { flex-direction: column; align-items: flex-start; }
             .comp-cat-pills {
-                width: 100%;
-                overflow-x: auto;
-                flex-wrap: nowrap;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
+                width: 100%; overflow-x: auto; flex-wrap: nowrap;
+                -webkit-overflow-scrolling: touch; scrollbar-width: none;
                 padding-bottom: 4px;
             }
             .comp-cat-pills::-webkit-scrollbar { display: none; }
-            .comp-cat-pills button {
-                flex-shrink: 0;
+            .comp-cat-pills button { flex-shrink: 0; }
+
+            /* ─── BUNDLES: category pills scroll, KPIs 2×2, chips square ─── */
+            #section-bundles > div:first-child {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
             }
+            #specialsCatPills {
+                display: flex !important;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                width: 100%;
+            }
+            #specialsCatPills::-webkit-scrollbar { display: none; }
+            #specialsCatPills button { flex-shrink: 0; }
+
+            /* Bundle scorecard chips: 1 col */
+            [style*="minmax(200px"] { grid-template-columns: 1fr !important; }
+
+            /* ─── COMPETITOR BUNDLE TABLE: fix EG overlap ─── */
+            #compBundleTable table {
+                table-layout: auto !important;
+                font-size: 10px;
+            }
+            #compBundleTable col:nth-child(1) { width: 18% !important; }
+            #compBundleTable col:nth-child(2) { width: 28% !important; }
+            #compBundleTable td, #compBundleTable th {
+                padding: 6px 4px !important;
+                word-break: break-word;
+            }
+
+            /* Summary cards */
+            .summary-cards { grid-template-columns: repeat(2, 1fr); }
+
+            /* Coverage buttons */
+            .coverage-selector { flex-wrap: wrap; }
+            .coverage-btn { font-size: 10px; padding: 5px 10px; }
         }
 
+        /* ── Small phone (≤480px) ─────────────────────────────────── */
         @media (max-width: 480px) {
-            /* Competition and purchasing: full single column */
+            .header-top { padding-left: 40px; }
+            .brand-info h1 { font-size: 14px; }
+
+            /* KPIs and summary cards: still 2-col (small squares) */
+            .kpi-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 6px; }
+            .kpi-card { padding: 8px; }
+            .kpi-value { font-size: 16px; }
+            .summary-cards { grid-template-columns: 1fr; }
+
+            /* Competition and bundles: full 1-col */
             #competitorOverview,
-            #purchasingPlanCards,
             #specialsKPIs {
                 grid-template-columns: 1fr !important;
             }
 
-            /* Header: tighter indent (hamburger smaller on very small) */
-            .header-top { padding-left: 46px; }
+            /* Comp bundle table: hide last 2 competitor cols for space */
+            #compBundleTable col:nth-child(4),
+            #compBundleTable col:nth-child(5),
+            #compBundleTable th:nth-child(4),
+            #compBundleTable th:nth-child(5),
+            #compBundleTable td:nth-child(4),
+            #compBundleTable td:nth-child(5) { display: none; }
         }
     </style>
 </head>
@@ -1063,7 +1069,7 @@
                 </svg>
                 <div class="brand-info">
                     <h1>EMBER GARDENS</h1>
-                    <p>Analytics Dashboard · Orleans, Cape Cod <span style="color:#555;margin-left:6px;">|</span> <span style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
+                    <p>Analytics Dashboard · Orleans, Cape Cod <span class="brand-tagline" style="color:#555;margin-left:6px;">|</span> <span class="brand-tagline" style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
                 </div>
                 <div class="header-date" id="headerDate"></div>
             </div>
@@ -1326,15 +1332,13 @@
 
         <!-- Purchasing Plan -->
         <div class="card" id="section-purchasing">
-            <div class="card-header">
-                <div style="display:flex;align-items:center;gap:16px;">
-                    <span class="card-title">Purchasing Plan</span>
-                    <div style="display:flex;align-items:center;gap:6px;">
-                        <span style="font-size:10px;color:#666;">Coverage:</span>
-                        <span class="period-pill active" onclick="setCoverage(30)" id="cov30" style="padding:4px 10px;font-size:10px;">30d</span>
-                        <span class="period-pill" onclick="setCoverage(60)" id="cov60" style="padding:4px 10px;font-size:10px;">60d</span>
-                        <span class="period-pill" onclick="setCoverage(90)" id="cov90" style="padding:4px 10px;font-size:10px;">90d</span>
-                    </div>
+            <div class="card-header" style="flex-wrap:wrap;gap:8px;">
+                <span class="card-title">Purchasing Plan</span>
+                <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                    <span style="font-size:10px;color:#666;">Coverage:</span>
+                    <span class="period-pill active" onclick="setCoverage(30)" id="cov30" style="padding:4px 10px;font-size:10px;">30d</span>
+                    <span class="period-pill" onclick="setCoverage(60)" id="cov60" style="padding:4px 10px;font-size:10px;">60d</span>
+                    <span class="period-pill" onclick="setCoverage(90)" id="cov90" style="padding:4px 10px;font-size:10px;">90d</span>
                 </div>
                 <span class="period-badge" id="purchaseBadge">30-Day Coverage</span>
             </div>
@@ -1376,12 +1380,12 @@
 
         <!-- Bundles & Specials Report -->
         <div id="section-bundles" class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;">
                 <div style="display:flex;align-items:center;gap:12px;">
                     <h2 class="card-title">Bundles & Specials Report</h2>
                     <span class="period-badge" style="background:#2A2A4E;color:#4CAF50;">Live Menu</span>
                 </div>
-                <div style="display:flex;gap:6px;" id="specialsCatPills"></div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;" id="specialsCatPills"></div>
             </div>
             <p style="color:#999;font-size:12px;margin-bottom:16px;">Current bundles and specials from <span style="color:#C87DAB;">embergardens.com</span> — scraped <span style="color:#C87DAB;">April 4, 2026</span>. Last 7 days: <strong style="color:#4CAF50;">$3,969</strong> in discounts on $31,547 gross sales (<strong style="color:#D4A843;">12.6% discount rate</strong>).</p>
 
@@ -1413,7 +1417,7 @@
             <div style="margin-top:20px;margin-bottom:20px;">
                 <h3 style="font-size:14px;font-weight:700;color:#C87DAB;margin-bottom:12px;">Competitor Bundle Comparison</h3>
                 <p style="color:#999;font-size:11px;margin-bottom:12px;">How Ember Gardens bundles stack up against competitor promotions across Cape Cod.</p>
-                <div id="compBundleTable"></div>
+                <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;" id="compBundleTable"></div>
             </div>
 
             <!-- AI Insights -->
@@ -1435,7 +1439,6 @@
     <script>
         // Data Constants
         const PERIOD_DATA = {
-            "today": { days: 1, label: "Today", pill: "Today" },
             "yesterday": { days: 1, label: "Yesterday", pill: "Yesterday" },
             "3d": { days: 3, label: "3-Day Data" },
             "7d": { days: 7, label: "7-Day Data" },
@@ -1647,7 +1650,6 @@
         // Helper: Get months for period
         function getMonthsForPeriod(period) {
             const months = {
-                "today": ["2026-04"],
                 "yesterday": ["2026-04"],
                 "3d": ["2026-04"],
                 "7d": ["2026-04", "2026-03"],
@@ -1669,23 +1671,9 @@
         }
 
         // Helper: Get daily slice for a named period
-        // DAILY_DATA always ends at the last *complete* business day.
-        // If that date is before wall-clock today, "today" has no data yet.
-        // "yesterday" always means the last complete day (DAILY_DATA[-1]).
+        // "yesterday" = last complete day in DAILY_DATA (wall-clock yesterday)
         function getDailySliceForPeriod(period) {
-            const lastDataDate = DAILY_DATA[DAILY_DATA.length - 1].date;
-            const wallToday = new Date().toISOString().slice(0, 10);
-            const dataIsYesterday = lastDataDate < wallToday; // true when store day not yet closed
-
-            if (period === "today") {
-                // If last data = yesterday, today has no closed data yet
-                if (dataIsYesterday) return []; // no complete data for today
-                return DAILY_DATA.slice(-1);
-            }
-            if (period === "yesterday") {
-                // "Yesterday" = last complete day regardless of whether today's data exists
-                return DAILY_DATA.slice(-1);
-            }
+            if (period === "yesterday") return DAILY_DATA.slice(-1);
             if (period === "3d") return DAILY_DATA.slice(-3);
             return DAILY_DATA.slice(-1);
         }
@@ -1696,17 +1684,9 @@
                 const dt = new Date(d + 'T12:00:00');
                 return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             };
-            if (period === "today") {
-                const d = getDailySliceForPeriod("today");
-                if (!d.length) {
-                    // Today's store data not yet available (day still in progress)
-                    return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + ' · Data pending close';
-                }
-                return fmt(d[0].date);
-            }
             if (period === "yesterday") {
                 const d = getDailySliceForPeriod("yesterday");
-                return d.length ? fmt(d[0].date) + ' · Last Complete Day' : '';
+                return d.length ? fmt(d[0].date) : '';
             }
             if (period === "3d") {
                 const d = getDailySliceForPeriod("3d");
@@ -1739,8 +1719,7 @@
             const periodData = PERIOD_DATA[period];
             if (!periodData) return 1;
 
-            // today, yesterday, and 3d use actual daily data, no scaling needed
-            if (period === "today") return 1;
+            // yesterday and 3d use actual daily data, no scaling needed
             if (period === "yesterday") return 1;
             if (period === "3d") return 1;
             if (period === "7d") return 7 / 35; // 35 = 31 (Mar) + 4 (Apr 1–4)
@@ -1753,7 +1732,7 @@
         // Get category data for period
         function getCategoryDataForPeriod(period) {
             // For today, yesterday, and 3d, use actual daily category data
-            if ((period === "today" || period === "yesterday" || period === "3d") && DAILY_CAT_DATA.length > 0) {
+            if ((period === "yesterday" || period === "3d") && DAILY_CAT_DATA.length > 0) {
                 const days = getDailySliceForPeriod(period);
                 const dateSet = new Set(days.map(d => d.date));
                 const catMap = {};
@@ -1891,7 +1870,7 @@
         // Get brands for period — blends recent + long-term data for intermediate periods
         function getBrandsForPeriod(period) {
             let raw;
-            if (period === "today") raw = BRANDS_7;
+            // "today" period removed; "yesterday" uses 7d brand data
             else if (period === "yesterday") raw = BRANDS_7;
             else if (period === "3d") raw = blendBrandArrays(BRANDS_7, BRANDS_30, 0.85);
             else if (period === "7d") raw = BRANDS_7;
@@ -1909,7 +1888,6 @@
 
         // Get products for period — blends recent + long-term data for intermediate periods
         function getProductsForPeriod(period) {
-            if (period === "today") return PRODUCTS_7;
             if (period === "yesterday") return PRODUCTS_7;
             if (period === "3d") return PRODUCTS_7;
             if (period === "7d") return PRODUCTS_7;
@@ -1927,7 +1905,7 @@
         // Get period summary
         function getPeriodSummary(period) {
             // For today, yesterday, and 3d, use actual daily data instead of monthly estimates
-            if (period === "today" || period === "yesterday" || period === "3d") {
+            if (period === "yesterday" || period === "3d") {
                 const days = getDailySliceForPeriod(period);
                 let totalNet = 0, totalCost = 0, totalProfit = 0;
                 days.forEach(d => {
@@ -2043,17 +2021,6 @@
 
             setBadge('kpiBadge', label, currentPeriod);
 
-            // If today's data hasn't closed yet, show a pending message instead of $0s
-            if (currentPeriod === "today" && getDailySliceForPeriod("today").length === 0) {
-                document.getElementById('kpiGrid').innerHTML = `
-                    <div style="grid-column:1/-1;padding:28px 20px;text-align:center;color:#999;">
-                        <div style="font-size:22px;margin-bottom:8px;">⏳</div>
-                        <div style="font-size:14px;font-weight:600;color:#C87DAB;margin-bottom:4px;">Today's data is not yet available</div>
-                        <div style="font-size:12px;">The store day hasn't closed in Dutchie yet. Check back after close, or switch to <strong>Yesterday</strong> to see the most recent complete day (${new Date(DAILY_DATA[DAILY_DATA.length-1].date+'T12:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}).</div>
-                    </div>`;
-                return;
-            }
-
             const kpiGrid = document.getElementById('kpiGrid');
             kpiGrid.innerHTML = `
                 <div class="kpi-card">
@@ -2081,21 +2048,6 @@
             const label = PERIOD_DATA[currentPeriod].label;
             setBadge('revenueBadge', label, currentPeriod);
 
-            // If today has no closed data yet, show a message instead of empty/wrong chart
-            if (currentPeriod === "today" && getDailySliceForPeriod("today").length === 0) {
-                if (revenueChart) { revenueChart.destroy(); revenueChart = null; }
-                document.getElementById('revenueChart').style.display = 'none';
-                let msg = document.getElementById('revenueChartMsg');
-                if (!msg) { msg = document.createElement('div'); msg.id = 'revenueChartMsg'; document.getElementById('revenueChart').parentNode.appendChild(msg); }
-                msg.style.cssText = 'padding:40px 20px;text-align:center;color:#999;font-size:13px;';
-                msg.innerHTML = "Today's data pending store close · Switch to <strong>Yesterday</strong> for the most recent complete day";
-                return;
-            } else {
-                document.getElementById('revenueChart').style.display = '';
-                const msg = document.getElementById('revenueChartMsg');
-                if (msg) msg.innerHTML = '';
-            }
-
             const ctx = document.getElementById('revenueChart').getContext('2d');
 
             if (revenueChart) revenueChart.destroy();
@@ -2109,7 +2061,7 @@
 
                 // For short periods with actual daily data, use real DAILY_DATA values and dates
                 // For longer periods, generate estimates anchored to last known data date
-                const useActual = (currentPeriod === "today" || currentPeriod === "yesterday" || currentPeriod === "3d");
+                const useActual = (currentPeriod === "yesterday" || currentPeriod === "3d");
                 let netData, costData, profitData;
 
                 if (useActual) {
