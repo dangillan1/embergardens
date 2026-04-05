@@ -811,40 +811,12 @@
             .doughnut-container { height: 160px; }
             .doughnut-table-grid { grid-template-columns: 1fr; }
 
-            /* ─── TABLES: sticky headers so you never lose column context ─── */
+            /* ─── TABLES: horizontal scroll only, static headers ─── */
             .table-container, .purchase-table-wrapper, .heatmap-table-wrapper {
                 overflow-x: auto; -webkit-overflow-scrolling: touch;
-                max-height: 60vh;  /* scroll vertically too, keeps headers visible */
-                overflow-y: auto;
-            }
-            .data-table thead th,
-            .heatmap-table thead th,
-            #compTable thead th,
-            #specialsTable thead th,
-            #compBundleTable thead th {
-                position: sticky;
-                top: 0;
-                background: #1A1A2E;
-                z-index: 3;
             }
             .heatmap-table { min-width: 480px; }
             .data-table { min-width: 320px; }
-
-            /* Competition & comp-bundle table: sticky first column (product/category names) */
-            #compTable tbody td:first-child,
-            #compTable thead th:first-child,
-            #compBundleTable tbody td:first-child,
-            #compBundleTable thead th:first-child {
-                position: sticky;
-                left: 0;
-                background: #1A1A2E;
-                z-index: 4;
-            }
-            /* Corner cell: sticky both ways */
-            #compTable thead th:first-child,
-            #compBundleTable thead th:first-child {
-                z-index: 5;
-            }
 
             /* ─── INVENTORY TABLE: hide last column (Potential Profit) ─── */
             .card:has(#inventoryKPIs) .data-table thead th:last-child,
@@ -860,12 +832,19 @@
                 align-items: flex-start;
             }
 
-            /* ─── COMPETITION: 1 col overview, pills scrollable ─── */
-            #competitorOverview { grid-template-columns: 1fr !important; }
+            /* ─── COMPETITION: overview chips 2×3 square grid like KPIs ─── */
+            #competitorOverview {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 6px !important;
+            }
             #competitorOverview > div {
                 overflow: hidden; word-break: break-word; min-width: 0;
-                padding: 10px !important;
+                padding: 8px 6px !important;
+                border-radius: 6px !important;
+                text-align: center;
             }
+            #competitorOverview > div div[style*="font-size:12px"] { font-size: 10px !important; }
+            #competitorOverview > div div[style*="font-size:10px"] { font-size: 9px !important; }
             .comp-header { flex-direction: column; align-items: flex-start; gap: 6px; }
             .comp-cat-pills {
                 width: 100%; overflow-x: auto; flex-wrap: nowrap;
@@ -891,16 +870,18 @@
             #specialsCatPills::-webkit-scrollbar { display: none; }
             #specialsCatPills button { flex-shrink: 0; font-size: 10px !important; padding: 3px 8px !important; }
 
-            /* Specials KPIs: 2×2 square chips */
+            /* Specials KPIs: 2×2 compact square chips like KPIs */
             #specialsKPIs {
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 6px;
+                gap: 6px !important;
             }
             #specialsKPIs > div {
-                padding: 8px !important;
+                padding: 8px 6px !important;
                 border-radius: 6px !important;
                 text-align: center;
             }
+            #specialsKPIs > div div[style*="font-size:22px"] { font-size: 16px !important; }
+            #specialsKPIs > div div[style*="font-size:10px"] { font-size: 8px !important; }
 
             /* Bundle scorecard chips: 1 column, no overhang */
             [style*="minmax(200px"] { grid-template-columns: 1fr !important; }
@@ -1469,6 +1450,7 @@
                 <h3 style="font-size:14px;font-weight:700;color:#C87DAB;margin-bottom:12px;">Competitor Bundle Comparison</h3>
                 <p style="color:#999;font-size:11px;margin-bottom:12px;">How Ember Gardens bundles stack up against competitor promotions across Cape Cod.</p>
                 <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;" id="compBundleTable"></div>
+                <div id="compBundleKeyTakeaway"></div>
             </div>
 
             <!-- AI Insights -->
@@ -3620,51 +3602,54 @@
             }
             renderTable('ALL');
 
-            // Competitor Bundle Comparison
+            // Competitor Bundle Comparison — all 6 competitors
             const COMP_BUNDLES = [
-                {cat:'Flower (8th)', eg:'2/$45 (Bostica)', egUnit:22.50, capecod:'2/10% · 4/15% · 8/20% off', capecodUnit:21.25, emerald:'Mix & Match 2 8ths', emeraldUnit:null, sublime:'Multiple $25-35/8th', sublimeUnit:null},
-                {cat:'Flower (oz)', eg:'$125 (Old Pal 28g)', egUnit:4.46, capecod:'$140 (Strane 28g)', capecodUnit:5.00, emerald:'$120 (RYTHM oz)', emeraldUnit:4.29, sublime:'$120 (RYTHM 28g)', sublimeUnit:4.29},
-                {cat:'Pre-Rolls', eg:'10/$50 (Valorem)', egUnit:5.00, capecod:'7/$35 (1g)', capecodUnit:5.00, emerald:'5 for $40', emeraldUnit:8.00, sublime:'Miss Grass 5pk/$20', sublimeUnit:4.00},
-                {cat:'Gummies', eg:'3/$60 (Camino/COAST)', egUnit:20.00, capecod:'Choice Chews $10/pk', capecodUnit:10.00, emerald:'Kanha 3/$45 · Wyld 2/$35 · Inhouse 2/$30', emeraldUnit:15.00, sublime:'Phat Dogg $25 bundle', sublimeUnit:25.00},
-                {cat:'Vape Carts', eg:'4/$80 (Perpetual mix)', egUnit:20.00, capecod:'3/5% · 4/10% · 5/15% off', capecodUnit:17.00, emerald:'RYTHM/&Shine 2/$40 · Select LD 2/$40', emeraldUnit:20.00, sublime:'No Bull rosin $30/0.5g', sublimeUnit:null},
-                {cat:'Disposables', eg:'2/$60 (Perpetual 1g)', egUnit:30.00, capecod:'None listed', capecodUnit:null, emerald:'BRIQ 2/$90 (2g)', emeraldUnit:45.00, sublime:'Strane $30/1g disp', sublimeUnit:30.00},
-                {cat:'Concentrates', eg:'None listed', egUnit:null, capecod:'2/5% · 3/10% · 5/20% off', capecodUnit:null, emerald:'Mix & Match 2 for offer', emeraldUnit:null, sublime:'Temple Ball $45 · Gran $30', sublimeUnit:37.50},
-                {cat:'Beverages', eg:'4/$24 (Build your own)', egUnit:6.00, capecod:'None listed', capecodUnit:null, emerald:'Hi5 6/$78 ($13/4pk)', emeraldUnit:3.25, sublime:'Easy $5/ea · Buzzy $7', sublimeUnit:5.00},
-                {cat:'Chocolate', eg:'3/$50 (Coast/Incredible)', egUnit:16.67, capecod:'None listed', capecodUnit:null, emerald:'Incredibles 2/$30 · Betty\'s 3/$50', emeraldUnit:15.00, sublime:'Phat Dogg 50mg $20 · 100mg $25', sublimeUnit:20.00},
-                {cat:'Edible Bundles', eg:'Camino/WYLD/COAST 3/$60', egUnit:20.00, capecod:'None listed', capecodUnit:null, emerald:'Camino 3/$60 · Coast 3/$60 · Hashables 2/$50', emeraldUnit:20.00, sublime:'HAVN $22/pk', sublimeUnit:22.00},
-                {cat:'Clones', eg:'None listed', egUnit:null, capecod:'None listed', capecodUnit:null, emerald:'1/$20 · 3/$30', emeraldUnit:10.00, sublime:'None listed', sublimeUnit:null}
+                {cat:'Flower (8th)', eg:'2/$45 (Bostica)', egUnit:22.50, seaside:'House 8ths $25', seasideUnit:25.00, haven:'2 8ths/$50', havenUnit:25.00, salty:'Budget 8ths $20', saltyUnit:20.00, capecod:'2/10% · 4/15% · 8/20% off', capecodUnit:21.25, emerald:'Mix & Match 2 8ths', emeraldUnit:null, sublime:'Multiple $25-35/8th', sublimeUnit:null},
+                {cat:'Flower (oz)', eg:'$125 (Old Pal 28g)', egUnit:4.46, seaside:'None listed', seasideUnit:null, haven:'None listed', havenUnit:null, salty:'$130 (house oz)', saltyUnit:4.64, capecod:'$140 (Strane 28g)', capecodUnit:5.00, emerald:'$120 (RYTHM oz)', emeraldUnit:4.29, sublime:'$120 (RYTHM 28g)', sublimeUnit:4.29},
+                {cat:'Pre-Rolls', eg:'10/$50 (Valorem)', egUnit:5.00, seaside:'None listed', seasideUnit:null, haven:'Pre-roll packs avail.', havenUnit:null, salty:'House 5/$30', saltyUnit:6.00, capecod:'7/$35 (1g)', capecodUnit:5.00, emerald:'5 for $40', emeraldUnit:8.00, sublime:'Miss Grass 5pk/$20', sublimeUnit:4.00},
+                {cat:'Gummies', eg:'3/$60 (Camino/COAST)', egUnit:20.00, seaside:'Wyld 2/$40', seasideUnit:20.00, haven:'Camino 3/$65', havenUnit:21.67, salty:'Wana 3/$55', saltyUnit:18.33, capecod:'Choice Chews $10/pk', capecodUnit:10.00, emerald:'Kanha 3/$45 · Wyld 2/$35', emeraldUnit:15.00, sublime:'Phat Dogg $25 bundle', sublimeUnit:25.00},
+                {cat:'Vape Carts', eg:'4/$80 (Perpetual mix)', egUnit:20.00, seaside:'Select 2/$55', seasideUnit:27.50, haven:'Fernway 2/$50', havenUnit:25.00, salty:'Ozone 2/$45', saltyUnit:22.50, capecod:'3/5% · 4/10% · 5/15% off', capecodUnit:17.00, emerald:'RYTHM/&Shine 2/$40', emeraldUnit:20.00, sublime:'No Bull rosin $30/0.5g', sublimeUnit:null},
+                {cat:'Disposables', eg:'2/$60 (Perpetual 1g)', egUnit:30.00, seaside:'None listed', seasideUnit:null, haven:'Strane 2/$55', havenUnit:27.50, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'BRIQ 2/$90 (2g)', emeraldUnit:45.00, sublime:'Strane $30/1g disp', sublimeUnit:30.00},
+                {cat:'Concentrates', eg:'None listed', egUnit:null, seaside:'None listed', seasideUnit:null, haven:'None listed', havenUnit:null, salty:'Live resin 2/$60', saltyUnit:30.00, capecod:'2/5% · 3/10% · 5/20% off', capecodUnit:null, emerald:'Mix & Match 2 for offer', emeraldUnit:null, sublime:'Temple Ball $45 · Gran $30', sublimeUnit:37.50},
+                {cat:'Beverages', eg:'4/$24 (Build your own)', egUnit:6.00, seaside:'None listed', seasideUnit:null, haven:'Hi5 4/$48', havenUnit:3.00, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Hi5 6/$78 ($13/4pk)', emeraldUnit:3.25, sublime:'Easy $5/ea · Buzzy $7', sublimeUnit:5.00},
+                {cat:'Chocolate', eg:'3/$50 (Coast/Incredible)', egUnit:16.67, seaside:'None listed', seasideUnit:null, haven:'Incredibles 2/$35', havenUnit:17.50, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Incredibles 2/$30 · Betty\'s 3/$50', emeraldUnit:15.00, sublime:'Phat Dogg 50mg $20', sublimeUnit:20.00},
+                {cat:'Edible Bundles', eg:'Camino/WYLD/COAST 3/$60', egUnit:20.00, seaside:'Mix edibles 3/$55', seasideUnit:18.33, haven:'None listed', havenUnit:null, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Camino 3/$60 · Coast 3/$60', emeraldUnit:20.00, sublime:'HAVN $22/pk', sublimeUnit:22.00},
+                {cat:'Clones', eg:'None listed', egUnit:null, seaside:'None listed', seasideUnit:null, haven:'None listed', havenUnit:null, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'1/$20 · 3/$30', emeraldUnit:10.00, sublime:'None listed', sublimeUnit:null}
             ];
 
             const compBundleDiv = document.getElementById('compBundleTable');
-            let bHtml = `<table style="width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;">
-                <colgroup><col style="width:14%;"><col style="width:22%;"><col style="width:22%;"><col style="width:21%;"><col style="width:21%;"></colgroup>
+            const colCount = COMPETITORS.length + 2; // Category + EG + each competitor
+            const colW = Math.floor(80 / (COMPETITORS.length + 1)); // distribute evenly after category col
+            let bHtml = `<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><table style="width:100%;border-collapse:collapse;font-size:11px;min-width:${colCount * 120}px;">
                 <thead><tr style="border-bottom:2px solid #2A2A4E;">
-                    <th style="padding:6px;text-align:left;color:#999;">Category</th>
-                    <th style="padding:6px;text-align:left;color:#C87DAB;">Ember Gardens</th>
-                    <th style="padding:6px;text-align:center;color:#FF6B6B;">Cape Cod Cannabis</th>
-                    <th style="padding:6px;text-align:center;color:#44546A;">Emerald Grove</th>
-                    <th style="padding:6px;text-align:center;color:#7030A0;">Sublime</th>
+                    <th style="padding:6px;text-align:left;color:#999;min-width:90px;">Category</th>
+                    <th style="padding:6px;text-align:left;color:#C87DAB;min-width:110px;">Ember Gardens</th>
+                    ${COMPETITORS.map(c => `<th style="padding:6px;text-align:center;color:${c.color};min-width:110px;">${c.name}</th>`).join('')}
                 </tr></thead><tbody>`;
 
+            const formatBundleCell = (text, unit, isEG) => {
+                if (!text || text === 'None listed') return `<span style="color:#555;">—</span>`;
+                const style = isEG ? 'color:#C87DAB;font-weight:600;' : 'color:#E0E0E0;';
+                return `<span style="${style}">${text}</span>${unit ? `<br><span style="color:#D4A843;font-size:10px;">$${unit.toFixed(2)}/ea</span>` : ''}`;
+            };
+
             COMP_BUNDLES.forEach(row => {
-                const formatCell = (text, unit, isEG) => {
-                    if (!text || text === 'None listed') return `<span style="color:#555;">—</span>`;
-                    const style = isEG ? 'color:#C87DAB;font-weight:600;' : 'color:#E0E0E0;';
-                    return `<span style="${style}">${text}</span>${unit ? `<br><span style="color:#D4A843;font-size:10px;">$${unit.toFixed(2)}/ea</span>` : ''}`;
-                };
                 bHtml += `<tr style="border-bottom:1px solid #1F1F3A;">
                     <td style="padding:8px 6px;color:#999;font-weight:600;">${row.cat}</td>
-                    <td style="padding:8px 6px;">${formatCell(row.eg, row.egUnit, true)}</td>
-                    <td style="padding:8px 6px;text-align:center;">${formatCell(row.capecod, row.capecodUnit)}</td>
-                    <td style="padding:8px 6px;text-align:center;">${formatCell(row.emerald, row.emeraldUnit)}</td>
-                    <td style="padding:8px 6px;text-align:center;">${formatCell(row.sublime, row.sublimeUnit)}</td>
+                    <td style="padding:8px 6px;">${formatBundleCell(row.eg, row.egUnit, true)}</td>
+                    ${COMP_KEYS.map(k => `<td style="padding:8px 6px;text-align:center;">${formatBundleCell(row[k], row[k+'Unit'])}</td>`).join('')}
                 </tr>`;
             });
-            bHtml += '</tbody></table>';
-            bHtml += `<div style="margin-top:10px;padding:10px;background:#0F0F1A;border:1px solid #2A2A4E;border-radius:8px;font-size:11px;color:#999;">
-                <strong style="color:#C87DAB;">Key Takeaway:</strong> Ember Gardens has the most aggressive and diverse bundle program on the Cape with ${totalBundles} active bundles. <strong>Cape Cod Cannabis</strong> runs tiered volume discounts (flower up to 20% off for 8+, carts up to 15% for 5+, concentrates up to 20% for 5+) and ultra-competitive Choice Chews gummies at $10/pack and 7 pre-rolls for $35. <strong>Emerald Grove</strong> has expanded significantly with Wyld 2/$35, Kanha 3/$45, Incredibles 2/$30, Betty's 3/$50, Camino/Coast 3/$60, plus Select LD carts 2/$40 and is now selling clones (3/$30). <strong>Sublime</strong> dominates the premium concentrate space with in-house temple ball hash ($45/1g, 5+ strains) and granulated hash ($30/1g), plus Phat Dogg rosin-infused edibles. EG's breadth across pre-rolls, vapes, gummies, and beverages remains unmatched but should monitor CCC's aggressive value pricing.
-            </div>`;
+            bHtml += '</tbody></table></div>';
             compBundleDiv.innerHTML = bHtml;
+
+            // Key Takeaway — rendered as a static sibling below the scroll table
+            const keyTakeawayDiv = document.getElementById('compBundleKeyTakeaway');
+            if (keyTakeawayDiv) {
+                keyTakeawayDiv.innerHTML = `<div style="margin-top:10px;padding:10px;background:#0F0F1A;border:1px solid #2A2A4E;border-radius:8px;font-size:11px;color:#999;">
+                    <strong style="color:#C87DAB;">Key Takeaway:</strong> Ember Gardens has the most aggressive and diverse bundle program on the Cape with ${totalBundles} active bundles. <strong>Cape Cod Cannabis</strong> runs tiered volume discounts (flower up to 20% off for 8+, carts up to 15% for 5+, concentrates up to 20% for 5+) and ultra-competitive Choice Chews gummies at $10/pack and 7 pre-rolls for $35. <strong>Emerald Grove</strong> has expanded significantly with Wyld 2/$35, Kanha 3/$45, Incredibles 2/$30, and is now selling clones (3/$30). <strong>Seaside Cannabis</strong> competes on gummies (Wyld 2/$40) and edible bundles (3/$55). <strong>Haven Center</strong> offers Camino 3/$65, Fernway carts 2/$50, and Incredibles 2/$35. <strong>Salty Farmers</strong> undercuts on flower (budget 8ths $20), Wana gummies 3/$55, and Ozone carts 2/$45. <strong>Sublime</strong> dominates premium concentrates with temple ball hash ($45/1g) and granulated hash ($30/1g). EG's breadth across pre-rolls, vapes, gummies, and beverages remains unmatched — monitor CCC's aggressive value pricing and Salty's budget flower play.
+                </div>`;
+            }
 
             // AI Insights
             const ins = document.getElementById('specialsInsights');
@@ -3881,6 +3866,13 @@
             categories.forEach(cat => {
                 // Category header row
                 rows += `<tr><td colspan="${COMPETITORS.length + 3}" style="padding:10px;font-weight:700;font-size:13px;color:#D4A843;border-bottom:1px solid #2A2A4E;background:rgba(212,168,67,0.05);">${cat}</td></tr>`;
+                // Shop name sub-header row (visible on mobile so user knows which column is which)
+                rows += `<tr class="comp-shop-subheader" style="background:rgba(42,42,78,0.3);">
+                    <td style="padding:4px 10px;font-size:10px;color:#777;font-weight:600;">Product</td>
+                    <td style="padding:4px 10px;text-align:right;font-size:10px;color:#C87DAB;font-weight:600;">EG</td>
+                    ${COMPETITORS.map(c => `<td style="padding:4px 10px;text-align:right;font-size:10px;color:${c.color};font-weight:600;">${c.name.split(' ')[0]}</td>`).join('')}
+                    <td style="padding:4px 10px;font-size:10px;color:#777;font-weight:600;">Notes</td>
+                </tr>`;
                 COMP_DATA[cat].forEach(row => {
                     const prices = COMP_KEYS.map(k => row[k]);
                     const allPrices = [row.eg, ...prices].filter(p => p != null);
