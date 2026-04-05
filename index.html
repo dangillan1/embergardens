@@ -1513,18 +1513,18 @@
     <script>
         // Data Constants
         const PERIOD_DATA = {
-            "yesterday": { days: 1, label: "Yesterday", pill: "Yesterday", mobilePill: "Yest" },
-            "mtd": { days: new Date().getDate(), label: "This Month", pill: "MTD", mobilePill: "MTD" },
-            "3d": { days: 3, label: "3 Days", pill: "3 Days", mobilePill: "3D" },
-            "7d": { days: 7, label: "7 Days", pill: "7 Days", mobilePill: "7D" },
-            "14d": { days: 14, label: "14 Days", pill: "14 Days", mobilePill: "14D" },
-            "30d": { days: 30, label: "30 Days", pill: "30 Days", mobilePill: "30D" },
-            "60d": { days: 60, label: "60 Days", pill: "60 Days", mobilePill: "60D" },
-            "90d": { days: 90, label: "90 Days", pill: "90 Days", mobilePill: "90D" },
-            "120d": { days: 120, label: "120 Days", pill: "120 Days", mobilePill: "120D" },
-            "180d": { days: 180, label: "180 Days", pill: "180 Days", mobilePill: "180D" },
-            "365d": { days: 365, label: "365 Days", pill: "365 Days", mobilePill: "365D" },
-            "lifetime": { days: 627, label: "Lifetime", pill: "Lifetime", mobilePill: "All" }
+            "yesterday": { days: 1, label: "Yesterday", pill: "Yesterday", mobilePill: "Yesterday" },
+            "mtd": { days: new Date().getDate(), label: "This Month", pill: "MTD", mobilePill: "This Month" },
+            "3d": { days: 3, label: "3 Days", pill: "3 Days", mobilePill: "3 Days" },
+            "7d": { days: 7, label: "7 Days", pill: "7 Days", mobilePill: "7 Days" },
+            "14d": { days: 14, label: "14 Days", pill: "14 Days", mobilePill: "14 Days" },
+            "30d": { days: 30, label: "30 Days", pill: "30 Days", mobilePill: "30 Days" },
+            "60d": { days: 60, label: "60 Days", pill: "60 Days", mobilePill: "60 Days" },
+            "90d": { days: 90, label: "90 Days", pill: "90 Days", mobilePill: "90 Days" },
+            "120d": { days: 120, label: "120 Days", pill: "120 Days", mobilePill: "120 Days" },
+            "180d": { days: 180, label: "180 Days", pill: "180 Days", mobilePill: "180 Days" },
+            "365d": { days: 365, label: "365 Days", pill: "365 Days", mobilePill: "365 Days" },
+            "lifetime": { days: 627, label: "Lifetime", pill: "Lifetime", mobilePill: "Lifetime" }
         };
         // Bundle performance data — derived from Dutchie discount reports & transaction data
         // weeklyUnits: avg bundle transactions/week, weeklyRev: gross bundle revenue/week
@@ -2060,7 +2060,7 @@
             document.getElementById('headerDate').innerHTML = dateStr + '<br><span style="font-size:10px;color:#777;">Updated ' + timeStr + '</span>';
             // Mobile updated time — inline next to "Orleans, Cape Cod"
             const mobileTimeInline = document.getElementById('mobileUpdatedInline');
-            if (mobileTimeInline) mobileTimeInline.textContent = '· Updated ' + timeStr;
+            if (mobileTimeInline) mobileTimeInline.innerHTML = '<span style="color:#C87DAB;margin:0 5px;">·</span>Updated ' + timeStr;
 
             const periods = Object.keys(PERIOD_DATA);
             const selector = document.getElementById('periodSelector');
