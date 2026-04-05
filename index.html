@@ -2069,7 +2069,7 @@
             document.getElementById('headerDate').innerHTML = 'Data through ' + dateStr + '<br><span style="font-size:10px;color:#777;">Last pull: ' + pullDateStr + ' ' + pullTimeStr + '</span>';
             // Mobile updated time — inline next to "Orleans, Cape Cod"
             const mobileTimeInline = document.getElementById('mobileUpdatedInline');
-            if (mobileTimeInline) mobileTimeInline.innerHTML = '<span style="color:#C87DAB;margin:0 5px;">·</span>Data thru ' + dateStr + ' · ' + pullTimeStr;
+            if (mobileTimeInline) mobileTimeInline.innerHTML = '<span style="color:#C87DAB;margin:0 5px;">·</span>' + dateStr + ' <span style="color:#C87DAB;">·</span> ' + pullTimeStr;
 
             const periods = Object.keys(PERIOD_DATA);
             const selector = document.getElementById('periodSelector');
