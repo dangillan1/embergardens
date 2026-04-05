@@ -1499,18 +1499,18 @@
     <script>
         // Data Constants
         const PERIOD_DATA = {
-            "yesterday": { days: 1, label: "Yesterday", pill: "Yest" },
-            "mtd": { days: new Date().getDate(), label: "This Month", pill: "MTD" },
-            "3d": { days: 3, label: "3-Day Data", pill: "3D" },
-            "7d": { days: 7, label: "7-Day Data", pill: "7D" },
-            "14d": { days: 14, label: "14-Day Data", pill: "14D" },
-            "30d": { days: 30, label: "30-Day Data", pill: "30D" },
-            "60d": { days: 60, label: "60-Day Data", pill: "60D" },
-            "90d": { days: 90, label: "90-Day Data", pill: "90D" },
-            "120d": { days: 120, label: "120-Day Data", pill: "120D" },
-            "180d": { days: 180, label: "180-Day Data", pill: "180D" },
-            "365d": { days: 365, label: "365-Day Data", pill: "365D" },
-            "lifetime": { days: 627, label: "Lifetime", pill: "ALL" }
+            "yesterday": { days: 1, label: "Yesterday", pill: "Yesterday", mobilePill: "Yest" },
+            "mtd": { days: new Date().getDate(), label: "This Month", pill: "MTD", mobilePill: "MTD" },
+            "3d": { days: 3, label: "3-Day Data", pill: "3 Days", mobilePill: "3D" },
+            "7d": { days: 7, label: "7-Day Data", pill: "7 Days", mobilePill: "7D" },
+            "14d": { days: 14, label: "14-Day Data", pill: "14 Days", mobilePill: "14D" },
+            "30d": { days: 30, label: "30-Day Data", pill: "30 Days", mobilePill: "30D" },
+            "60d": { days: 60, label: "60-Day Data", pill: "60 Days", mobilePill: "60D" },
+            "90d": { days: 90, label: "90-Day Data", pill: "90 Days", mobilePill: "90D" },
+            "120d": { days: 120, label: "120-Day Data", pill: "120 Days", mobilePill: "120D" },
+            "180d": { days: 180, label: "180-Day Data", pill: "180 Days", mobilePill: "180D" },
+            "365d": { days: 365, label: "365-Day Data", pill: "365 Days", mobilePill: "365D" },
+            "lifetime": { days: 627, label: "Lifetime", pill: "Lifetime", mobilePill: "All" }
         };
         // Bundle performance data — derived from Dutchie discount reports & transaction data
         // weeklyUnits: avg bundle transactions/week, weeklyRev: gross bundle revenue/week
@@ -2061,7 +2061,7 @@
                 periods.forEach(p => {
                     const opt = document.createElement('option');
                     opt.value = p;
-                    opt.textContent = PERIOD_DATA[p].label || PERIOD_DATA[p].pill || p;
+                    opt.textContent = PERIOD_DATA[p].mobilePill || PERIOD_DATA[p].pill || p;
                     if (p === currentPeriod) opt.selected = true;
                     dropSelect.appendChild(opt);
                 });
