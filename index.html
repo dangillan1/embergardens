@@ -621,7 +621,7 @@
             font-variant-numeric: tabular-nums;
         }
 
-        /* ── Mobile hamburger button ── */
+        /* ââ Mobile hamburger button ââ */
         .mobile-menu-btn {
             display: none;
             position: fixed;
@@ -649,7 +649,7 @@
             transition: all 0.3s ease;
         }
 
-        /* ── Sidebar overlay backdrop ── */
+        /* ââ Sidebar overlay backdrop ââ */
         .sidebar-overlay {
             display: none;
             position: fixed;
@@ -660,7 +660,7 @@
         }
         .sidebar-overlay.visible { display: block; }
 
-        /* ── Sidebar close button (mobile only) ── */
+        /* ââ Sidebar close button (mobile only) ââ */
         .sidebar-close-btn {
             display: none;
             position: absolute;
@@ -702,11 +702,11 @@
 
         /* (old 768px and 480px rules consolidated into new mobile CSS block below) */
 
-        /* ═══════════════════════════════════════════════════════════
+        /* âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
            MOBILE / TABLET OVERRIDES
-           ═══════════════════════════════════════════════════════════ */
+           âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ */
 
-        /* ── Tablet (≤1024px) ─────────────────────────────────────── */
+        /* ââ Tablet (â¤1024px) âââââââââââââââââââââââââââââââââââââââ */
         @media (max-width: 1024px) {
             html, body { overflow-x: hidden; max-width: 100vw; }
             .container [style*="grid-template-columns"] { max-width: 100%; box-sizing: border-box; }
@@ -728,10 +728,10 @@
             .purchasing-gap-grid, .two-col-grid { grid-template-columns: 1fr !important; }
         }
 
-        /* ── Phone (≤768px) ───────────────────────────────────────── */
+        /* ââ Phone (â¤768px) âââââââââââââââââââââââââââââââââââââââââ */
         @media (max-width: 768px) {
 
-            /* ─── HEADER: fixed at top, always accessible ─── */
+            /* âââ HEADER: fixed at top, always accessible âââ */
             header {
                 position: fixed; top: 0; left: 0; right: 0;
                 z-index: 500;
@@ -794,7 +794,7 @@
             /* Container */
             .container { padding: 0 8px 24px 8px; }
 
-            /* ─── CARDS ─── */
+            /* âââ CARDS âââ */
             .card { padding: 10px; margin-bottom: 12px; border-radius: 8px; }
             .card-title { font-size: 13px; }
 
@@ -812,7 +812,7 @@
                 border: 1px solid #2A2A4E;
             }
 
-            /* ─── KPI CHIPS: compact squares, 2×2 grid ─── */
+            /* âââ KPI CHIPS: compact squares, 2Ã2 grid âââ */
             .kpi-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 6px;
@@ -832,33 +832,33 @@
             .kpi-label { font-size: 8px; margin-bottom: 2px; letter-spacing: 0.3px; }
             .kpi-subtext { font-size: 8px; }
 
-            /* ─── CHARTS ─── */
+            /* âââ CHARTS âââ */
             .chart-container { height: 180px; }
             .doughnut-container { height: 160px; }
             .doughnut-table-grid { grid-template-columns: 1fr; }
 
-            /* ─── TABLES: horizontal scroll only, static headers ─── */
+            /* âââ TABLES: horizontal scroll only, static headers âââ */
             .table-container, .purchase-table-wrapper, .heatmap-table-wrapper {
                 overflow-x: auto; -webkit-overflow-scrolling: touch;
             }
             .heatmap-table { min-width: 480px; }
             .data-table { min-width: 320px; }
 
-            /* ─── INVENTORY TABLE: hide last column (Potential Profit) ─── */
+            /* âââ INVENTORY TABLE: hide last column (Potential Profit) âââ */
             .card:has(#inventoryKPIs) .data-table thead th:last-child,
             .card:has(#inventoryKPIs) .data-table tbody td:last-child { display: none; }
 
-            /* ─── INSIGHTS ─── */
+            /* âââ INSIGHTS âââ */
             .insights { grid-template-columns: 1fr; }
             .insight-box { font-size: 10px; padding: 8px; }
 
-            /* ─── PURCHASING HEADER: coverage pills wrap below ─── */
+            /* âââ PURCHASING HEADER: coverage pills wrap below âââ */
             #section-purchasing .card-header {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
-            /* ─── COMPETITION: overview chips 2×3 square grid ─── */
+            /* âââ COMPETITION: overview chips 2Ã3 square grid âââ */
             .comp-overview-grid, #competitorOverview {
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
@@ -880,7 +880,7 @@
             .comp-cat-pills::-webkit-scrollbar { display: none; }
             .comp-cat-pills button { flex-shrink: 0; font-size: 10px !important; padding: 3px 8px !important; }
 
-            /* ─── BUNDLES: pills scroll, KPIs 2×2 squares ─── */
+            /* âââ BUNDLES: pills scroll, KPIs 2Ã2 squares âââ */
             #section-bundles > div:first-child {
                 flex-direction: column;
                 align-items: flex-start;
@@ -897,7 +897,7 @@
             #specialsCatPills::-webkit-scrollbar { display: none; }
             #specialsCatPills button { flex-shrink: 0; font-size: 10px !important; padding: 3px 8px !important; }
 
-            /* Specials KPIs: 2×2 compact square chips */
+            /* Specials KPIs: 2Ã2 compact square chips */
             .specials-kpi-grid, #specialsKPIs {
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
@@ -915,11 +915,11 @@
             .bundle-scorecard-grid { grid-template-columns: 1fr !important; max-width: 100%; overflow: hidden; }
             .bundle-scorecard-grid > div { min-width: 0; max-width: 100%; box-sizing: border-box; }
 
-            /* Specials table: hide on mobile — all data now in scorecards */
+            /* Specials table: hide on mobile â all data now in scorecards */
             .specials-table-wrapper { display: none !important; }
             #specialsCatPills { display: none !important; }
 
-            /* ─── COMPETITOR BUNDLE TABLE ─── */
+            /* âââ COMPETITOR BUNDLE TABLE âââ */
             #compBundleTable { overflow-x: auto; -webkit-overflow-scrolling: touch; }
             #compBundleTable table {
                 table-layout: auto !important;
@@ -939,7 +939,7 @@
             .coverage-btn { font-size: 9px; padding: 4px 8px; }
         }
 
-        /* ── Small phone (≤480px) ─────────────────────────────────── */
+        /* ââ Small phone (â¤480px) âââââââââââââââââââââââââââââââââââ */
         @media (max-width: 480px) {
             body { padding-top: 64px; }
             .header-top { padding-left: 48px; }
@@ -988,7 +988,7 @@
         </div>
     </div>
     <script>
-        // Simple hash check — not cryptographic, but prevents casual access
+        // Simple hash check â not cryptographic, but prevents casual access
         function simpleHash(str) {
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
@@ -1138,7 +1138,7 @@
                 </svg>
                 <div class="brand-info">
                     <h1>EMBER GARDENS</h1>
-                    <p><span class="brand-subtitle-full">Analytics Dashboard · </span>Orleans, Cape Cod <span id="mobileUpdatedInline" class="mobile-updated-inline" style="display:none;"></span><span class="brand-tagline" style="color:#555;margin-left:6px;">|</span> <span class="brand-tagline" style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
+                    <p><span class="brand-subtitle-full">Analytics Dashboard Â· </span>Orleans, Cape Cod <span id="mobileUpdatedInline" class="mobile-updated-inline" style="display:none;"></span><span class="brand-tagline" style="color:#555;margin-left:6px;">|</span> <span class="brand-tagline" style="color:#C87DAB;font-style:italic;margin-left:6px;font-size:10px;">QUALITY OVER EVERYTHING</span></p>
                 </div>
                 <div class="header-date" id="headerDate"></div>
             </div>
@@ -1460,12 +1460,12 @@
                 </div>
                 <div style="display:flex;flex-wrap:wrap;gap:6px;" id="specialsCatPills"></div>
             </div>
-            <p style="color:#999;font-size:12px;margin-bottom:16px;">Current bundles and specials from <span style="color:#C87DAB;">embergardens.com</span> — scraped <span style="color:#C87DAB;">April 4, 2026</span>. Last 7 days: <strong style="color:#4CAF50;">$3,969</strong> in discounts on $31,547 gross sales (<strong style="color:#D4A843;">12.6% discount rate</strong>).</p>
+            <p style="color:#999;font-size:12px;margin-bottom:16px;">Current bundles and specials from <span style="color:#C87DAB;">embergardens.com</span> â scraped <span style="color:#C87DAB;">April 4, 2026</span>. Last 7 days: <strong style="color:#4CAF50;">$3,969</strong> in discounts on $31,547 gross sales (<strong style="color:#D4A843;">12.6% discount rate</strong>).</p>
 
             <!-- KPI Cards -->
             <div id="specialsKPIs" class="specials-kpi-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;"></div>
 
-            <!-- Specials Table (hidden on mobile — data in scorecards) -->
+            <!-- Specials Table (hidden on mobile â data in scorecards) -->
             <div class="specials-table-wrapper" style="overflow-x:auto;margin-bottom:20px;">
                 <table style="width:100%;border-collapse:collapse;font-size:12px;table-layout:fixed;" id="specialsTable">
                     <colgroup>
@@ -1526,7 +1526,7 @@
             "365d": { days: 365, label: "365 Days", pill: "365 Days", mobilePill: "365 Days" },
             "lifetime": { days: 627, label: "Lifetime", pill: "Lifetime", mobilePill: "Lifetime" }
         };
-        // Bundle performance data — derived from Dutchie discount reports & transaction data
+        // Bundle performance data â derived from Dutchie discount reports & transaction data
         // weeklyUnits: avg bundle transactions/week, weeklyRev: gross bundle revenue/week
         // avgDiscount: avg % off per bundle, marginImpact: estimated margin % on bundled items
         // regularMargin: what these items normally sell at without bundle
@@ -1707,7 +1707,7 @@
 
         const VENDOR_REORDER = [{vendor:"140 Industrial Road, LLC",totalCost:612,meetsMin:false,shortfall:2388,criticals:2,highs:0,items:[{name:"Devil's Lettuce - 3.5g - Flower - Whole - Kosher Kush - (I) (Promo)",qty:7,dos:"1.2",risk:"CRITICAL",needed:75,unitCost:0.01,lineCost:1,vel:"5.86",net30:641},{name:"Devil's Lettuce - 3.5g - Flower - Whole - Oreoz - (I)",qty:14,dos:"2.7",risk:"CRITICAL",needed:58,unitCost:8.00,lineCost:464,vel:"5.14",net30:578},{name:"Devil's Lettuce - 3.5g - Flower - Whole - Emergen-C - (S)",qty:27,dos:"8.6",risk:"MEDIUM",needed:17,unitCost:8.00,lineCost:136,vel:"3.14",net30:391},{name:"Native Sun - 3.5g - Flower - Whole - E85 - (H)",qty:29,dos:"13.5",risk:"MEDIUM",needed:1,unitCost:11.00,lineCost:11,vel:"2.14",net30:305}]},{vendor:"Sweetgrass Botanicals Extractions LLC",totalCost:534,meetsMin:false,shortfall:2466,criticals:2,highs:1,items:[{name:"Sweetgrass Solventless - 1g - Concentrates - Live Rosin - Jungle Pie - (H) - 1pk",qty:1,dos:"1.4",risk:"CRITICAL",needed:9,unitCost:29.10,lineCost:262,vel:"0.71",net30:897},{name:"Sweetgrass Solventless - 0.5g - Vapes - Cartridge - GMO Rosin - (H) - 1pk",qty:1,dos:"1.8",risk:"CRITICAL",needed:7,unitCost:19.40,lineCost:136,vel:"0.71",net30:553},{name:"Sweetgrass Solventless - 0.5g - Vapes - Cartridge - Superboof Rosin - (H) - 1pk",qty:3,dos:"4.2",risk:"HIGH",needed:7,unitCost:19.40,lineCost:136,vel:"0.86",net30:514}]},{vendor:"Bountiful Farms, LLC",totalCost:457,meetsMin:false,shortfall:2543,criticals:2,highs:1,items:[{name:"Bountiful Farms - 0.5g - Vapes - Disposable - Purple Punch Live Rosin - (I) - 1pk",qty:1,dos:"1.4",risk:"CRITICAL",needed:9,unitCost:13.46,lineCost:121,vel:"0.71",net30:312},{name:"Bountiful Farms - 0.5g - Vapes - Disposable - Watermellos Live Rosin - (H) - 1pk",qty:2,dos:"2.8",risk:"CRITICAL",needed:8,unitCost:13.46,lineCost:108,vel:"0.71",net30:756},{name:"Bountiful Farms - 1g - Vapes - Disposable - Banana Bread Live Rosin - (I) - 1pk",qty:4,dos:"2.3",risk:"HIGH",needed:20,unitCost:21.77,lineCost:435,vel:"1.71",net30:772}]},{vendor:"Cresco Labs",totalCost:2395,meetsMin:false,shortfall:605,criticals:1,highs:2,items:[{name:"Rythm - 3.5g - Flower - Whole - VelcroZ - (H)",qty:2,dos:"0.5",risk:"CRITICAL",needed:58,unitCost:12.50,lineCost:725,vel:"4.29",net30:1044},{name:"Rythm - 3.5g - Flower - Whole - Brownie Scout - (I)",qty:10,dos:"4.5",risk:"HIGH",needed:21,unitCost:12.50,lineCost:263,vel:"2.29",net30:1393},{name:"Rythm - 3.5g - Flower - Whole - Animal Face - (H)",qty:18,dos:"5.6",risk:"HIGH",needed:22,unitCost:12.50,lineCost:275,vel:"2.57",net30:897},{name:"&Shine - 3.5g - Flower - Whole - LA Kush Cake - (I)",qty:20,dos:"8.6",risk:"MEDIUM",needed:13,unitCost:9.50,lineCost:124,vel:"2.29",net30:545},{name:"&Shine - 1g - Vapes - Disposable - Blue Raspberry - (S) - 1pk",qty:17,dos:"10.5",risk:"MEDIUM",needed:6,unitCost:11.50,lineCost:69,vel:"1.57",net30:398}]},{vendor:"OCS Green Leaves, LLC",totalCost:940,meetsMin:false,shortfall:2060,criticals:1,highs:2,items:[{name:"OCS - 1g - Vapes - Cartridge - Sour Diesel Distillate - (S) - 1pk",qty:3,dos:"1.9",risk:"CRITICAL",needed:18,unitCost:10.15,lineCost:183,vel:"1.57",net30:564},{name:"OCS - 1g - Vapes - Cartridge - Watermelon Zkittlez Distillate - (I) - 1pk",qty:8,dos:"4.0",risk:"HIGH",needed:12,unitCost:10.15,lineCost:122,vel:"2.00",net30:476},{name:"OCS - 1g - Pre-Rolls - Flower - Single - (H) - 1pk",qty:45,dos:"6.2",risk:"HIGH",needed:56,unitCost:1.93,lineCost:108,vel:"7.29",net30:1233}]},{vendor:"Green Thumb Industries",totalCost:737,meetsMin:false,shortfall:2263,criticals:1,highs:0,items:[{name:"Stingers Sweets - 1g - Pre-Rolls - Infused - 24K Gold Punch - (H) - 1pk",qty:3,dos:"0.6",risk:"CRITICAL",needed:67,unitCost:0.01,lineCost:1,vel:"5.00",net30:416},{name:"Stingers Sweets - 1g - Pre-Rolls - Infused - Grapes & Cream - (I) - 1pk",qty:15,dos:"6.5",risk:"MEDIUM",needed:17,unitCost:4.23,lineCost:72,vel:"2.29",net30:395}]},{vendor:"Cape Cod Grow Lab, LLC",totalCost:814,meetsMin:false,shortfall:2186,criticals:0,highs:2,items:[{name:"Cape Cod Grow Lab - 3.5g - Flower - Whole - Lions Breath - (S)",qty:9,dos:"2.5",risk:"HIGH",needed:41,unitCost:15.73,lineCost:645,vel:"3.57",net30:1218},{name:"Cape Cod Grow Lab - 3.5g - Flower - Whole - Cape White Shark - (H)",qty:10,dos:"5.0",risk:"HIGH",needed:18,unitCost:15.73,lineCost:283,vel:"2.00",net30:694}]},{vendor:"Holistic Industries",totalCost:442,meetsMin:false,shortfall:2558,criticals:0,highs:3,items:[{name:"Strane Stash - 1g - Vapes - Cartridge - King Louis XIII - (I) - 1pk",qty:12,dos:"3.8",risk:"HIGH",needed:32,unitCost:9.23,lineCost:295,vel:"3.14",net30:1163},{name:"Strane Stash - 1g - Vapes - Cartridge - G6 - (S) - 1pk",qty:7,dos:"4.1",risk:"HIGH",needed:13,unitCost:9.23,lineCost:120,vel:"2.00",net30:678},{name:"Strane Stash - 3.5g - Flower - Whole - Biscotti - (H)",qty:8,dos:"5.3",risk:"HIGH",needed:11,unitCost:11.54,lineCost:127,vel:"1.86",net30:489}]},{vendor:"Tower Three, LLC",totalCost:299,meetsMin:false,shortfall:2701,criticals:0,highs:3,items:[{name:"Tower Three - 1g - Pre-Rolls - Flower - Gyros - (I) - 1pk",qty:2,dos:"3.5",risk:"HIGH",needed:6,unitCost:6.00,lineCost:36,vel:"0.57",net30:237},{name:"Tower Three - 3.5g - Flower - Whole - Oreoz - (H)",qty:5,dos:"4.2",risk:"HIGH",needed:9,unitCost:14.50,lineCost:131,vel:"1.43",net30:612},{name:"Tower Three - 1g - Pre-Rolls - Flower - Cherry Garcia - (I) - 1pk",qty:3,dos:"4.5",risk:"HIGH",needed:6,unitCost:6.00,lineCost:36,vel:"0.86",net30:198}]},{vendor:"Bostica, LLC",totalCost:39,meetsMin:false,shortfall:2961,criticals:0,highs:1,items:[{name:"Bostica - 3.5g - Flower - Whole - Drip - (S)",qty:6,dos:"1.7",risk:"HIGH",needed:42,unitCost:9.48,lineCost:398,vel:"3.43",net30:843},{name:"Bostica - 3.5g - Flower - Whole - Cap Junky - (S)",qty:14,dos:"6.1",risk:"HIGH",needed:18,unitCost:9.48,lineCost:171,vel:"2.29",net30:607}]}];
 
-        // Cannabis SKU count trend — active SKUs only (estimated monthly from opening through current)
+        // Cannabis SKU count trend â active SKUs only (estimated monthly from opening through current)
         const SKU_TREND = [
             {month:'Jul 2024', total:165, cannabis:128},
             {month:'Aug 2024', total:186, cannabis:146},
@@ -1730,7 +1730,7 @@
             {month:'Jan 2026', total:428, cannabis:348},
             {month:'Feb 2026', total:442, cannabis:360},
             {month:'Mar 2026', total:460, cannabis:374},
-            {month:'Apr 2026', total:476, cannabis:388}
+            {month:'Apr 2026', total:476, cannabis:432}
         ];
 
         let currentPeriod = "30d";
@@ -1792,23 +1792,23 @@
                 const d = getDailySliceForPeriod("mtd");
                 if (!d.length) return '';
                 const now = new Date(DAILY_DATA[DAILY_DATA.length - 1].date + 'T12:00:00');
-                return 'Apr 1, ' + now.getFullYear() + ' – ' + fmt(d[d.length-1].date);
+                return 'Apr 1, ' + now.getFullYear() + ' â ' + fmt(d[d.length-1].date);
             }
             if (period === "3d") {
                 const d = getDailySliceForPeriod("3d");
                 if (!d.length) return '';
-                return d.length === 1 ? fmt(d[0].date) : fmt(d[0].date) + ' – ' + fmt(d[d.length-1].date);
+                return d.length === 1 ? fmt(d[0].date) : fmt(d[0].date) + ' â ' + fmt(d[d.length-1].date);
             }
             // For longer periods, compute from today minus N days
             const pDays = PERIOD_DATA[period] ? PERIOD_DATA[period].days : 30;
             if (period === "lifetime") {
-                return 'Jul 1, 2024 – Present';
+                return 'Jul 1, 2024 â Present';
             }
             const end = new Date();
             const start = new Date();
             start.setDate(end.getDate() - pDays + 1);
             return start.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                 + ' – '
+                 + ' â '
                  + end.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
         }
 
@@ -1829,7 +1829,7 @@
             if (period === "yesterday") return 1;
             if (period === "mtd") return 1;
             if (period === "3d") return 1;
-            if (period === "7d") return 7 / 35; // 35 = 31 (Mar) + 4 (Apr 1–4)
+            if (period === "7d") return 7 / 35; // 35 = 31 (Mar) + 4 (Apr 1â4)
             if (period === "14d") return 14 / 35;
             if (period === "30d") return 30 / 35;
             if (period === "lifetime") return 632 / 632;
@@ -1897,7 +1897,7 @@
             })).sort((a, b) => b.net - a.net);
         }
 
-        // Brand name normalization — maps legal entity names to DBA/display names
+        // Brand name normalization â maps legal entity names to DBA/display names
         const BRAND_NAME_MAP = {
             'OCS Green Leaves, LLC': 'Perpetual / OCS',
             '140 Industrial Road, LLC': "Devil's Lettuce",
@@ -1974,7 +1974,7 @@
             }).filter(p => p.net > 0).sort((a, b) => b.net - a.net);
         }
 
-        // Get brands for period — blends recent + long-term data for intermediate periods
+        // Get brands for period â blends recent + long-term data for intermediate periods
         function getBrandsForPeriod(period) {
             let raw;
             if (period === "yesterday") raw = BRANDS_7;
@@ -1993,7 +1993,7 @@
             return normalizeBrands(raw);
         }
 
-        // Get products for period — blends recent + long-term data for intermediate periods
+        // Get products for period â blends recent + long-term data for intermediate periods
         function getProductsForPeriod(period) {
             if (period === "yesterday") return PRODUCTS_7;
             if (period === "3d") return PRODUCTS_7;
@@ -2080,11 +2080,11 @@
             const dateStr = lastDataDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
             const pullDateStr = lastPull.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             const pullTimeStr = lastPull.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
-            const updatedLabel = 'Data through ' + dateStr + ' · Pulled ' + pullDateStr + ' ' + pullTimeStr;
+            const updatedLabel = 'Data through ' + dateStr + ' Â· Pulled ' + pullDateStr + ' ' + pullTimeStr;
             document.getElementById('headerDate').innerHTML = 'Data through ' + dateStr + '<br><span style="font-size:10px;color:#777;">Last pull: ' + pullDateStr + ' ' + pullTimeStr + '</span>';
-            // Mobile updated time — inline next to "Orleans, Cape Cod"
+            // Mobile updated time â inline next to "Orleans, Cape Cod"
             const mobileTimeInline = document.getElementById('mobileUpdatedInline');
-            if (mobileTimeInline) mobileTimeInline.innerHTML = '<span style="color:#C87DAB;margin:0 5px;">·</span>' + dateStr + ' <span style="color:#C87DAB;">·</span> ' + pullTimeStr;
+            if (mobileTimeInline) mobileTimeInline.innerHTML = '<span style="color:#C87DAB;margin:0 5px;">Â·</span>' + dateStr + ' <span style="color:#C87DAB;">Â·</span> ' + pullTimeStr;
 
             const periods = Object.keys(PERIOD_DATA);
             const selector = document.getElementById('periodSelector');
@@ -2194,7 +2194,7 @@
                 let netData, costData, profitData;
 
                 if (useActual) {
-                    // Use real daily data — dates and values come from DAILY_DATA
+                    // Use real daily data â dates and values come from DAILY_DATA
                     const slice = getDailySliceForPeriod(currentPeriod);
                     labels = slice.map(d => {
                         const dt = new Date(d.date + 'T12:00:00');
@@ -2361,7 +2361,7 @@
                 }
             });
 
-            // Insights — period-specific
+            // Insights â period-specific
             const top = data[0];
             const second = data[1];
             const bottom = data[data.length - 1];
@@ -2380,9 +2380,9 @@
                 </div>
                 <div class="insight-box opportunities">
                     <h4>Actions for Next ${periodDays <= 30 ? 'Week' : 'Month'}</h4>
-                    <p><strong>Promote ${top.cat}:</strong> It drives the highest profit — run a "featured strain" spotlight with 10% off second item to increase basket size. Pair it with Accessories for cross-sell.</p>
-                    <p style="margin-top:6px;"><strong>Boost ${bottom.cat}:</strong> Only ${formatCurrency(bottom.net)} in ${periodDays}d — consider bundling with ${top.cat} purchases ("Add a topical for $5 off") or dedicated endcap display to increase visibility.</p>
-                    <p style="margin-top:6px;"><strong>Margin optimization:</strong>${lowMarginCats.length > 0 ? ' ' + lowMarginCats[0] + ' at ' + data.find(d => d.cat === lowMarginCats[0])?.margin + '% margin needs vendor renegotiation or 3-5% price increase. Even 2 points of margin on a top category adds $' + Math.round(top.net * 0.02).toLocaleString() + ' to profit.' : ' All categories above 45% — strong. Focus on maintaining through vendor negotiations.'}</p>
+                    <p><strong>Promote ${top.cat}:</strong> It drives the highest profit â run a "featured strain" spotlight with 10% off second item to increase basket size. Pair it with Accessories for cross-sell.</p>
+                    <p style="margin-top:6px;"><strong>Boost ${bottom.cat}:</strong> Only ${formatCurrency(bottom.net)} in ${periodDays}d â consider bundling with ${top.cat} purchases ("Add a topical for $5 off") or dedicated endcap display to increase visibility.</p>
+                    <p style="margin-top:6px;"><strong>Margin optimization:</strong>${lowMarginCats.length > 0 ? ' ' + lowMarginCats[0] + ' at ' + data.find(d => d.cat === lowMarginCats[0])?.margin + '% margin needs vendor renegotiation or 3-5% price increase. Even 2 points of margin on a top category adds $' + Math.round(top.net * 0.02).toLocaleString() + ' to profit.' : ' All categories above 45% â strong. Focus on maintaining through vendor negotiations.'}</p>
                 </div>
             `;
         }
@@ -2439,7 +2439,7 @@
                 }
             });
 
-            // Insights — fully period-specific
+            // Insights â fully period-specific
             const top = data[0];
             const second = data[1];
             const third = data[2];
@@ -2453,14 +2453,14 @@
             document.getElementById('brandInsights').innerHTML = `
                 <div class="insight-box">
                     <h4>${label} Brand Analysis</h4>
-                    <p><strong>${top.name}</strong> leads with ${formatCurrency(top.sales)} (${topPct}% of brand revenue) at ${top.margin}% margin — generating ${formatCurrency(top.profit)} profit over ${periodDays} days (~${formatCurrency(topDaily)}/day). <strong>${second.name}</strong> follows at ${formatCurrency(second.sales)} (${second.margin}% margin) and <strong>${third.name}</strong> at ${formatCurrency(third.sales)}.</p>
+                    <p><strong>${top.name}</strong> leads with ${formatCurrency(top.sales)} (${topPct}% of brand revenue) at ${top.margin}% margin â generating ${formatCurrency(top.profit)} profit over ${periodDays} days (~${formatCurrency(topDaily)}/day). <strong>${second.name}</strong> follows at ${formatCurrency(second.sales)} (${second.margin}% margin) and <strong>${third.name}</strong> at ${formatCurrency(third.sales)}.</p>
                     <p style="margin-top:8px;">Top 3 brands account for ${((data.slice(0,3).reduce((a,d) => a + d.sales, 0) / totalBrandSales) * 100).toFixed(0)}% of total sales.${highMarginBrands.length > 0 ? ' <strong style="color:#4CAF50;">High-margin performers (55%+):</strong> ' + highMarginBrands.map(b => b.name + ' (' + b.margin + '%)').join(', ') + '.' : ''}${lowMarginBrands.length > 0 ? ' <span style="color:#E57373;"><strong>Low-margin concern (under 40%):</strong> ' + lowMarginBrands.map(b => b.name + ' (' + b.margin + '%)').join(', ') + '.</span>' : ''}</p>
                 </div>
                 <div class="insight-box opportunities">
                     <h4>Actions This ${periodDays <= 30 ? 'Week' : 'Period'}</h4>
-                    <p><strong>Shelf priority:</strong> ${top.name} generates ${formatCurrency(topDaily)}/day — ensure eye-level placement and full stock. ${second.name} at ${formatCurrency(second.sales)} deserves secondary prominence.</p>
-                    <p style="margin-top:6px;"><strong>Margin play:</strong>${highMarginBrands.length > 0 ? ' Push ' + highMarginBrands[0].name + ' harder — at ' + highMarginBrands[0].margin + '% margin, every $1K in extra sales adds $' + Math.round(parseFloat(highMarginBrands[0].margin) * 10) + ' to profit.' : ''} ${lowMarginBrands.length > 0 ? 'Consider reducing ' + lowMarginBrands[0].name + ' facings (' + lowMarginBrands[0].margin + '% margin) unless it drives foot traffic.' : 'All top brands above 40% margin — healthy mix.'}</p>
-                    <p style="margin-top:6px;"><strong>Vendor strategy:</strong> Your top 5 brands control ${((data.slice(0,5).reduce((a,d) => a + d.sales, 0) / totalBrandSales) * 100).toFixed(0)}% of revenue. Use this leverage for better wholesale terms — even 1-2% improvement on ${top.name} costs adds ${formatCurrency(Math.round(top.cost * 0.015))} to your bottom line.</p>
+                    <p><strong>Shelf priority:</strong> ${top.name} generates ${formatCurrency(topDaily)}/day â ensure eye-level placement and full stock. ${second.name} at ${formatCurrency(second.sales)} deserves secondary prominence.</p>
+                    <p style="margin-top:6px;"><strong>Margin play:</strong>${highMarginBrands.length > 0 ? ' Push ' + highMarginBrands[0].name + ' harder â at ' + highMarginBrands[0].margin + '% margin, every $1K in extra sales adds $' + Math.round(parseFloat(highMarginBrands[0].margin) * 10) + ' to profit.' : ''} ${lowMarginBrands.length > 0 ? 'Consider reducing ' + lowMarginBrands[0].name + ' facings (' + lowMarginBrands[0].margin + '% margin) unless it drives foot traffic.' : 'All top brands above 40% margin â healthy mix.'}</p>
+                    <p style="margin-top:6px;"><strong>Vendor strategy:</strong> Your top 5 brands control ${((data.slice(0,5).reduce((a,d) => a + d.sales, 0) / totalBrandSales) * 100).toFixed(0)}% of revenue. Use this leverage for better wholesale terms â even 1-2% improvement on ${top.name} costs adds ${formatCurrency(Math.round(top.cost * 0.015))} to your bottom line.</p>
                 </div>
             `;
         }
@@ -2481,7 +2481,7 @@
                 </tr>
             `).join('');
 
-            // Insights — period-specific
+            // Insights â period-specific
             const pTop = data[0];
             const p2 = data[1];
             const p3 = data[2];
@@ -2495,15 +2495,15 @@
             document.getElementById('productInsights').innerHTML = `
                 <div class="insight-box">
                     <h4>${label} Top Product Analysis</h4>
-                    <p><strong>#1: ${pTop.name.substring(0, 50)}</strong> — ${formatCurrency(pTop.net)} net (${topPctP}% of product revenue), ${pTop.margin}% margin, ${formatCurrency(pTop.profit)} profit. That's ${formatCurrency(topDailyP)}/day. ${pTop.qty > 0 ? 'Selling ' + pTop.qty + ' units at $' + pTop.avgPrice + ' avg.' : ''}</p>
-                    <p style="margin-top:6px;"><strong>#2: ${p2.name.substring(0, 50)}</strong> — ${formatCurrency(p2.net)} net, ${p2.margin}% margin. <strong>#3: ${p3.name.substring(0, 50)}</strong> — ${formatCurrency(p3.net)} net, ${p3.margin}% margin.</p>
+                    <p><strong>#1: ${pTop.name.substring(0, 50)}</strong> â ${formatCurrency(pTop.net)} net (${topPctP}% of product revenue), ${pTop.margin}% margin, ${formatCurrency(pTop.profit)} profit. That's ${formatCurrency(topDailyP)}/day. ${pTop.qty > 0 ? 'Selling ' + pTop.qty + ' units at $' + pTop.avgPrice + ' avg.' : ''}</p>
+                    <p style="margin-top:6px;"><strong>#2: ${p2.name.substring(0, 50)}</strong> â ${formatCurrency(p2.net)} net, ${p2.margin}% margin. <strong>#3: ${p3.name.substring(0, 50)}</strong> â ${formatCurrency(p3.net)} net, ${p3.margin}% margin.</p>
                     <p style="margin-top:6px;">${flowerProds.length > 0 ? 'Flower products in top list: ' + flowerProds.length + '. ' : ''}${vapeProds.length > 0 ? 'Vape products in top list: ' + vapeProds.length + '. ' : ''}Top 3 products account for ${totalProdNet > 0 ? (((pTop.net + p2.net + p3.net) / totalProdNet) * 100).toFixed(0) : 0}% of tracked product revenue.</p>
                 </div>
                 <div class="insight-box opportunities">
                     <h4>Product Strategy Actions</h4>
                     <p><strong>Never-out-of-stock list:</strong> ${pTop.name.substring(0, 35)}, ${p2.name.substring(0, 35)}, and ${p3.name.substring(0, 35)} should have auto-reorder triggers set at 2-week supply minimum. A single stockout day on #1 costs ~${formatCurrency(topDailyP)}.</p>
                     <p style="margin-top:6px;"><strong>Cross-sell opportunities:</strong> Bundle ${pTop.name.substring(0, 25)} with a complementary accessory or edible at a 5% combo discount. Even 10% attachment rate on ${pTop.qty || 'top'} transactions adds meaningful incremental profit.</p>
-                    <p style="margin-top:6px;"><strong>Watch list:</strong> Track velocity on products #8-12 — if any drop 25% vs. prior period, evaluate for delisting. Replace slow movers with new SKUs from your top vendors to keep the menu fresh.</p>
+                    <p style="margin-top:6px;"><strong>Watch list:</strong> Track velocity on products #8-12 â if any drop 25% vs. prior period, evaluate for delisting. Replace slow movers with new SKUs from your top vendors to keep the menu fresh.</p>
                 </div>
             `;
         }
@@ -2539,7 +2539,7 @@
         function updateHeatmap() {
             const lifetimeDays = 627;
 
-            // Determine period days — custom range overrides dashboard period
+            // Determine period days â custom range overrides dashboard period
             const customChecked = document.getElementById('heatmapCustomRange') && document.getElementById('heatmapCustomRange').checked;
             let periodDays, badgeText;
             if (customChecked) {
@@ -2564,7 +2564,7 @@
             const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
             const hours = ['09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM', '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM'];
 
-            // Day-of-week weights that change by period — simulates real traffic variance
+            // Day-of-week weights that change by period â simulates real traffic variance
             // Anchored to last complete data day in DAILY_DATA (not wall-clock today, which may lack data yet)
             const today = new Date(DAILY_DATA[DAILY_DATA.length - 1].date + 'T12:00:00');
             const todayDow = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][today.getDay()];
@@ -2584,7 +2584,7 @@
                     return recentDays.includes(dayName) ? 1.0 : 0.08;
                 }
                 if (pDays <= 7) {
-                    // Full week — slightly boost weekend
+                    // Full week â slightly boost weekend
                     const boosts = {'Friday': 1.15, 'Saturday': 1.25, 'Sunday': 1.10};
                     return boosts[dayName] || 0.92;
                 }
@@ -2622,7 +2622,7 @@
                 return 1.0; // Lifetime is the raw data
             }
 
-            // "Today" period shows the last complete data day — no future hours to hide (it's fully closed)
+            // "Today" period shows the last complete data day â no future hours to hide (it's fully closed)
             const nowHour = 23; // all hours visible; "today" = last complete day, not live wall-clock
             const isTodayPeriod = false; // never hide future hours since we show complete historical days
             const isYesterdayPeriod = (currentPeriod === "yesterday");
@@ -2738,7 +2738,7 @@
                 hours.forEach(hour => {
                     const key = day + '|' + hour;
                     if (hiddenCells.has(key)) {
-                        html += '<td class="heatmap-cell" style="background-color:rgba(30,20,50,0.5);color:#444;font-size:10px;">—</td>';
+                        html += '<td class="heatmap-cell" style="background-color:rgba(30,20,50,0.5);color:#444;font-size:10px;">â</td>';
                         return;
                     }
                     const row = HOURLY_DATA.find(r => r.day === day && r.hour === hour);
@@ -2772,12 +2772,12 @@
             document.getElementById('heatmapInsights').innerHTML = `
                 <div class="insight-box">
                     <h4>${badgeText} Traffic Pattern</h4>
-                    <p><strong>Peak hour:</strong> ${peakHour.day} ${peakHour.hour} at ~${formatCurrency(Math.round(peakHour.netEst))} est. net — your single strongest selling hour. <strong>${peak2.day} ${peak2.hour}</strong> is #2 at ~${formatCurrency(Math.round(peak2.netEst))}. These two hours alone account for ${totalHeatmapNet > 0 ? (((peakHour.netEst + peak2.netEst) / totalHeatmapNet) * 100).toFixed(1) : '0'}% of total revenue.</p>
-                    <p style="margin-top:8px;"><strong>Slowest periods:</strong> ${slowest.day} ${slowest.hour} (~${formatCurrency(Math.round(slowest.netEst))}) and ${slow2.day} ${slow2.hour} (~${formatCurrency(Math.round(slow2.netEst))}). Weekend (Fri-Sun) drives <strong>${wkndPct}%</strong> of weekly revenue — ${weekendTotal > weekdayTotal ? 'significantly outperforming' : 'roughly matching'} weekdays.</p>
+                    <p><strong>Peak hour:</strong> ${peakHour.day} ${peakHour.hour} at ~${formatCurrency(Math.round(peakHour.netEst))} est. net â your single strongest selling hour. <strong>${peak2.day} ${peak2.hour}</strong> is #2 at ~${formatCurrency(Math.round(peak2.netEst))}. These two hours alone account for ${totalHeatmapNet > 0 ? (((peakHour.netEst + peak2.netEst) / totalHeatmapNet) * 100).toFixed(1) : '0'}% of total revenue.</p>
+                    <p style="margin-top:8px;"><strong>Slowest periods:</strong> ${slowest.day} ${slowest.hour} (~${formatCurrency(Math.round(slowest.netEst))}) and ${slow2.day} ${slow2.hour} (~${formatCurrency(Math.round(slow2.netEst))}). Weekend (Fri-Sun) drives <strong>${wkndPct}%</strong> of weekly revenue â ${weekendTotal > weekdayTotal ? 'significantly outperforming' : 'roughly matching'} weekdays.</p>
                 </div>
                 <div class="insight-box opportunities">
                     <h4>Staffing & Promo Actions</h4>
-                    <p><strong>Staff scheduling:</strong> Double-staff ${peakHour.day}s 11am-3pm and all weekend 10am-6pm. Your peak hours generate ${((peakHour.netEst / (slowest.netEst || 1))).toFixed(1)}x more revenue than your slowest — staffing should reflect this ratio.</p>
+                    <p><strong>Staff scheduling:</strong> Double-staff ${peakHour.day}s 11am-3pm and all weekend 10am-6pm. Your peak hours generate ${((peakHour.netEst / (slowest.netEst || 1))).toFixed(1)}x more revenue than your slowest â staffing should reflect this ratio.</p>
                     <p style="margin-top:6px;"><strong>Flash promotions:</strong> Run "Early Bird" deals (9-10am weekdays) to build morning traffic when the store is quietest. A 10% discount during slow hours costs less than the revenue you gain from incremental foot traffic.</p>
                     <p style="margin-top:6px;"><strong>Weekend strategy:</strong> ${weekendTotal > weekdayTotal ? 'Weekends are your money-maker at ' + wkndPct + '% of revenue. Stock up Friday mornings, run premium product launches Saturday AM, and push impulse-buy items (edibles, beverages) near the register.' : 'Weekdays and weekends are roughly balanced. Consider weekend-exclusive deals to pull more traffic.'}</p>
                 </div>
@@ -2795,7 +2795,7 @@
             // Also get lifetime data to ensure we always have enough products for both tables
             const ltData = PRODUCTS_LT;
 
-            // Determine threshold based on period — lower for shorter periods
+            // Determine threshold based on period â lower for shorter periods
             const thresholds = {'7d':50,'14d':100,'30d':200,'60d':350,'90d':500,'365d':1500,'lifetime':2000};
             const threshold = thresholds[currentPeriod] || 300;
 
@@ -2843,7 +2843,7 @@
                 </tr>
             `).join('');
 
-            // Insights — period-specific
+            // Insights â period-specific
             const lowest = worstMargin[0];
             const highest = bestMargin[0];
             const avgMargin = periodData.length > 0 ? (periodData.reduce((a, p) => a + parseFloat(p.margin), 0) / periodData.length).toFixed(1) : '0';
@@ -2853,12 +2853,12 @@
             document.getElementById('marginInsights').innerHTML = `
                 <div class="insight-box">
                     <h4>${label} Margin Analysis</h4>
-                    <p>${lowest ? `<strong>Lowest margin:</strong> ${lowest.name.substring(0, 45)} at <span style="color:#E57373;">${lowest.margin}%</span> with ${formatCurrency(lowest.net)} in sales — only ${formatCurrency(lowest.profit)} profit. ` : ''}${highest ? `<strong>Highest margin:</strong> ${highest.name.substring(0, 45)} at <span style="color:#4CAF50;">${highest.margin}%</span> generating ${formatCurrency(highest.profit)} profit from ${formatCurrency(highest.net)} sales.` : ''}</p>
-                    <p style="margin-top:8px;">Average product margin: <strong>${avgMargin}%</strong>. The 10 worst-margin products above ${formatCurrency(threshold)} in sales combined generate only ${formatCurrency(totalProfit)} profit — a 5% price increase across these would add ~${formatCurrency(potentialGain)} to your bottom line with minimal demand impact.</p>
+                    <p>${lowest ? `<strong>Lowest margin:</strong> ${lowest.name.substring(0, 45)} at <span style="color:#E57373;">${lowest.margin}%</span> with ${formatCurrency(lowest.net)} in sales â only ${formatCurrency(lowest.profit)} profit. ` : ''}${highest ? `<strong>Highest margin:</strong> ${highest.name.substring(0, 45)} at <span style="color:#4CAF50;">${highest.margin}%</span> generating ${formatCurrency(highest.profit)} profit from ${formatCurrency(highest.net)} sales.` : ''}</p>
+                    <p style="margin-top:8px;">Average product margin: <strong>${avgMargin}%</strong>. The 10 worst-margin products above ${formatCurrency(threshold)} in sales combined generate only ${formatCurrency(totalProfit)} profit â a 5% price increase across these would add ~${formatCurrency(potentialGain)} to your bottom line with minimal demand impact.</p>
                 </div>
                 <div class="insight-box opportunities">
                     <h4>Margin Improvement Actions</h4>
-                    <p><strong>Reprice or renegotiate:</strong>${lowest ? ' ' + lowest.name.substring(0, 30) + ' at ' + lowest.margin + '% should be 45%+ — either negotiate a 5-8% cost reduction with the vendor or increase retail price by $2-3.' : ''} Target all sub-35% SKUs for review this week.</p>
+                    <p><strong>Reprice or renegotiate:</strong>${lowest ? ' ' + lowest.name.substring(0, 30) + ' at ' + lowest.margin + '% should be 45%+ â either negotiate a 5-8% cost reduction with the vendor or increase retail price by $2-3.' : ''} Target all sub-35% SKUs for review this week.</p>
                     <p style="margin-top:6px;"><strong>Shift shelf allocation:</strong> Your top-margin products deserve 2x the shelf space. ${highest ? highest.name.substring(0, 30) + ' at ' + highest.margin + '% should be eye-level and well-stocked. ' : ''}Move low-margin products to bottom shelf or delist entirely.</p>
                     <p style="margin-top:6px;"><strong>Bundle strategy:</strong> Pair low-margin high-velocity items with high-margin accessories or edibles. A $5 accessory at 60% margin added to 20% of transactions would add significant profit without requiring any price changes.</p>
                 </div>
@@ -2867,7 +2867,7 @@
 
         // Update Inventory Status
         function updateInventoryStatus() {
-            const NON_CANNABIS = ['Accessories'];
+            const NON_CANNABIS = ['Accessories', 'Snacks'];
             const totalSKUs = INVENTORY_DATA.reduce((s, d) => s + d.activeSKUs, 0);
             const inactiveSKUs = INVENTORY_DATA.reduce((s, d) => s + (d.skus - d.activeSKUs), 0);
             const cannabisSKUs = INVENTORY_DATA.filter(d => !NON_CANNABIS.includes(d.name)).reduce((s, d) => s + d.activeSKUs, 0);
@@ -2970,8 +2970,8 @@
             document.getElementById('skuTrendInsights').innerHTML = `
                 <div class="insight-box">
                     <h4>SKU Growth Trend</h4>
-                    <p>Active cannabis SKU count has grown <strong>${cannabisGrowth}%</strong> from ${first.cannabis} to ${last.cannabis} since opening (${first.month}), counting only active inventory (inactive/discontinued SKUs omitted). Non-cannabis active SKUs (accessories, topicals) have grown from ${nonCannabisStart} to ${nonCannabisNow}. Cannabis products represent <strong>${((last.cannabis / last.total) * 100).toFixed(0)}%</strong> of your total active catalog.</p>
-                    <p style="margin-top:8px;"><strong>Action:</strong> Your SKU growth rate has been ${last.cannabis - SKU_TREND[SKU_TREND.length - 7].cannabis > 40 ? 'accelerating' : 'steady'} over the past 6 months. Monitor sell-through rates on newer SKUs — if any category exceeds 100 active SKUs with <60% sell-through, consider culling slow movers to free shelf space and reduce carrying costs.</p>
+                    <p>Active cannabis SKU count has grown <strong>${cannabisGrowth}%</strong> from ${first.cannabis} to ${last.cannabis} since opening (${first.month}), counting only active inventory (inactive/discontinued SKUs omitted). Non-cannabis active SKUs (accessories) have grown from ${nonCannabisStart} to ${nonCannabisNow}. Cannabis products represent <strong>${((last.cannabis / last.total) * 100).toFixed(0)}%</strong> of your total active catalog.</p>
+                    <p style="margin-top:8px;"><strong>Action:</strong> Your SKU growth rate has been ${last.cannabis - SKU_TREND[SKU_TREND.length - 7].cannabis > 40 ? 'accelerating' : 'steady'} over the past 6 months. Monitor sell-through rates on newer SKUs â if any category exceeds 100 active SKUs with <60% sell-through, consider culling slow movers to free shelf space and reduce carrying costs.</p>
                 </div>
             `;
         }
@@ -2991,7 +2991,7 @@
             const ltExtras = ltBrands.filter(b => !periodBrandNames.has(b.name));
             const combinedBrands = [...brands, ...ltExtras];
 
-            // Filter to brands with meaningful sales — much lower thresholds to always populate
+            // Filter to brands with meaningful sales â much lower thresholds to always populate
             const brandThresholds = {'7d':100,'14d':200,'30d':500,'60d':800,'90d':1000,'365d':3000,'lifetime':5000};
             const brandThreshold = brandThresholds[currentPeriod] || 800;
 
@@ -3034,7 +3034,7 @@
                 <div class="insight-box">
                     <h4>${label} Brand Margin Analysis</h4>
                     <p>${top1 ? `<strong>Highest margin brand:</strong> ${top1.name.replace(/, (LLC|Inc\.)/, '')} at <span style="color:#4CAF50;">${top1.margin}%</span> generating $${(top1.profit / periodDays).toFixed(0)}/day in profit from ${formatCurrency(top1.sales)} sales.` : ''} ${bot1 ? `<strong>Lowest:</strong> ${bot1.name.replace(/, (LLC|Inc\.)/, '')} at <span style="color:#E57373;">${bot1.margin}%</span>.` : ''} The margin spread across your vendor portfolio is <strong>${spreadPct} percentage points</strong>, with an average of ${avgMargin}%.</p>
-                    <p style="margin-top:8px;"><strong>Action:</strong> ${bot1 && parseFloat(bot1.margin) < 40 ? `Renegotiate cost on ${bot1.name.replace(/, (LLC|Inc\.)/, '')} — at ${bot1.margin}% they\'re dragging your blended margin down. Target 45%+ or consider replacing with higher-margin alternatives.` : 'All brands are performing at acceptable margins.'} ${top1 ? `Double down on ${top1.name.replace(/, (LLC|Inc\.)/, '')} — their ${top1.margin}% margin and ${formatCurrency(top1.sales)} volume make them your most profitable vendor relationship.` : ''}</p>
+                    <p style="margin-top:8px;"><strong>Action:</strong> ${bot1 && parseFloat(bot1.margin) < 40 ? `Renegotiate cost on ${bot1.name.replace(/, (LLC|Inc\.)/, '')} â at ${bot1.margin}% they\'re dragging your blended margin down. Target 45%+ or consider replacing with higher-margin alternatives.` : 'All brands are performing at acceptable margins.'} ${top1 ? `Double down on ${top1.name.replace(/, (LLC|Inc\.)/, '')} â their ${top1.margin}% margin and ${formatCurrency(top1.sales)} volume make them your most profitable vendor relationship.` : ''}</p>
                 </div>
             `;
         }
@@ -3182,7 +3182,7 @@
             `;
 
             // Vendor Reorder Cards
-            let recsHtml = '<h3 style="font-size:13px;color:#C87DAB;margin-bottom:12px;">Vendor Purchase Orders — $3K Minimum Strategy</h3>';
+            let recsHtml = '<h3 style="font-size:13px;color:#C87DAB;margin-bottom:12px;">Vendor Purchase Orders â $3K Minimum Strategy</h3>';
 
             const sortedVendors = [...vendorData].sort((a, b) => b.criticals - a.criticals || b.totalForCoverage - a.totalForCoverage);
 
@@ -3209,8 +3209,8 @@
                     if (item.risk === 'CRITICAL') catMap[cat].criticals++;
                 });
 
-                // Category breakdown table — BASE ORDER
-                let catTable = '<div style="font-size:10px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-top:8px;margin-bottom:4px;">Base Reorder — Replenishment Needs</div>';
+                // Category breakdown table â BASE ORDER
+                let catTable = '<div style="font-size:10px;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-top:8px;margin-bottom:4px;">Base Reorder â Replenishment Needs</div>';
                 catTable += '<table style="width:100%;border-collapse:collapse;"><thead><tr>' +
                     '<th style="text-align:left;font-size:10px;color:#999;padding:3px 6px;border-bottom:1px solid #2A2A4E;">Category</th>' +
                     '<th style="text-align:right;font-size:10px;color:#999;padding:3px 6px;border-bottom:1px solid #2A2A4E;">SKUs</th>' +
@@ -3238,13 +3238,13 @@
                 </tr>`;
                 catTable += '</tbody></table>';
 
-                // PADDING SECTION — additional items to hit $3K
+                // PADDING SECTION â additional items to hit $3K
                 let paddingHtml = '';
                 if (vendor.paddingItems.length > 0) {
                     const shortfall = MIN_ORDER - vendor.baseCost;
                     paddingHtml = `<div style="margin-top:10px;padding:8px;background:rgba(200,125,171,0.05);border:1px dashed #C87DAB44;border-radius:6px;">
                         <div style="font-size:10px;font-weight:600;color:#C87DAB;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px;">
-                            Order Padding — +${formatCurrency(vendor.paddingCost)} to hit $3K minimum
+                            Order Padding â +${formatCurrency(vendor.paddingCost)} to hit $3K minimum
                             <span style="color:#666;font-weight:400;text-transform:none;"> (${formatCurrency(shortfall)} shortfall)</span>
                         </div>
                         <table style="width:100%;border-collapse:collapse;"><thead><tr>
@@ -3255,7 +3255,7 @@
                         </tr></thead><tbody>`;
                     vendor.paddingItems.forEach(p => {
                         paddingHtml += `<tr>
-                            <td style="font-size:10px;color:#E0E0E0;padding:3px 6px;">${p.name.length > 55 ? p.name.substring(0, 55) + '...' : p.name}<br><span style="color:#666;font-size:9px;">${p.cat} · ${p.margin}% margin · ${p.vel}/day vel</span></td>
+                            <td style="font-size:10px;color:#E0E0E0;padding:3px 6px;">${p.name.length > 55 ? p.name.substring(0, 55) + '...' : p.name}<br><span style="color:#666;font-size:9px;">${p.cat} Â· ${p.margin}% margin Â· ${p.vel}/day vel</span></td>
                             <td style="text-align:right;font-size:11px;color:#E0E0E0;padding:3px 6px;">${p.units}</td>
                             <td style="text-align:right;font-size:11px;color:#C87DAB;padding:3px 6px;">${formatCurrency(p.cost)}</td>
                             <td style="font-size:10px;color:#999;padding:3px 6px;">${p.reason}</td>
@@ -3339,9 +3339,9 @@
             document.getElementById('purchasingInsights').innerHTML = `
                 <div class="insight-box">
                     <h4>${currentCoverage}-Day Purchasing Strategy</h4>
-                    <p><strong>Total investment needed:</strong> ${formatCurrency(totalPO)} across ${vendorData.length} vendors for ${currentCoverage} days of coverage (${formatCurrency(totalBase)} replenishment + ${formatCurrency(totalPadding)} strategic padding). ${urgentVendorNames.length > 0 ? `<span style="color:#E57373;">Urgent orders needed from: ${urgentVendorNames.join(', ')}</span> — these vendors have critical stock-outs imminent.` : 'No immediate stock-out emergencies.'}</p>
-                    <p style="margin-top:8px;"><strong>$3K minimum strategy:</strong> ${vendorsMet.length} of ${vendorData.length} vendors hit the $3K order minimum${vendorsMet.length > 0 ? ' (' + vendorsMet.map(v => v.vendor.split(',')[0].split(' LLC')[0]).join(', ') + ')' : ''}. ${vendorsShort.length > 0 ? 'Padding recommendations add category depth and high-velocity items from each vendor\u2019s catalog to bridge the gap. All padding picks are based on brand sell-through, margin profile, and category gaps in your current inventory.' : 'All vendors are above minimum — no padding needed at this coverage level.'}</p>
-                    <p style="margin-top:8px;"><strong>Priority order:</strong> ${topVendor ? topVendor.vendor + ' at ' + formatCurrency(topVendor.totalForCoverage) + ' is your largest PO — ' + (topVendor.criticals > 0 ? 'place this order TODAY due to ' + topVendor.criticals + ' critical items.' : 'schedule within the week.') : ''}</p>
+                    <p><strong>Total investment needed:</strong> ${formatCurrency(totalPO)} across ${vendorData.length} vendors for ${currentCoverage} days of coverage (${formatCurrency(totalBase)} replenishment + ${formatCurrency(totalPadding)} strategic padding). ${urgentVendorNames.length > 0 ? `<span style="color:#E57373;">Urgent orders needed from: ${urgentVendorNames.join(', ')}</span> â these vendors have critical stock-outs imminent.` : 'No immediate stock-out emergencies.'}</p>
+                    <p style="margin-top:8px;"><strong>$3K minimum strategy:</strong> ${vendorsMet.length} of ${vendorData.length} vendors hit the $3K order minimum${vendorsMet.length > 0 ? ' (' + vendorsMet.map(v => v.vendor.split(',')[0].split(' LLC')[0]).join(', ') + ')' : ''}. ${vendorsShort.length > 0 ? 'Padding recommendations add category depth and high-velocity items from each vendor\u2019s catalog to bridge the gap. All padding picks are based on brand sell-through, margin profile, and category gaps in your current inventory.' : 'All vendors are above minimum â no padding needed at this coverage level.'}</p>
+                    <p style="margin-top:8px;"><strong>Priority order:</strong> ${topVendor ? topVendor.vendor + ' at ' + formatCurrency(topVendor.totalForCoverage) + ' is your largest PO â ' + (topVendor.criticals > 0 ? 'place this order TODAY due to ' + topVendor.criticals + ' critical items.' : 'schedule within the week.') : ''}</p>
                     <p style="margin-top:8px;"><strong>Negotiation leverage:</strong> Your top 3 vendors represent ${formatCurrency(sortedVendors.slice(0, 3).reduce((s,v) => s + v.totalForCoverage, 0))} in ${currentCoverage}-day spend. Use this volume to negotiate 3-5% cost reductions or extended payment terms (Net 30 to Net 45). Even a 3% reduction across your top vendors saves ~${formatCurrency(Math.round(totalPO * 0.03))}/cycle.</p>
                 </div>
             `;
@@ -3499,21 +3499,21 @@
 
             el.innerHTML = `
                 <h4>Bundle Performance Analysis</h4>
-                <p><strong style="color:#D4A843;">Portfolio Overview:</strong> Ember Gardens runs <strong>${entries.length} active bundles</strong> generating <strong>${formatCurrency(totalWeeklyRev)}/week</strong> in gross revenue and <strong>${formatCurrency(Math.round(totalWeeklyProfit))}/week</strong> in estimated profit. An estimated <strong>${formatCurrency(Math.round(totalIncrementalRev))}/week</strong> (${((totalIncrementalRev / totalWeeklyRev) * 100).toFixed(0)}%) is truly incremental — revenue that wouldn't exist without the bundle. Average margin compression is <strong>${avgMarginDrop} points</strong> below regular pricing.</p>
+                <p><strong style="color:#D4A843;">Portfolio Overview:</strong> Ember Gardens runs <strong>${entries.length} active bundles</strong> generating <strong>${formatCurrency(totalWeeklyRev)}/week</strong> in gross revenue and <strong>${formatCurrency(Math.round(totalWeeklyProfit))}/week</strong> in estimated profit. An estimated <strong>${formatCurrency(Math.round(totalIncrementalRev))}/week</strong> (${((totalIncrementalRev / totalWeeklyRev) * 100).toFixed(0)}%) is truly incremental â revenue that wouldn't exist without the bundle. Average margin compression is <strong>${avgMarginDrop} points</strong> below regular pricing.</p>
 
                 <p style="margin-top:8px;"><strong style="color:#4CAF50;">Top Performers (${gradeA} Grade-A bundles):</strong></p>
                 <ul style="margin:4px 0 8px 20px;padding:0;">
-                    ${top5.map(e => `<li style="margin-bottom:3px;"><strong>${e.name}</strong> — Score: <span style="color:${e.score.verdictColor};">${e.score.total}/100 (${e.score.grade})</span> · ${formatCurrency(e.weeklyRev)}/wk · ${e.sellThrough}% sell-through · ${e.incrementalPct}% incremental · Trend: ${e.monthlyTrend > 1.0 ? '+' : ''}${((e.monthlyTrend - 1) * 100).toFixed(0)}%</li>`).join('')}
+                    ${top5.map(e => `<li style="margin-bottom:3px;"><strong>${e.name}</strong> â Score: <span style="color:${e.score.verdictColor};">${e.score.total}/100 (${e.score.grade})</span> Â· ${formatCurrency(e.weeklyRev)}/wk Â· ${e.sellThrough}% sell-through Â· ${e.incrementalPct}% incremental Â· Trend: ${e.monthlyTrend > 1.0 ? '+' : ''}${((e.monthlyTrend - 1) * 100).toFixed(0)}%</li>`).join('')}
                 </ul>
 
                 <p style="margin-top:8px;"><strong style="color:#E57373;">Underperformers (${gradeD} Grade D/F):</strong></p>
                 <ul style="margin:4px 0 8px 20px;padding:0;">
-                    ${bottom5.map(e => `<li style="margin-bottom:3px;"><strong>${e.name}</strong> — Score: <span style="color:${e.score.verdictColor};">${e.score.total}/100 (${e.score.grade})</span> · ${formatCurrency(e.weeklyRev)}/wk · ${e.sellThrough}% sell-through · ${e.marginImpact.toFixed(1)}% margin (down ${e.marginDrop.toFixed(1)} pts) · Trend: ${e.monthlyTrend > 1.0 ? '+' : ''}${((e.monthlyTrend - 1) * 100).toFixed(0)}%</li>`).join('')}
+                    ${bottom5.map(e => `<li style="margin-bottom:3px;"><strong>${e.name}</strong> â Score: <span style="color:${e.score.verdictColor};">${e.score.total}/100 (${e.score.grade})</span> Â· ${formatCurrency(e.weeklyRev)}/wk Â· ${e.sellThrough}% sell-through Â· ${e.marginImpact.toFixed(1)}% margin (down ${e.marginDrop.toFixed(1)} pts) Â· Trend: ${e.monthlyTrend > 1.0 ? '+' : ''}${((e.monthlyTrend - 1) * 100).toFixed(0)}%</li>`).join('')}
                 </ul>
 
                 <p style="margin-top:8px;"><strong style="color:#D4A843;">Growth Signals:</strong> ${growing.length} bundles are trending up >10% month-over-month: ${growing.slice(0, 4).map(e => `<strong>${e.name}</strong> (+${((e.monthlyTrend - 1) * 100).toFixed(0)}%)`).join(', ')}. ${declining.length > 0 ? `${declining.length} bundles are declining: ${declining.map(e => '<strong>' + e.name + '</strong> (' + ((e.monthlyTrend - 1) * 100).toFixed(0) + '%)').join(', ')}. Consider refreshing or retiring these.` : 'No bundles are in decline.'}</p>
 
-                <p style="margin-top:8px;"><strong style="color:#8B6BAE;">Recommendations:</strong> (1) The Herbwell Live Resin Cart bundle has the highest incrementality (${entries.find(e => e.name.includes('Herbwell'))?.incrementalPct || 58}%) but also the deepest margin compression — negotiate vendor support to offset. (2) Bostica 28g and 14g bundles have low sell-through (${entries.find(e => e.name === 'Bostica 28g')?.sellThrough || 58}%/${entries.find(e => e.name === 'Bostica 14g')?.sellThrough || 65}%) — consider tighter inventory buys on these SKUs. (3) Beverage bundle is the fastest-growing category (+${((entries.find(e => e.name.includes('Buzzy'))?.monthlyTrend || 1.20) - 1) * 100}%) — expand with seasonal summer packs ahead of Cape Cod tourist season.</p>
+                <p style="margin-top:8px;"><strong style="color:#8B6BAE;">Recommendations:</strong> (1) The Herbwell Live Resin Cart bundle has the highest incrementality (${entries.find(e => e.name.includes('Herbwell'))?.incrementalPct || 58}%) but also the deepest margin compression â negotiate vendor support to offset. (2) Bostica 28g and 14g bundles have low sell-through (${entries.find(e => e.name === 'Bostica 28g')?.sellThrough || 58}%/${entries.find(e => e.name === 'Bostica 14g')?.sellThrough || 65}%) â consider tighter inventory buys on these SKUs. (3) Beverage bundle is the fastest-growing category (+${((entries.find(e => e.name.includes('Buzzy'))?.monthlyTrend || 1.20) - 1) * 100}%) â expand with seasonal summer packs ahead of Cape Cod tourist season.</p>
             `;
         }
 
@@ -3557,7 +3557,7 @@
                     <div style="font-size:10px;color:#666;">${maxSavings.name}</div>
                 </div>`;
 
-            // Bundle Success Scorecard — show ALL bundles with deal info
+            // Bundle Success Scorecard â show ALL bundles with deal info
             const scorecardDiv = document.createElement('div');
             scorecardDiv.style.cssText = 'margin:16px 0;padding:16px;background:#0F0F1A;border:1px solid #2A2A4E;border-radius:8px;';
 
@@ -3577,7 +3577,7 @@
             const drivingCount = scoredBundles.filter(b => b.score.total >= 70).length;
             const dragCount = scoredBundles.filter(b => b.score.total < 55).length;
 
-            let scHtml = '<div class="scorecard-header-row" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="font-size:14px;">&#9733;</span><span style="font-size:13px;font-weight:600;color:#D4A843;">Bundle Success Scorecard</span><span style="font-size:10px;color:#666;">— All ' + allBundleCards.length + ' bundles</span></div><div style="display:flex;gap:8px;font-size:10px;flex-wrap:wrap;"><span style="color:#4CAF50;">' + drivingCount + ' driving</span><span style="color:#D4A843;">' + (scoredBundles.length - drivingCount - dragCount) + ' mixed</span><span style="color:#E57373;">' + dragCount + ' drag</span><span style="color:#999;">Avg: ' + avgScore + '/100</span></div></div>';
+            let scHtml = '<div class="scorecard-header-row" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:6px;"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><span style="font-size:14px;">&#9733;</span><span style="font-size:13px;font-weight:600;color:#D4A843;">Bundle Success Scorecard</span><span style="font-size:10px;color:#666;">â All ' + allBundleCards.length + ' bundles</span></div><div style="display:flex;gap:8px;font-size:10px;flex-wrap:wrap;"><span style="color:#4CAF50;">' + drivingCount + ' driving</span><span style="color:#D4A843;">' + (scoredBundles.length - drivingCount - dragCount) + ' mixed</span><span style="color:#E57373;">' + dragCount + ' drag</span><span style="color:#999;">Avg: ' + avgScore + '/100</span></div></div>';
             scHtml += '<div class="bundle-scorecard-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;">';
             allBundleCards.forEach(({ cat, item, perf, score }) => {
                 const pctMatch = item.savings.match(/\((\d+)%\)/);
@@ -3591,9 +3591,9 @@
                 scHtml += `<div style="background:#1A1A2E;border:1px solid #2A2A4E;border-radius:6px;padding:10px;border-left:3px solid ${verdictColor};">
                     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
                         <span style="font-size:11px;font-weight:600;color:#E0E0E0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${item.bundle}</span>
-                        ${score ? `<span style="background:${verdictColor}22;color:${verdictColor};font-size:11px;font-weight:700;padding:2px 6px;border-radius:6px;flex-shrink:0;margin-left:4px;">${score.grade} ${score.total}</span>` : '<span style="font-size:10px;color:#555;flex-shrink:0;">—</span>'}
+                        ${score ? `<span style="background:${verdictColor}22;color:${verdictColor};font-size:11px;font-weight:700;padding:2px 6px;border-radius:6px;flex-shrink:0;margin-left:4px;">${score.grade} ${score.total}</span>` : '<span style="font-size:10px;color:#555;flex-shrink:0;">â</span>'}
                     </div>
-                    <div style="font-size:10px;color:#C87DAB;margin-bottom:4px;">${item.qty} · $${item.unitPrice.toFixed(2)}/ea <span style="text-decoration:line-through;color:#555;">$${item.regPrice.toFixed(2)}</span> <span style="color:#D4A843;">(${pct}% off)</span></div>
+                    <div style="font-size:10px;color:#C87DAB;margin-bottom:4px;">${item.qty} Â· $${item.unitPrice.toFixed(2)}/ea <span style="text-decoration:line-through;color:#555;">$${item.regPrice.toFixed(2)}</span> <span style="color:#D4A843;">(${pct}% off)</span></div>
                     ${score ? `<div style="font-size:9px;color:${verdictColor};font-weight:600;margin-bottom:3px;">${score.verdict}</div>` : ''}
                     ${perf ? `<div style="display:flex;gap:6px;font-size:9px;color:#999;flex-wrap:wrap;">
                         <span>${perf.weeklyUnits}/wk <span style="color:${trendColor};">${trendIcon}</span></span>
@@ -3689,12 +3689,12 @@
                                         <span style="background:${score.verdictColor}22;color:${score.verdictColor};font-size:10px;font-weight:700;padding:3px 8px;border-radius:8px;">${score.grade}</span>
                                         <span style="font-size:9px;color:${score.verdictColor};">${score.verdict}</span>
                                     </div>
-                                    <div style="font-size:9px;color:#666;margin-top:2px;">${score.total}/100 · ${perf.marginImpact}% margin</div>
+                                    <div style="font-size:9px;color:#666;margin-top:2px;">${score.total}/100 Â· ${perf.marginImpact}% margin</div>
                                 </td>`;
                         } else {
                             perfCells = `
-                                <td style="padding:6px;text-align:center;color:#555;font-size:11px;">—</td>
-                                <td style="padding:6px;text-align:right;color:#555;font-size:11px;">—</td>
+                                <td style="padding:6px;text-align:center;color:#555;font-size:11px;">â</td>
+                                <td style="padding:6px;text-align:right;color:#555;font-size:11px;">â</td>
                                 <td style="padding:6px;text-align:center;color:#555;font-size:10px;">No data</td>`;
                         }
 
@@ -3713,19 +3713,19 @@
             }
             renderTable('ALL');
 
-            // Competitor Bundle Comparison — all 6 competitors
+            // Competitor Bundle Comparison â all 6 competitors
             const COMP_BUNDLES = [
-                {cat:'Flower (8th)', eg:'2/$45 (Bostica)', egUnit:22.50, seaside:'House 8ths $25', seasideUnit:25.00, haven:'2 8ths/$50', havenUnit:25.00, salty:'Budget 8ths $20', saltyUnit:20.00, capecod:'2/10% · 4/15% · 8/20% off', capecodUnit:21.25, emerald:'Mix & Match 2 8ths', emeraldUnit:null, sublime:'Multiple $25-35/8th', sublimeUnit:null},
+                {cat:'Flower (8th)', eg:'2/$45 (Bostica)', egUnit:22.50, seaside:'House 8ths $25', seasideUnit:25.00, haven:'2 8ths/$50', havenUnit:25.00, salty:'Budget 8ths $20', saltyUnit:20.00, capecod:'2/10% Â· 4/15% Â· 8/20% off', capecodUnit:21.25, emerald:'Mix & Match 2 8ths', emeraldUnit:null, sublime:'Multiple $25-35/8th', sublimeUnit:null},
                 {cat:'Flower (oz)', eg:'$125 (Old Pal 28g)', egUnit:4.46, seaside:'None listed', seasideUnit:null, haven:'None listed', havenUnit:null, salty:'$130 (house oz)', saltyUnit:4.64, capecod:'$140 (Strane 28g)', capecodUnit:5.00, emerald:'$120 (RYTHM oz)', emeraldUnit:4.29, sublime:'$120 (RYTHM 28g)', sublimeUnit:4.29},
                 {cat:'Pre-Rolls', eg:'10/$50 (Valorem)', egUnit:5.00, seaside:'None listed', seasideUnit:null, haven:'Pre-roll packs avail.', havenUnit:null, salty:'House 5/$30', saltyUnit:6.00, capecod:'7/$35 (1g)', capecodUnit:5.00, emerald:'5 for $40', emeraldUnit:8.00, sublime:'Miss Grass 5pk/$20', sublimeUnit:4.00},
-                {cat:'Gummies', eg:'3/$60 (Camino/COAST)', egUnit:20.00, seaside:'Wyld 2/$40', seasideUnit:20.00, haven:'Camino 3/$65', havenUnit:21.67, salty:'Wana 3/$55', saltyUnit:18.33, capecod:'Choice Chews $10/pk', capecodUnit:10.00, emerald:'Kanha 3/$45 · Wyld 2/$35', emeraldUnit:15.00, sublime:'Phat Dogg $25 bundle', sublimeUnit:25.00},
-                {cat:'Vape Carts', eg:'4/$80 (Perpetual mix)', egUnit:20.00, seaside:'Select 2/$55', seasideUnit:27.50, haven:'Fernway 2/$50', havenUnit:25.00, salty:'Ozone 2/$45', saltyUnit:22.50, capecod:'3/5% · 4/10% · 5/15% off', capecodUnit:17.00, emerald:'RYTHM/&Shine 2/$40', emeraldUnit:20.00, sublime:'No Bull rosin $30/0.5g', sublimeUnit:null},
+                {cat:'Gummies', eg:'3/$60 (Camino/COAST)', egUnit:20.00, seaside:'Wyld 2/$40', seasideUnit:20.00, haven:'Camino 3/$65', havenUnit:21.67, salty:'Wana 3/$55', saltyUnit:18.33, capecod:'Choice Chews $10/pk', capecodUnit:10.00, emerald:'Kanha 3/$45 Â· Wyld 2/$35', emeraldUnit:15.00, sublime:'Phat Dogg $25 bundle', sublimeUnit:25.00},
+                {cat:'Vape Carts', eg:'4/$80 (Perpetual mix)', egUnit:20.00, seaside:'Select 2/$55', seasideUnit:27.50, haven:'Fernway 2/$50', havenUnit:25.00, salty:'Ozone 2/$45', saltyUnit:22.50, capecod:'3/5% Â· 4/10% Â· 5/15% off', capecodUnit:17.00, emerald:'RYTHM/&Shine 2/$40', emeraldUnit:20.00, sublime:'No Bull rosin $30/0.5g', sublimeUnit:null},
                 {cat:'Disposables', eg:'2/$60 (Perpetual 1g)', egUnit:30.00, seaside:'None listed', seasideUnit:null, haven:'Strane 2/$55', havenUnit:27.50, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'BRIQ 2/$90 (2g)', emeraldUnit:45.00, sublime:'Strane $30/1g disp', sublimeUnit:30.00},
-                {cat:'Concentrates', eg:'None listed', egUnit:null, seaside:'None listed', seasideUnit:null, haven:'None listed', havenUnit:null, salty:'Live resin 2/$60', saltyUnit:30.00, capecod:'2/5% · 3/10% · 5/20% off', capecodUnit:null, emerald:'Mix & Match 2 for offer', emeraldUnit:null, sublime:'Temple Ball $45 · Gran $30', sublimeUnit:37.50},
-                {cat:'Beverages', eg:'4/$24 (Build your own)', egUnit:6.00, seaside:'None listed', seasideUnit:null, haven:'Hi5 4/$48', havenUnit:3.00, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Hi5 6/$78 ($13/4pk)', emeraldUnit:3.25, sublime:'Easy $5/ea · Buzzy $7', sublimeUnit:5.00},
-                {cat:'Chocolate', eg:'3/$50 (Coast/Incredible)', egUnit:16.67, seaside:'None listed', seasideUnit:null, haven:'Incredibles 2/$35', havenUnit:17.50, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Incredibles 2/$30 · Betty\'s 3/$50', emeraldUnit:15.00, sublime:'Phat Dogg 50mg $20', sublimeUnit:20.00},
-                {cat:'Edible Bundles', eg:'Camino/WYLD/COAST 3/$60', egUnit:20.00, seaside:'Mix edibles 3/$55', seasideUnit:18.33, haven:'None listed', havenUnit:null, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Camino 3/$60 · Coast 3/$60', emeraldUnit:20.00, sublime:'HAVN $22/pk', sublimeUnit:22.00},
-                {cat:'Clones', eg:'None listed', egUnit:null, seaside:'None listed', seasideUnit:null, haven:'None listed', havenUnit:null, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'1/$20 · 3/$30', emeraldUnit:10.00, sublime:'None listed', sublimeUnit:null}
+                {cat:'Concentrates', eg:'None listed', egUnit:null, seaside:'None listed', seasideUnit:null, haven:'None listed', havenUnit:null, salty:'Live resin 2/$60', saltyUnit:30.00, capecod:'2/5% Â· 3/10% Â· 5/20% off', capecodUnit:null, emerald:'Mix & Match 2 for offer', emeraldUnit:null, sublime:'Temple Ball $45 Â· Gran $30', sublimeUnit:37.50},
+                {cat:'Beverages', eg:'4/$24 (Build your own)', egUnit:6.00, seaside:'None listed', seasideUnit:null, haven:'Hi5 4/$48', havenUnit:3.00, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Hi5 6/$78 ($13/4pk)', emeraldUnit:3.25, sublime:'Easy $5/ea Â· Buzzy $7', sublimeUnit:5.00},
+                {cat:'Chocolate', eg:'3/$50 (Coast/Incredible)', egUnit:16.67, seaside:'None listed', seasideUnit:null, haven:'Incredibles 2/$35', havenUnit:17.50, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Incredibles 2/$30 Â· Betty\'s 3/$50', emeraldUnit:15.00, sublime:'Phat Dogg 50mg $20', sublimeUnit:20.00},
+                {cat:'Edible Bundles', eg:'Camino/WYLD/COAST 3/$60', egUnit:20.00, seaside:'Mix edibles 3/$55', seasideUnit:18.33, haven:'None listed', havenUnit:null, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'Camino 3/$60 Â· Coast 3/$60', emeraldUnit:20.00, sublime:'HAVN $22/pk', sublimeUnit:22.00},
+                {cat:'Clones', eg:'None listed', egUnit:null, seaside:'None listed', seasideUnit:null, haven:'None listed', havenUnit:null, salty:'None listed', saltyUnit:null, capecod:'None listed', capecodUnit:null, emerald:'1/$20 Â· 3/$30', emeraldUnit:10.00, sublime:'None listed', sublimeUnit:null}
             ];
 
             const compBundleDiv = document.getElementById('compBundleTable');
@@ -3739,7 +3739,7 @@
                 </tr></thead><tbody>`;
 
             const formatBundleCell = (text, unit, isEG) => {
-                if (!text || text === 'None listed') return `<span style="color:#555;">—</span>`;
+                if (!text || text === 'None listed') return `<span style="color:#555;">â</span>`;
                 const style = isEG ? 'color:#C87DAB;font-weight:600;' : 'color:#E0E0E0;';
                 return `<span style="${style}">${text}</span>${unit ? `<br><span style="color:#D4A843;font-size:10px;">$${unit.toFixed(2)}/ea</span>` : ''}`;
             };
@@ -3754,11 +3754,11 @@
             bHtml += '</tbody></table></div>';
             compBundleDiv.innerHTML = bHtml;
 
-            // Key Takeaway — rendered as a static sibling below the scroll table
+            // Key Takeaway â rendered as a static sibling below the scroll table
             const keyTakeawayDiv = document.getElementById('compBundleKeyTakeaway');
             if (keyTakeawayDiv) {
                 keyTakeawayDiv.innerHTML = `<div style="margin-top:10px;padding:10px;background:#0F0F1A;border:1px solid #2A2A4E;border-radius:8px;font-size:11px;color:#999;">
-                    <strong style="color:#C87DAB;">Key Takeaway:</strong> Ember Gardens has the most aggressive and diverse bundle program on the Cape with ${totalBundles} active bundles. <strong>Cape Cod Cannabis</strong> runs tiered volume discounts (flower up to 20% off for 8+, carts up to 15% for 5+, concentrates up to 20% for 5+) and ultra-competitive Choice Chews gummies at $10/pack and 7 pre-rolls for $35. <strong>Emerald Grove</strong> has expanded significantly with Wyld 2/$35, Kanha 3/$45, Incredibles 2/$30, and is now selling clones (3/$30). <strong>Seaside Cannabis</strong> competes on gummies (Wyld 2/$40) and edible bundles (3/$55). <strong>Haven Center</strong> offers Camino 3/$65, Fernway carts 2/$50, and Incredibles 2/$35. <strong>Salty Farmers</strong> undercuts on flower (budget 8ths $20), Wana gummies 3/$55, and Ozone carts 2/$45. <strong>Sublime</strong> dominates premium concentrates with temple ball hash ($45/1g) and granulated hash ($30/1g). EG's breadth across pre-rolls, vapes, gummies, and beverages remains unmatched — monitor CCC's aggressive value pricing and Salty's budget flower play.
+                    <strong style="color:#C87DAB;">Key Takeaway:</strong> Ember Gardens has the most aggressive and diverse bundle program on the Cape with ${totalBundles} active bundles. <strong>Cape Cod Cannabis</strong> runs tiered volume discounts (flower up to 20% off for 8+, carts up to 15% for 5+, concentrates up to 20% for 5+) and ultra-competitive Choice Chews gummies at $10/pack and 7 pre-rolls for $35. <strong>Emerald Grove</strong> has expanded significantly with Wyld 2/$35, Kanha 3/$45, Incredibles 2/$30, and is now selling clones (3/$30). <strong>Seaside Cannabis</strong> competes on gummies (Wyld 2/$40) and edible bundles (3/$55). <strong>Haven Center</strong> offers Camino 3/$65, Fernway carts 2/$50, and Incredibles 2/$35. <strong>Salty Farmers</strong> undercuts on flower (budget 8ths $20), Wana gummies 3/$55, and Ozone carts 2/$45. <strong>Sublime</strong> dominates premium concentrates with temple ball hash ($45/1g) and granulated hash ($30/1g). EG's breadth across pre-rolls, vapes, gummies, and beverages remains unmatched â monitor CCC's aggressive value pricing and Salty's budget flower play.
                 </div>`;
             }
 
@@ -3785,17 +3785,17 @@
                 <h4>Bundles & Specials Analysis</h4>
                 <p><strong style="color:#D4A843;">Bundle Strategy Overview:</strong> Ember Gardens is running ${totalBundles} active bundles across ${Object.keys(SPECIALS_DATA).length} categories with an average discount of ${avgSavings}%. The heaviest bundle concentration is in <strong>Pre-Rolls (${prerollStats.count} bundles, avg ${prerollStats.avgPct}% off)</strong> and <strong>Vapes (${vapeStats.count} bundles, avg ${vapeStats.avgPct}% off)</strong>, which are the two highest-velocity accessory categories.</p>
 
-                <p><strong style="color:#D4A843;">Deepest Discounts:</strong> The Valorem 10-for-$50 pre-roll bundle leads at 29% off ($5/unit vs $7 regular) — this aggressive value play drives trial and volume on a budget brand. Herbwell Live Resin Carts at 28% off ($14.50/unit) represent excellent margin compression on a mid-tier vape line. These deep discounts signal inventory movement priorities or vendor-subsidized promotions.</p>
+                <p><strong style="color:#D4A843;">Deepest Discounts:</strong> The Valorem 10-for-$50 pre-roll bundle leads at 29% off ($5/unit vs $7 regular) â this aggressive value play drives trial and volume on a budget brand. Herbwell Live Resin Carts at 28% off ($14.50/unit) represent excellent margin compression on a mid-tier vape line. These deep discounts signal inventory movement priorities or vendor-subsidized promotions.</p>
 
                 <p><strong style="color:#D4A843;">Gummies Domination:</strong> With ${gummyStats.count} active gummy bundles averaging ${gummyStats.avgPct}% off, edibles are the most promotion-heavy category. The 3-for-$60 structure on Camino, COAST, and WYLD creates a consistent $20/unit price point (vs $25 regular). Betty's Eddies at 3-for-$48 ($16/unit) targets the value-seeking edible buyer. Consider whether this discount depth is eroding margin or successfully driving basket size.</p>
 
-                <p><strong style="color:#D4A843;">Flower Bundle Architecture:</strong> Bostica's tiered bundles (2 8ths/$45, 14g/$85, 28g/$160) create a compelling volume ladder — the oz deal at $160 represents $5.71/g vs $7.14/g at single-8th pricing. Old Pal & Devil's Lettuce at 2-for-$35 ($17.50/8th) is the most aggressive flower deal on the Cape. Harbor House at 2-for-$60 is the premium anchor.</p>
+                <p><strong style="color:#D4A843;">Flower Bundle Architecture:</strong> Bostica's tiered bundles (2 8ths/$45, 14g/$85, 28g/$160) create a compelling volume ladder â the oz deal at $160 represents $5.71/g vs $7.14/g at single-8th pricing. Old Pal & Devil's Lettuce at 2-for-$35 ($17.50/8th) is the most aggressive flower deal on the Cape. Harbor House at 2-for-$60 is the premium anchor.</p>
 
-                <p><strong style="color:#D4A843;">Vape Cart Mix & Match Strategy:</strong> The 4-for-$80 Perpetual/Charge Bar/Sapura cart bundle ($20/g cart) is extremely competitive — comparable to Emerald Grove's $30 single carts. Jeeter/Select ACE/Fernway at 2-for-$60 ($30/cart vs $35) targets the premium cart buyer. These mix-and-match deals encourage brand exploration while maintaining basket value above $60.</p>
+                <p><strong style="color:#D4A843;">Vape Cart Mix & Match Strategy:</strong> The 4-for-$80 Perpetual/Charge Bar/Sapura cart bundle ($20/g cart) is extremely competitive â comparable to Emerald Grove's $30 single carts. Jeeter/Select ACE/Fernway at 2-for-$60 ($30/cart vs $35) targets the premium cart buyer. These mix-and-match deals encourage brand exploration while maintaining basket value above $60.</p>
 
-                <p><strong style="color:#D4A843;">Beverage Play:</strong> The build-your-own Buzzy/Easy/Pine+Star 4-pack at $6/can (vs $7 regular) is a smart summer strategy for Cape Cod tourist traffic. At only 14% off, this preserves more margin than other categories. Consider seasonal expansion — 6-packs or beach cooler bundles could drive higher AOV during peak summer.</p>
+                <p><strong style="color:#D4A843;">Beverage Play:</strong> The build-your-own Buzzy/Easy/Pine+Star 4-pack at $6/can (vs $7 regular) is a smart summer strategy for Cape Cod tourist traffic. At only 14% off, this preserves more margin than other categories. Consider seasonal expansion â 6-packs or beach cooler bundles could drive higher AOV during peak summer.</p>
 
-                <p><strong style="color:#8B6BAE;">Recommendations:</strong> (1) Track bundle attach rate to measure if specials are cannibalizing full-price sales or genuinely driving incremental volume. (2) The 12.6% overall discount rate ($3,969/week) is moderate — industry average is 10-15%, so EG is within norms but should monitor upward drift. (3) Consider time-limited flash specials (happy hour, weekday deals) to drive traffic during slow periods identified in the heatmap. (4) Vendor co-op opportunities: brands like Camino and WYLD may subsidize bundle promotions — negotiate for MDF (market development funds) to offset discount costs.</p>
+                <p><strong style="color:#8B6BAE;">Recommendations:</strong> (1) Track bundle attach rate to measure if specials are cannibalizing full-price sales or genuinely driving incremental volume. (2) The 12.6% overall discount rate ($3,969/week) is moderate â industry average is 10-15%, so EG is within norms but should monitor upward drift. (3) Consider time-limited flash specials (happy hour, weekday deals) to drive traffic during slow periods identified in the heatmap. (4) Vendor co-op opportunities: brands like Camino and WYLD may subsidize bundle promotions â negotiate for MDF (market development funds) to offset discount costs.</p>
                 </div>
             `;
         }
@@ -3872,47 +3872,47 @@
             el.innerHTML = `
                 <h4>Daily Performance & Market Position</h4>
 
-                <p><strong style="color:#C87DAB;">Yesterday — ${ydayLabel}</strong></p>
+                <p><strong style="color:#C87DAB;">Yesterday â ${ydayLabel}</strong></p>
                 <p>Ember Gardens posted <strong>${formatCurrency(ydayData.net)} net</strong> on ${formatCurrency(ydayData.gross)} gross sales, with <strong>${formatCurrency(ydayData.profit)} profit</strong> at a <strong>${ydayMargin}% margin</strong>. This was <span style="color:${ydayVsAvgColor};font-weight:600;">${parseFloat(ydayVsAvg) >= 0 ? '+' : ''}${ydayVsAvg}%</span> vs. the 7-day average of ${formatCurrency(avg7)}/day. ${topCat ? `<strong>${topCat.cat}</strong> led the day at ${formatCurrency(topCat.net)} net` : ''}${botCat && botCat !== topCat ? `, while <strong>${botCat.cat}</strong> was the lightest at ${formatCurrency(botCat.net)}` : ''}.</p>
 
                 <p style="margin-top:10px;"><strong style="color:#D4A843;">Week-over-Week Trend</strong></p>
-                <p>Last 7 days: <strong>${formatCurrency(last7Net)}</strong> total net (${formatCurrency(avg7)}/day avg). Prior 7 days: ${formatCurrency(prior7Net)}. WoW change: <span style="color:${wowColor};font-weight:600;">${wowDir}${wowChange}%</span>. Best recent day: <strong>${bestDayLabel}</strong> at ${formatCurrency(bestDay.net)}. Slowest: <strong>${worstDayLabel}</strong> at ${formatCurrency(worstDay.net)}. The ${formatCurrency(bestDay.net - worstDay.net)} spread between best and worst shows ${bestDay.net / worstDay.net > 2 ? 'high day-to-day volatility — staffing and inventory prep should account for these swings' : 'moderate consistency in daily performance'}.</p>
+                <p>Last 7 days: <strong>${formatCurrency(last7Net)}</strong> total net (${formatCurrency(avg7)}/day avg). Prior 7 days: ${formatCurrency(prior7Net)}. WoW change: <span style="color:${wowColor};font-weight:600;">${wowDir}${wowChange}%</span>. Best recent day: <strong>${bestDayLabel}</strong> at ${formatCurrency(bestDay.net)}. Slowest: <strong>${worstDayLabel}</strong> at ${formatCurrency(worstDay.net)}. The ${formatCurrency(bestDay.net - worstDay.net)} spread between best and worst shows ${bestDay.net / worstDay.net > 2 ? 'high day-to-day volatility â staffing and inventory prep should account for these swings' : 'moderate consistency in daily performance'}.</p>
 
                 <p style="margin-top:10px;"><strong style="color:#D4A843;">April MTD Pace</strong></p>
                 <p>Through ${mtdDays} days of April: <strong>${formatCurrency(mtdNet)} net</strong> at ${formatCurrency(mtdAvgDaily)}/day. ${marchFull ? `March averaged ${formatCurrency(marchAvgDaily)}/day over ${marchFull.days} days. April is pacing <span style="color:${mtdColor};font-weight:600;">${parseFloat(mtdVsMarch) >= 0 ? '+' : ''}${mtdVsMarch}%</span> vs. March.` : ''} At current pace, April projects to ~<strong>${formatCurrency(mtdAvgDaily * 30)}</strong> for the full month${marchFull ? ` (March closed at ${formatCurrency(marchFull.net)})` : ''}.</p>
 
                 <p style="margin-top:10px;"><strong style="color:#D4A843;">Margin Health</strong></p>
-                <p>Yesterday's ${ydayMargin}% margin was <span style="color:${marginTrendColor};font-weight:600;">${marginTrend}</span> the 7-day average of ${avgMargin7d.toFixed(1)}%. ${aprilMTD ? `April MTD margin is running at ${aprilMTD.margin}%.` : ''} ${marchFull ? `March closed at ${marchFull.margin}% margin.` : ''} ${ydayMarginFloat < 48 ? 'Margin is compressing — check if heavy discount days or low-margin category mix is driving this. Review bundle discount depth and vendor cost changes.' : ydayMarginFloat > 52 ? 'Strong margin day — high-margin categories or lower discount usage likely contributed. Look for repeatable patterns.' : 'Margin is within the healthy 48-52% band.'}</p>
+                <p>Yesterday's ${ydayMargin}% margin was <span style="color:${marginTrendColor};font-weight:600;">${marginTrend}</span> the 7-day average of ${avgMargin7d.toFixed(1)}%. ${aprilMTD ? `April MTD margin is running at ${aprilMTD.margin}%.` : ''} ${marchFull ? `March closed at ${marchFull.margin}% margin.` : ''} ${ydayMarginFloat < 48 ? 'Margin is compressing â check if heavy discount days or low-margin category mix is driving this. Review bundle discount depth and vendor cost changes.' : ydayMarginFloat > 52 ? 'Strong margin day â high-margin categories or lower discount usage likely contributed. Look for repeatable patterns.' : 'Margin is within the healthy 48-52% band.'}</p>
 
                 <p style="margin-top:10px;"><strong style="color:#4CAF50;">Wins</strong></p>
                 <ul style="margin:4px 0 8px 20px;padding:0;">
-                    ${parseFloat(wowChange) > 0 ? `<li style="margin-bottom:3px;">Revenue trending up WoW (${wowDir}${wowChange}%) — momentum is positive</li>` : ''}
+                    ${parseFloat(wowChange) > 0 ? `<li style="margin-bottom:3px;">Revenue trending up WoW (${wowDir}${wowChange}%) â momentum is positive</li>` : ''}
                     ${ydayMarginFloat > avgMargin7d ? `<li style="margin-bottom:3px;">Yesterday's margin (${ydayMargin}%) beat the 7-day average (${avgMargin7d.toFixed(1)}%)</li>` : ''}
-                    ${topCat && topCat.net > 2000 ? `<li style="margin-bottom:3px;">${topCat.cat} had a strong day at ${formatCurrency(topCat.net)} — keep depth on best-selling SKUs</li>` : ''}
+                    ${topCat && topCat.net > 2000 ? `<li style="margin-bottom:3px;">${topCat.cat} had a strong day at ${formatCurrency(topCat.net)} â keep depth on best-selling SKUs</li>` : ''}
                     ${mtdAvgDaily > marchAvgDaily ? `<li style="margin-bottom:3px;">April daily average ($${mtdAvgDaily.toLocaleString()}) is outpacing March ($${marchAvgDaily.toLocaleString()})</li>` : ''}
                     <li style="margin-bottom:3px;">EG is pacing <span style="color:${egVsMaColor};">${parseFloat(egVsMa) >= 0 ? '+' : ''}${egVsMa}%</span> vs. estimated MA dispensary average (~$${maAvgDispensary.toLocaleString()}/day)</li>
                 </ul>
 
                 <p style="margin-top:10px;"><strong style="color:#E57373;">Challenges</strong></p>
                 <ul style="margin:4px 0 8px 20px;padding:0;">
-                    ${parseFloat(wowChange) < 0 ? `<li style="margin-bottom:3px;">WoW revenue declining (${wowChange}%) — identify if weather, staffing, or inventory gaps are contributing</li>` : ''}
-                    ${ydayMarginFloat < avgMargin7d ? `<li style="margin-bottom:3px;">Yesterday's margin (${ydayMargin}%) dipped below the 7-day average — review discount usage and product mix</li>` : ''}
-                    ${bestDay.net / worstDay.net > 2.5 ? `<li style="margin-bottom:3px;">High revenue volatility (${formatCurrency(bestDay.net)} best vs. ${formatCurrency(worstDay.net)} worst) — consider weekday promotions to smooth demand</li>` : ''}
-                    <li style="margin-bottom:3px;">Cape Cod seasonality approaching — tourist traffic typically ramps May through September. Stock planning and staffing should begin now</li>
-                    ${ydayCats.filter(c => c.net < 100).length > 0 ? `<li style="margin-bottom:3px;">Underperforming categories yesterday: ${ydayCats.filter(c => c.net < 100).map(c => c.cat + ' (' + formatCurrency(c.net) + ')').join(', ')} — assess if selection or visibility is the issue</li>` : ''}
+                    ${parseFloat(wowChange) < 0 ? `<li style="margin-bottom:3px;">WoW revenue declining (${wowChange}%) â identify if weather, staffing, or inventory gaps are contributing</li>` : ''}
+                    ${ydayMarginFloat < avgMargin7d ? `<li style="margin-bottom:3px;">Yesterday's margin (${ydayMargin}%) dipped below the 7-day average â review discount usage and product mix</li>` : ''}
+                    ${bestDay.net / worstDay.net > 2.5 ? `<li style="margin-bottom:3px;">High revenue volatility (${formatCurrency(bestDay.net)} best vs. ${formatCurrency(worstDay.net)} worst) â consider weekday promotions to smooth demand</li>` : ''}
+                    <li style="margin-bottom:3px;">Cape Cod seasonality approaching â tourist traffic typically ramps May through September. Stock planning and staffing should begin now</li>
+                    ${ydayCats.filter(c => c.net < 100).length > 0 ? `<li style="margin-bottom:3px;">Underperforming categories yesterday: ${ydayCats.filter(c => c.net < 100).map(c => c.cat + ' (' + formatCurrency(c.net) + ')').join(', ')} â assess if selection or visibility is the issue</li>` : ''}
                 </ul>
 
                 <p style="margin-top:10px;"><strong style="color:#D4A843;">Immediate Opportunities</strong></p>
                 <ul style="margin:4px 0 8px 20px;padding:0;">
                     <li style="margin-bottom:3px;"><strong>Weekend optimization:</strong> Friday and Saturday are consistently the highest-revenue days. Ensure full staffing, fresh flower drops, and high-visibility bundle promotions land by Thursday close</li>
-                    <li style="margin-bottom:3px;"><strong>Weekday floor lift:</strong> ${worstDay ? `${new Date(worstDay.date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'long'})}` : 'Midweek'} was the weakest day — consider a "Hump Day Happy Hour" or midweek-exclusive deal to drive traffic during slow periods</li>
+                    <li style="margin-bottom:3px;"><strong>Weekday floor lift:</strong> ${worstDay ? `${new Date(worstDay.date + 'T12:00:00').toLocaleDateString('en-US', {weekday:'long'})}` : 'Midweek'} was the weakest day â consider a "Hump Day Happy Hour" or midweek-exclusive deal to drive traffic during slow periods</li>
                     <li style="margin-bottom:3px;"><strong>Margin recovery:</strong> Negotiate vendor MDF (market development funds) on your highest-volume bundles to offset discount compression. Target Herbwell and Perpetual/Charge Bar lines where volume justifies co-op support</li>
                     <li style="margin-bottom:3px;"><strong>Pre-season positioning:</strong> Orleans sits at the gateway to the Outer Cape. Build a "Cape Cod Welcome" landing promotion targeting Provincetown/Wellfleet/Chatham visitors. First-timer discounts or sample packs for tourists can capture new customers before competitors</li>
-                    <li style="margin-bottom:3px;"><strong>Category expansion:</strong> Beverages are the fastest-growing bundle category (+20% MoM). Expand the lineup with summer-focused SKUs — seltzer variety packs, beach-friendly formats — ahead of Memorial Day weekend</li>
+                    <li style="margin-bottom:3px;"><strong>Category expansion:</strong> Beverages are the fastest-growing bundle category (+20% MoM). Expand the lineup with summer-focused SKUs â seltzer variety packs, beach-friendly formats â ahead of Memorial Day weekend</li>
                 </ul>
 
                 <p style="margin-top:10px;"><strong style="color:#8B6BAE;">MA Market Context</strong></p>
-                <p>Massachusetts recreational cannabis market continues to see pricing pressure from increasing dispensary count (now 300+ active retail licenses). Average transaction values are declining statewide as competition intensifies, particularly on the Cape where 8 dispensaries now serve the Outer Cape corridor. Ember Gardens' position in Orleans provides geographic advantage as the only dispensary between Harwich and Wellfleet. The key competitive moat is customer experience, product curation, and bundle value — areas where EG is performing well. Monitor state-level regulatory changes around delivery licensing and social consumption venues that could shift the competitive landscape by Q3 2026.</p>
+                <p>Massachusetts recreational cannabis market continues to see pricing pressure from increasing dispensary count (now 300+ active retail licenses). Average transaction values are declining statewide as competition intensifies, particularly on the Cape where 8 dispensaries now serve the Outer Cape corridor. Ember Gardens' position in Orleans provides geographic advantage as the only dispensary between Harwich and Wellfleet. The key competitive moat is customer experience, product curation, and bundle value â areas where EG is performing well. Monitor state-level regulatory changes around delivery licensing and social consumption venues that could shift the competitive landscape by Q3 2026.</p>
             `;
         }
 
@@ -3938,7 +3938,7 @@
                     <div style="width:10px;height:10px;background:${c.color};border-radius:50%;display:inline-block;margin-bottom:4px;"></div>
                     <div style="font-size:12px;font-weight:600;color:#E0E0E0;">${c.name}</div>
                     <div style="font-size:10px;color:#999;margin-bottom:6px;">${c.loc}</div>
-                    <div style="font-size:10px;margin-bottom:2px;"><span style="color:#E57373;">${cheaper} cheaper</span> · <span style="color:#4CAF50;">${pricier} higher</span></div>
+                    <div style="font-size:10px;margin-bottom:2px;"><span style="color:#E57373;">${cheaper} cheaper</span> Â· <span style="color:#4CAF50;">${pricier} higher</span></div>
                     <div style="font-size:10px;color:${threatColor};font-weight:600;text-transform:uppercase;">${threat} threat</div>
                 </div>`;
             }).join('');
@@ -3992,7 +3992,7 @@
 
                     const cellStyle = 'padding:6px 10px;text-align:right;border-bottom:1px solid rgba(42,42,78,0.5);font-size:12px;';
                     const formatCell = (val, isEg) => {
-                        if(val == null) return `<td style="${cellStyle}color:#555;">—</td>`;
+                        if(val == null) return `<td style="${cellStyle}color:#555;">â</td>`;
                         const isBest = val === minPrice && allPrices.length > 1;
                         const isWorst = val === maxPrice && allPrices.length > 1;
                         let color = '#E0E0E0';
@@ -4007,7 +4007,7 @@
                         }
                         const bg = isEg ? 'background:rgba(200,125,171,0.08);' : '';
                         const bold = isBest ? 'font-weight:700;' : '';
-                        return `<td style="${cellStyle}color:${color};${bg}${bold}">$${val.toFixed(2)}${isBest ? ' ★' : ''}</td>`;
+                        return `<td style="${cellStyle}color:${color};${bg}${bold}">$${val.toFixed(2)}${isBest ? ' â' : ''}</td>`;
                     };
 
                     rows += `<tr>
@@ -4050,27 +4050,27 @@
 
             el.innerHTML = `
                 <div class="insight-box">
-                <h4 style="display:flex;align-items:center;gap:8px;">🔍 Competition Analysis</h4>
+                <h4 style="display:flex;align-items:center;gap:8px;">ð Competition Analysis</h4>
                 <div style="font-size:12px;line-height:1.7;color:#CCC;">
-                    <p style="margin-bottom:10px;"><strong style="color:#E57373;">Key Pricing Threats:</strong> Emerald Grove is the most aggressive price competitor, offering house-grown flower at <strong>$15-20/8th</strong> — significantly below market average. Their in-house concentrates (shatter at $20/g) undercut everyone. Sublime Cannabis also runs very competitive pricing on vapes ($30 for 1g distillate disposables vs. your $35) and their Phat Dogg edible bundles at $20-25 are well-positioned. Haven Center's multi-buy deals (e.g., "Berkshire Roots 8ths 4 for $80" = $20/ea effective) create strong perceived value.</p>
+                    <p style="margin-bottom:10px;"><strong style="color:#E57373;">Key Pricing Threats:</strong> Emerald Grove is the most aggressive price competitor, offering house-grown flower at <strong>$15-20/8th</strong> â significantly below market average. Their in-house concentrates (shatter at $20/g) undercut everyone. Sublime Cannabis also runs very competitive pricing on vapes ($30 for 1g distillate disposables vs. your $35) and their Phat Dogg edible bundles at $20-25 are well-positioned. Haven Center's multi-buy deals (e.g., "Berkshire Roots 8ths 4 for $80" = $20/ea effective) create strong perceived value.</p>
 
                     <p style="margin-bottom:10px;"><strong style="color:#D4A843;">Biggest Gaps to Address:</strong></p>
                     <ul style="margin:0 0 10px 20px;padding:0;">
-                        ${threats.slice(0,6).map(t => `<li style="margin-bottom:4px;"><strong>${t.product}</strong> — ${t.comp} undercuts by <span style="color:#E57373;">$${t.diff.toFixed(2)} (${t.pct}%)</span> at $${t.compPrice.toFixed(2)} vs. your $${t.egPrice.toFixed(2)}</li>`).join('')}
+                        ${threats.slice(0,6).map(t => `<li style="margin-bottom:4px;"><strong>${t.product}</strong> â ${t.comp} undercuts by <span style="color:#E57373;">$${t.diff.toFixed(2)} (${t.pct}%)</span> at $${t.compPrice.toFixed(2)} vs. your $${t.egPrice.toFixed(2)}</li>`).join('')}
                     </ul>
 
                     <p style="margin-bottom:10px;"><strong style="color:#4CAF50;">Your Competitive Advantages:</strong> Ember Gardens holds strong pricing parity on premium concentrates (live rosin $55/g matches Haven) and standard edibles ($25/100mg in line with market). Your location in Orleans is centrally positioned on Cape Cod with less direct competition than the Eastham corridor (where Salty Farmers, Emerald Grove, and Cape Cod Cannabis all cluster). ${opportunities.length > 0 ? `You\'re priced below average on ${opportunities.length} product categories.` : ''}</p>
 
                     <p style="margin-bottom:10px;"><strong style="color:#C87DAB;">Recommended Actions:</strong></p>
                     <ul style="margin:0 0 10px 20px;padding:0;">
-                        <li style="margin-bottom:4px;"><strong>Match Sublime's vape pricing</strong> — Their $30 Strane disposables and $30 No Bull rosin carts are pulling value-conscious customers. Consider dropping 1g distillate vapes to $30 or creating a 2-for bundle.</li>
-                        <li style="margin-bottom:4px;"><strong>Create bundle deals to compete with Haven/Emerald Grove</strong> — Haven's "5 pre-rolls for $50" and EG's "2 8ths for special offer" create urgency. Launch a "Mix & Match Monday" or "Pre-Roll Pack" promotion.</li>
-                        <li style="margin-bottom:4px;"><strong>Leverage unique product depth</strong> — You carry brands competitors don't. Highlight exclusives in marketing. Sublime's Phat Dogg house brand is a major draw; consider developing or partnering on an EG-exclusive product line.</li>
-                        <li style="margin-bottom:4px;"><strong>Watch Emerald Grove's budget flower</strong> — At $15-20/8th for house-grown, they appeal to price-first buyers. Consider a small "value shelf" at $20-25/8th to avoid losing share to budget shoppers making the drive to Eastham.</li>
-                        <li style="margin-bottom:4px;"><strong>Hi5 seltzers at Emerald Grove are $15/4-pack</strong> vs. $20 market standard — if beverages are growing, match or bundle competitively to avoid leakage.</li>
+                        <li style="margin-bottom:4px;"><strong>Match Sublime's vape pricing</strong> â Their $30 Strane disposables and $30 No Bull rosin carts are pulling value-conscious customers. Consider dropping 1g distillate vapes to $30 or creating a 2-for bundle.</li>
+                        <li style="margin-bottom:4px;"><strong>Create bundle deals to compete with Haven/Emerald Grove</strong> â Haven's "5 pre-rolls for $50" and EG's "2 8ths for special offer" create urgency. Launch a "Mix & Match Monday" or "Pre-Roll Pack" promotion.</li>
+                        <li style="margin-bottom:4px;"><strong>Leverage unique product depth</strong> â You carry brands competitors don't. Highlight exclusives in marketing. Sublime's Phat Dogg house brand is a major draw; consider developing or partnering on an EG-exclusive product line.</li>
+                        <li style="margin-bottom:4px;"><strong>Watch Emerald Grove's budget flower</strong> â At $15-20/8th for house-grown, they appeal to price-first buyers. Consider a small "value shelf" at $20-25/8th to avoid losing share to budget shoppers making the drive to Eastham.</li>
+                        <li style="margin-bottom:4px;"><strong>Hi5 seltzers at Emerald Grove are $15/4-pack</strong> vs. $20 market standard â if beverages are growing, match or bundle competitively to avoid leakage.</li>
                     </ul>
 
-                    <p style="margin-bottom:0;"><strong style="color:#8B6BAE;">Note:</strong> Salty Farmers' menu was loaded via Dutchie embed — detailed product-level pricing was partially obscured. Their bundle messaging indicates competitive "Salty Bundles" including "Any Two Mission 1/8s for $50." Recommend in-store price check for complete intelligence.</p>
+                    <p style="margin-bottom:0;"><strong style="color:#8B6BAE;">Note:</strong> Salty Farmers' menu was loaded via Dutchie embed â detailed product-level pricing was partially obscured. Their bundle messaging indicates competitive "Salty Bundles" including "Any Two Mission 1/8s for $50." Recommend in-store price check for complete intelligence.</p>
                 </div>
                 </div>
             `;
