@@ -280,8 +280,8 @@
             border: 1px solid #2A2A4E;
             border-top: 2px solid #2A2A4E;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
+            padding: 16px;
+            margin-bottom: 18px;
             transition: border-color 0.2s ease;
         }
 
@@ -294,11 +294,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .card-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             color: #E0E0E0;
             letter-spacing: -0.02em;
@@ -327,7 +327,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .kpi-card {
@@ -345,7 +345,7 @@
 
         .kpi-label {
             color: #999;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             margin-bottom: 6px;
             text-transform: uppercase;
@@ -368,7 +368,7 @@
         .chart-container {
             position: relative;
             height: 280px;
-            margin-bottom: 20px;
+            margin-bottom: 14px;
         }
 
         .doughnut-table-grid {
@@ -446,8 +446,8 @@
         .insights {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
+            gap: 14px;
+            margin-top: 14px;
         }
 
         .insights > :only-child {
@@ -458,9 +458,9 @@
             background: linear-gradient(135deg, #0F0F1A 0%, rgba(15,15,26,0.7) 100%);
             border-left: 3px solid #D4A843;
             border-radius: 4px;
-            padding: 15px;
+            padding: 12px 14px;
             font-size: 11.5px;
-            line-height: 1.7;
+            line-height: 1.55;
         }
 
         .insight-box.opportunities {
@@ -471,7 +471,7 @@
             color: #D4A843;
             font-size: 11px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -795,14 +795,14 @@
             .container { padding: 0 8px 24px 8px; }
 
             /* ─── CARDS ─── */
-            .card { padding: 10px; margin-bottom: 12px; border-radius: 8px; }
+            .card { padding: 9px 10px; margin-bottom: 10px; border-radius: 8px; }
             .card-title { font-size: 13px; }
 
             /* Card header: wrap so badge goes below title */
             .card-header {
                 flex-wrap: wrap;
                 gap: 4px 8px;
-                margin-bottom: 12px;
+                margin-bottom: 8px;
             }
             .period-badge {
                 font-size: 10px;
@@ -866,7 +866,7 @@
             }
             .comp-overview-grid > div, #competitorOverview > div {
                 overflow: hidden; word-break: break-word; min-width: 0;
-                padding: 8px 6px !important;
+                padding: 6px 5px !important;
                 border-radius: 6px !important;
                 text-align: center;
             }
@@ -1412,17 +1412,17 @@
 
         <!-- Competition Pricing Report -->
         <div id="section-competition" class="card">
-            <div class="comp-header" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:16px;gap:10px;">
+            <div class="comp-header" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;">
                 <div style="display:flex;align-items:center;gap:12px;">
                     <h2 class="card-title">Competition Pricing Report</h2>
                     <span class="period-badge">Cape Cod Market</span>
                 </div>
                 <div class="comp-cat-pills" style="display:flex;flex-wrap:wrap;gap:6px;" id="compCatPills"></div>
             </div>
-            <p style="color:#999;font-size:12px;margin-bottom:16px;">Live pricing scraped from 6 Cape Cod competitors on <span style="color:#C87DAB;">April 4, 2026</span>. Prices shown are listed menu prices before tax.</p>
+            <p style="color:#999;font-size:12px;margin-bottom:10px;">Live pricing scraped from 6 Cape Cod competitors on <span style="color:#C87DAB;">April 4, 2026</span>. Prices shown are listed menu prices before tax.</p>
 
             <!-- Competitor Overview Cards -->
-            <div id="competitorOverview" class="comp-overview-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;"></div>
+            <div id="competitorOverview" class="comp-overview-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;"></div>
 
             <!-- Category Price Comparison Table -->
             <div style="overflow-x:auto;margin-bottom:20px;">
@@ -3702,12 +3702,12 @@
                 });
                 const threat = cheaper > pricier ? 'high' : cheaper === pricier ? 'medium' : 'low';
                 const threatColor = threat === 'high' ? '#E57373' : threat === 'medium' ? '#D4A843' : '#4CAF50';
-                return `<div style="background:#0F0F1A;border:1px solid #2A2A4E;border-radius:8px;padding:12px;text-align:center;">
-                    <div style="width:10px;height:10px;background:${c.color};border-radius:50%;display:inline-block;margin-bottom:4px;"></div>
-                    <div style="font-size:12px;font-weight:600;color:#E0E0E0;">${c.name}</div>
-                    <div style="font-size:10px;color:#999;margin-bottom:6px;">${c.loc}</div>
-                    <div style="font-size:10px;margin-bottom:2px;"><span style="color:#E57373;">${cheaper} cheaper</span> · <span style="color:#4CAF50;">${pricier} higher</span></div>
-                    <div style="font-size:10px;color:${threatColor};font-weight:600;text-transform:uppercase;">${threat} threat</div>
+                return `<div style="background:#0F0F1A;border:1px solid #2A2A4E;border-radius:8px;padding:9px;text-align:center;">
+                    <div style="display:flex;align-items:center;justify-content:center;gap:6px;">
+                        <span style="width:8px;height:8px;background:${c.color};border-radius:50%;display:inline-block;"></span>
+                        <span style="font-size:12px;font-weight:600;color:#E0E0E0;">${c.name}</span>
+                    </div>
+                    <div style="font-size:10px;margin-top:3px;"><span style="color:#E57373;">${cheaper} cheaper</span> · <span style="color:#4CAF50;">${pricier} higher</span> · <span style="color:${threatColor};font-weight:600;text-transform:uppercase;">${threat}</span></div>
                 </div>`;
             }).join('');
 
@@ -3744,7 +3744,7 @@
             const categories = category === 'all' ? Object.keys(COMP_DATA) : [category];
             categories.forEach(cat => {
                 // Category header row
-                rows += `<tr><td colspan="${COMPETITORS.length + 3}" style="padding:10px;font-weight:700;font-size:13px;color:#D4A843;border-bottom:1px solid #2A2A4E;background:rgba(212,168,67,0.05);">${cat}</td></tr>`;
+                rows += `<tr><td colspan="${COMPETITORS.length + 3}" style="padding:6px 10px;font-weight:700;font-size:13px;color:#D4A843;border-bottom:1px solid #2A2A4E;background:rgba(212,168,67,0.05);">${cat}</td></tr>`;
                 // Shop name sub-header row (visible on mobile so user knows which column is which)
                 rows += `<tr class="comp-shop-subheader" style="background:rgba(42,42,78,0.3);">
                     <td style="padding:4px 10px;font-size:10px;color:#777;font-weight:600;">Product</td>
@@ -3758,7 +3758,7 @@
                     const minPrice = Math.min(...allPrices);
                     const maxPrice = Math.max(...allPrices);
 
-                    const cellStyle = 'padding:6px 10px;text-align:right;border-bottom:1px solid rgba(42,42,78,0.5);font-size:12px;';
+                    const cellStyle = 'padding:5px 10px;text-align:right;border-bottom:1px solid rgba(42,42,78,0.5);font-size:12px;';
                     const formatCell = (val, isEg) => {
                         if(val == null) return `<td style="${cellStyle}color:#555;">—</td>`;
                         const isBest = val === minPrice && allPrices.length > 1;
@@ -3779,10 +3779,10 @@
                     };
 
                     rows += `<tr>
-                        <td style="padding:6px 10px;border-bottom:1px solid rgba(42,42,78,0.5);font-size:12px;color:#E0E0E0;">${row.product}</td>
+                        <td style="padding:5px 10px;border-bottom:1px solid rgba(42,42,78,0.5);font-size:12px;color:#E0E0E0;">${row.product}</td>
                         ${formatCell(row.eg, true)}
                         ${COMP_KEYS.map(k => formatCell(row[k], false)).join('')}
-                        <td style="padding:6px 10px;border-bottom:1px solid rgba(42,42,78,0.5);font-size:11px;color:#777;">${row.notes || ''}</td>
+                        <td style="padding:5px 10px;border-bottom:1px solid rgba(42,42,78,0.5);font-size:11px;color:#777;">${row.notes || ''}</td>
                     </tr>`;
                 });
             });
@@ -3819,7 +3819,7 @@
             el.innerHTML = `
                 <div class="insight-box">
                 <h4 style="display:flex;align-items:center;gap:8px;">🔍 Competition Analysis</h4>
-                <div style="font-size:12px;line-height:1.7;color:#CCC;">
+                <div style="font-size:12px;line-height:1.55;color:#CCC;">
                     <p style="margin-bottom:10px;"><strong style="color:#E57373;">Key Pricing Threats:</strong> Emerald Grove is the most aggressive price competitor, offering house-grown flower at <strong>$15-20/8th</strong> — significantly below market average. Their in-house concentrates (shatter at $20/g) undercut everyone. Sublime Cannabis also runs very competitive pricing on vapes ($30 for 1g distillate disposables vs. your $35) and their Phat Dogg edible bundles at $20-25 are well-positioned. Haven Center's multi-buy deals (e.g., "Berkshire Roots 8ths 4 for $80" = $20/ea effective) create strong perceived value.</p>
 
                     <p style="margin-bottom:10px;"><strong style="color:#D4A843;">Biggest Gaps to Address:</strong></p>
