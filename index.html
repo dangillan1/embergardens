@@ -1702,12 +1702,14 @@
             if (period === "lifetime") {
                 const catMap = {};
                 CAT_MONTHLY.forEach(row => {
-                    if (!catMap[row.cat]) {
-                        catMap[row.cat] = { net: 0, cost: 0, profit: 0 };
+                    const catKey = row.category || row.cat;
+                    if (!catKey) return;
+                    if (!catMap[catKey]) {
+                        catMap[catKey] = { net: 0, cost: 0, profit: 0 };
                     }
-                    catMap[row.cat].net += row.net;
-                    catMap[row.cat].cost += row.cost;
-                    catMap[row.cat].profit += row.profit;
+                    catMap[catKey].net += row.net || 0;
+                    catMap[catKey].cost += (row.cogs != null ? row.cogs : (row.cost || 0));
+                    catMap[catKey].profit += row.profit || 0;
                 });
                 return Object.entries(catMap).map(([cat, data]) => ({
                     cat,
@@ -1740,12 +1742,14 @@
             const catMap = {};
             DAILY_CAT_DATA.forEach(row => {
                 if (dateFilter(row)) {
-                    if (!catMap[row.cat]) {
-                        catMap[row.cat] = { net: 0, cost: 0, profit: 0 };
+                    const catKey = row.category || row.cat;
+                    if (!catKey) return;
+                    if (!catMap[catKey]) {
+                        catMap[catKey] = { net: 0, cost: 0, profit: 0 };
                     }
-                    catMap[row.cat].net += row.net;
-                    catMap[row.cat].cost += row.cost;
-                    catMap[row.cat].profit += row.profit;
+                    catMap[catKey].net += row.net || 0;
+                    catMap[catKey].cost += (row.cogs != null ? row.cogs : (row.cost || 0));
+                    catMap[catKey].profit += row.profit || 0;
                 }
             });
 
@@ -1776,16 +1780,22 @@
         }
 
         function normalizeBrands(brands) {
-            // Normalize names and merge duplicates
+            // Normalize names and merge duplicates.
+            // Refresh writes `.cogs`; older code reads `.cost` — alias here so all downstream consumers see `.cost`.
             const merged = {};
             brands.forEach(b => {
                 const name = normalizeBrandName(b.name);
+                const sales = b.sales != null ? b.sales : (b.net || 0);
+                const cost = b.cogs != null ? b.cogs : (b.cost || 0);
+                const profit = b.profit != null ? b.profit : (sales - cost);
+                const units = b.units != null ? b.units : (b.qty || 0);
                 if (merged[name]) {
-                    merged[name].sales += b.sales;
-                    merged[name].cost += b.cost;
-                    merged[name].profit += b.profit;
+                    merged[name].sales += sales;
+                    merged[name].cost += cost;
+                    merged[name].profit += profit;
+                    merged[name].units += units;
                 } else {
-                    merged[name] = { ...b, name };
+                    merged[name] = { name, sales, cost, profit, units };
                 }
             });
             // Recalculate margins
@@ -1814,32 +1824,40 @@
 
         // Get products for period — strict 1:1 mapping to real Dutchie data arrays.
         // No blending, no estimating, no lifetime fallbacks. Empty array → empty state in the UI.
+        // Margin is normalized to 1 decimal here so every downstream consumer displays consistent precision.
         function getProductsForPeriod(period) {
-            if (period === "yesterday") return PRODUCTS_YESTERDAY;
-            if (period === "mtd") return PRODUCTS_MTD;
-            if (period === "7d") return PRODUCTS_7;
-            if (period === "30d") return PRODUCTS_30;
-            if (period === "60d") return PRODUCTS_60;
-            if (period === "90d") return PRODUCTS_90;
-            if (period === "180d") return PRODUCTS_180;
-            if (period === "365d") return PRODUCTS_365;
-            if (period === "lifetime") return PRODUCTS_LT;
-            return [];
+            let raw;
+            if (period === "yesterday") raw = PRODUCTS_YESTERDAY;
+            else if (period === "mtd") raw = PRODUCTS_MTD;
+            else if (period === "7d") raw = PRODUCTS_7;
+            else if (period === "30d") raw = PRODUCTS_30;
+            else if (period === "60d") raw = PRODUCTS_60;
+            else if (period === "90d") raw = PRODUCTS_90;
+            else if (period === "180d") raw = PRODUCTS_180;
+            else if (period === "365d") raw = PRODUCTS_365;
+            else if (period === "lifetime") raw = PRODUCTS_LT;
+            else return [];
+            return raw.map(p => ({
+                ...p,
+                margin: (p.margin != null ? parseFloat(p.margin) : 0).toFixed(1)
+            }));
         }
 
         // Get period summary — strict accuracy: all day-count periods slice DAILY_DATA directly.
         // Lifetime sums MONTHLY_DATA (real monthly totals from Dutchie).
         // If DAILY_DATA has fewer days than the requested period, we sum ONLY what exists and flag it via `dataComplete`.
         function getPeriodSummary(period) {
-            // Lifetime uses real monthly totals summed across all months
+            // Lifetime uses real monthly totals summed across all months.
+            // Refresh writes `.cogs`; alias to .cost here. Day count is derived from DAILY_DATA length
+            // (MONTHLY_DATA rows don't carry a `days` field).
             if (period === "lifetime") {
-                let totalNet = 0, totalCost = 0, totalProfit = 0, totalDays = 0;
+                let totalNet = 0, totalCost = 0, totalProfit = 0;
                 MONTHLY_DATA.forEach(m => {
-                    totalNet += m.net;
-                    totalCost += m.cost;
-                    totalProfit += m.profit;
-                    totalDays += m.days;
+                    totalNet += m.net || 0;
+                    totalCost += (m.cogs != null ? m.cogs : (m.cost || 0));
+                    totalProfit += m.profit || 0;
                 });
+                const totalDays = DAILY_DATA.length;
                 return {
                     net: Math.round(totalNet),
                     cost: Math.round(totalCost),
@@ -1870,9 +1888,9 @@
 
             let totalNet = 0, totalCost = 0, totalProfit = 0;
             slice.forEach(d => {
-                totalNet += d.net;
-                totalCost += d.cost;
-                totalProfit += d.profit;
+                totalNet += d.net || 0;
+                totalCost += (d.cogs != null ? d.cogs : (d.cost || 0));
+                totalProfit += d.profit || 0;
             });
 
             return {
@@ -2032,7 +2050,7 @@
                     return dt.toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric'});
                 });
                 const netData = slice.map(d => d.net);
-                const costData = slice.map(d => d.cost);
+                const costData = slice.map(d => d.cogs != null ? d.cogs : (d.cost || 0));
                 const profitData = slice.map(d => d.profit);
 
                 datasets = [
@@ -2069,7 +2087,7 @@
                 }
                 labels = monthSlice.map(m => m.month);
                 const netData = monthSlice.map(m => m.net);
-                const costData = monthSlice.map(m => m.cost);
+                const costData = monthSlice.map(m => m.cogs != null ? m.cogs : (m.cost || 0));
                 const profitData = monthSlice.map(m => m.profit);
 
                 datasets = [
@@ -2604,18 +2622,38 @@
             const ctx = document.getElementById('skuTrendChart').getContext('2d');
             if (skuTrendChart) skuTrendChart.destroy();
 
-            // Empty state — no real monthly SKU data yet
-            if (!SKU_TREND || SKU_TREND.length === 0) {
+            // Empty / insufficient state — need at least 3 monthly snapshots to draw a meaningful trend.
+            // SKU_TREND is populated forward-only by the nightly refresh, so early months render a tidy
+            // HTML placeholder (no canvas text, which was clipping on narrow widths).
+            if (!SKU_TREND || SKU_TREND.length < 3) {
                 const canvas = document.getElementById('skuTrendChart');
-                const c2 = canvas.getContext('2d');
-                c2.clearRect(0, 0, canvas.width, canvas.height);
-                c2.fillStyle = '#999';
-                c2.font = '12px Inter, sans-serif';
-                c2.textAlign = 'center';
-                c2.fillText('No monthly SKU data available — waiting for nightly refresh', canvas.width / 2, canvas.height / 2);
-                document.getElementById('skuTrendInsights').innerHTML = `<div class="insight-box"><h4>SKU Growth Trend</h4><p style="color:#999;font-style:italic;">Insufficient monthly SKU data to analyze growth trend.</p></div>`;
+                canvas.style.display = 'none';
+                const current = SKU_TREND && SKU_TREND.length > 0 ? SKU_TREND[SKU_TREND.length - 1] : null;
+                const snapshotCount = SKU_TREND ? SKU_TREND.length : 0;
+                // Inject HTML placeholder in the chart's parent container so it replaces the visual.
+                const parent = canvas.parentElement;
+                let placeholder = parent.querySelector('.sku-trend-placeholder');
+                if (!placeholder) {
+                    placeholder = document.createElement('div');
+                    placeholder.className = 'sku-trend-placeholder';
+                    placeholder.style.cssText = 'padding:24px 16px;text-align:center;color:#999;font-size:12px;line-height:1.6;background:rgba(255,255,255,0.02);border:1px dashed rgba(255,255,255,0.1);border-radius:6px;margin:8px 0;';
+                    parent.appendChild(placeholder);
+                }
+                placeholder.innerHTML = current
+                    ? `<div style="color:#C87DAB;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Collecting data</div>
+                       <div style="color:#E0E0E0;font-size:14px;margin-bottom:6px;"><strong>${current.cannabis}</strong> active cannabis SKUs &nbsp;·&nbsp; <strong>${current.total}</strong> total</div>
+                       <div style="color:#777;font-size:11px;">Snapshot ${snapshotCount} of 3 &nbsp;·&nbsp; ${current.month}</div>
+                       <div style="color:#777;font-size:11px;margin-top:6px;">Trend chart unlocks after 3 monthly snapshots</div>`
+                    : `<div style="color:#C87DAB;font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Waiting for data</div>
+                       <div style="color:#777;font-size:12px;">First monthly SKU snapshot lands at month-end.</div>`;
+                document.getElementById('skuTrendInsights').innerHTML = `<div class="insight-box"><h4>SKU Growth Trend</h4><p style="color:#999;font-style:italic;">${current ? `Month-over-month trend will populate once we have at least 3 monthly snapshots from the nightly refresh.` : 'Waiting for the first month-end snapshot.'}</p></div>`;
                 return;
             }
+            // Full data case — ensure canvas is visible (recover from a prior empty-state hide)
+            const canvasEl = document.getElementById('skuTrendChart');
+            canvasEl.style.display = '';
+            const oldPlaceholder = canvasEl.parentElement.querySelector('.sku-trend-placeholder');
+            if (oldPlaceholder) oldPlaceholder.remove();
 
             skuTrendChart = new Chart(ctx, {
                 type: 'line',
@@ -3522,11 +3560,19 @@
             // Set badge
             setBadge('dailyReviewBadge', 'Yesterday\u2019s Review', 'yesterday');
 
-            // Category breakdown for yesterday
+            // Category breakdown for yesterday — alias category→cat and cogs→cost for render code
             const ydayCats = [];
             const ydayDateStr = ydayData.date;
             DAILY_CAT_DATA.forEach(row => {
-                if (row.date === ydayDateStr) ydayCats.push(row);
+                if (row.date === ydayDateStr) {
+                    ydayCats.push({
+                        cat: row.category || row.cat,
+                        net: row.net || 0,
+                        cost: row.cogs != null ? row.cogs : (row.cost || 0),
+                        profit: row.profit || 0,
+                        margin: row.margin
+                    });
+                }
             });
             ydayCats.sort((a, b) => b.net - a.net);
             const topCat = ydayCats[0];
@@ -3542,15 +3588,32 @@
             const wowDir = parseFloat(wowChange) >= 0 ? '+' : '';
             const wowColor = parseFloat(wowChange) >= 0 ? '#4CAF50' : '#E57373';
 
-            // MTD from MONTHLY_DATA
-            const aprilMTD = MONTHLY_DATA.find(m => m.month === '2026-04');
-            const marchFull = MONTHLY_DATA.find(m => m.month === '2026-03');
-            const mtdDays = aprilMTD ? aprilMTD.days : 0;
-            const mtdNet = aprilMTD ? aprilMTD.net : 0;
-            const mtdAvgDaily = aprilMTD ? aprilMTD.avgDaily : 0;
-            const marchAvgDaily = marchFull ? marchFull.avgDaily : 0;
+            // MTD pace — computed inline from DAILY_DATA (no dependence on MONTHLY_DATA.days/avgDaily)
+            // Current month = prefix of the latest DAILY_DATA row; prior month = month before that.
+            const curMonthStr = ydayData.date.slice(0, 7);
+            const curMonthSlice = DAILY_DATA.filter(d => d.date.startsWith(curMonthStr));
+            const mtdDays = curMonthSlice.length;
+            const mtdNet = curMonthSlice.reduce((s, d) => s + (d.net || 0), 0);
+            const mtdProfit = curMonthSlice.reduce((s, d) => s + (d.profit || 0), 0);
+            const mtdMargin = mtdNet > 0 ? ((mtdProfit / mtdNet) * 100).toFixed(1) : '0.0';
+            const mtdAvgDaily = mtdDays > 0 ? Math.round(mtdNet / mtdDays) : 0;
+            // Prior month = step back one calendar month from current month
+            const [curY, curM] = curMonthStr.split('-').map(Number);
+            const priorY = curM === 1 ? curY - 1 : curY;
+            const priorM = curM === 1 ? 12 : curM - 1;
+            const priorMonthStr = priorY + '-' + String(priorM).padStart(2, '0');
+            const priorMonthSlice = DAILY_DATA.filter(d => d.date.startsWith(priorMonthStr));
+            const priorMonthDays = priorMonthSlice.length;
+            const priorMonthNet = priorMonthSlice.reduce((s, d) => s + (d.net || 0), 0);
+            const priorMonthProfit = priorMonthSlice.reduce((s, d) => s + (d.profit || 0), 0);
+            const priorMonthMargin = priorMonthNet > 0 ? ((priorMonthProfit / priorMonthNet) * 100).toFixed(1) : '0.0';
+            const priorAvgDaily = priorMonthDays > 0 ? Math.round(priorMonthNet / priorMonthDays) : 0;
+            const priorMonthLabel = new Date(priorY, priorM - 1, 1).toLocaleDateString('en-US', { month: 'long' });
+            const marchFull = priorMonthDays > 0 ? { net: priorMonthNet, avgDaily: priorAvgDaily, days: priorMonthDays, margin: priorMonthMargin, label: priorMonthLabel } : null;
+            const marchAvgDaily = priorAvgDaily;
             const mtdVsMarch = marchAvgDaily > 0 ? (((mtdAvgDaily - marchAvgDaily) / marchAvgDaily) * 100).toFixed(1) : 'N/A';
             const mtdColor = parseFloat(mtdVsMarch) >= 0 ? '#4CAF50' : '#E57373';
+            const curMonthLabel = new Date(curY, curM - 1, 1).toLocaleDateString('en-US', { month: 'long' });
 
             // 7-day average
             const avg7 = last7.length > 0 ? Math.round(last7Net / last7.length) : 0;
@@ -3583,18 +3646,18 @@
                 <p style="margin-top:10px;"><strong style="color:#D4A843;">Week-over-Week Trend</strong></p>
                 <p>Last 7 days: <strong>${formatCurrency(last7Net)}</strong> total net (${formatCurrency(avg7)}/day avg). Prior 7 days: ${formatCurrency(prior7Net)}. WoW change: <span style="color:${wowColor};font-weight:600;">${wowDir}${wowChange}%</span>. Best recent day: <strong>${bestDayLabel}</strong> at ${formatCurrency(bestDay.net)}. Slowest: <strong>${worstDayLabel}</strong> at ${formatCurrency(worstDay.net)}. The ${formatCurrency(bestDay.net - worstDay.net)} spread between best and worst shows ${bestDay.net / worstDay.net > 2 ? 'high day-to-day volatility — staffing and inventory prep should account for these swings' : 'moderate consistency in daily performance'}.</p>
 
-                <p style="margin-top:10px;"><strong style="color:#D4A843;">April MTD Pace</strong></p>
-                <p>Through ${mtdDays} days of April: <strong>${formatCurrency(mtdNet)} net</strong> at ${formatCurrency(mtdAvgDaily)}/day. ${marchFull ? `March averaged ${formatCurrency(marchAvgDaily)}/day over ${marchFull.days} days. April is pacing <span style="color:${mtdColor};font-weight:600;">${parseFloat(mtdVsMarch) >= 0 ? '+' : ''}${mtdVsMarch}%</span> vs. March.` : ''} At current pace, April projects to ~<strong>${formatCurrency(mtdAvgDaily * 30)}</strong> for the full month${marchFull ? ` (March closed at ${formatCurrency(marchFull.net)})` : ''}.</p>
+                <p style="margin-top:10px;"><strong style="color:#D4A843;">${curMonthLabel} MTD Pace</strong></p>
+                <p>Through ${mtdDays} days of ${curMonthLabel}: <strong>${formatCurrency(mtdNet)} net</strong> at ${formatCurrency(mtdAvgDaily)}/day. ${marchFull ? `${marchFull.label} averaged ${formatCurrency(marchAvgDaily)}/day over ${marchFull.days} days. ${curMonthLabel} is pacing <span style="color:${mtdColor};font-weight:600;">${parseFloat(mtdVsMarch) >= 0 ? '+' : ''}${mtdVsMarch}%</span> vs. ${marchFull.label}.` : ''} At current pace, ${curMonthLabel} projects to ~<strong>${formatCurrency(mtdAvgDaily * 30)}</strong> for the full month${marchFull ? ` (${marchFull.label} closed at ${formatCurrency(marchFull.net)})` : ''}.</p>
 
                 <p style="margin-top:10px;"><strong style="color:#D4A843;">Margin Health</strong></p>
-                <p>Yesterday's ${ydayMargin}% margin was <span style="color:${marginTrendColor};font-weight:600;">${marginTrend}</span> the 7-day average of ${avgMargin7d.toFixed(1)}%. ${aprilMTD ? `April MTD margin is running at ${aprilMTD.margin}%.` : ''} ${marchFull ? `March closed at ${marchFull.margin}% margin.` : ''} ${ydayMarginFloat < 48 ? 'Margin is compressing — check if heavy discount days or low-margin category mix is driving this. Review bundle discount depth and vendor cost changes.' : ydayMarginFloat > 52 ? 'Strong margin day — high-margin categories or lower discount usage likely contributed. Look for repeatable patterns.' : 'Margin is within the healthy 48-52% band.'}</p>
+                <p>Yesterday's ${ydayMargin}% margin was <span style="color:${marginTrendColor};font-weight:600;">${marginTrend}</span> the 7-day average of ${avgMargin7d.toFixed(1)}%. ${mtdDays > 0 ? `${curMonthLabel} MTD margin is running at ${mtdMargin}%.` : ''} ${marchFull ? `${marchFull.label} closed at ${marchFull.margin}% margin.` : ''} ${ydayMarginFloat < 48 ? 'Margin is compressing — check if heavy discount days or low-margin category mix is driving this. Review bundle discount depth and vendor cost changes.' : ydayMarginFloat > 52 ? 'Strong margin day — high-margin categories or lower discount usage likely contributed. Look for repeatable patterns.' : 'Margin is within the healthy 48-52% band.'}</p>
 
                 <p style="margin-top:10px;"><strong style="color:#4CAF50;">Wins</strong></p>
                 <ul style="margin:4px 0 8px 20px;padding:0;">
                     ${parseFloat(wowChange) > 0 ? `<li style="margin-bottom:3px;">Revenue trending up WoW (${wowDir}${wowChange}%) — momentum is positive</li>` : ''}
                     ${ydayMarginFloat > avgMargin7d ? `<li style="margin-bottom:3px;">Yesterday's margin (${ydayMargin}%) beat the 7-day average (${avgMargin7d.toFixed(1)}%)</li>` : ''}
                     ${topCat && topCat.net > 2000 ? `<li style="margin-bottom:3px;">${topCat.cat} had a strong day at ${formatCurrency(topCat.net)} — keep depth on best-selling SKUs</li>` : ''}
-                    ${mtdAvgDaily > marchAvgDaily ? `<li style="margin-bottom:3px;">April daily average ($${mtdAvgDaily.toLocaleString()}) is outpacing March ($${marchAvgDaily.toLocaleString()})</li>` : ''}
+                    ${marchFull && mtdAvgDaily > marchAvgDaily ? `<li style="margin-bottom:3px;">${curMonthLabel} daily average ($${mtdAvgDaily.toLocaleString()}) is outpacing ${marchFull.label} ($${marchAvgDaily.toLocaleString()})</li>` : ''}
                     <li style="margin-bottom:3px;">EG is pacing <span style="color:${egVsMaColor};">${parseFloat(egVsMa) >= 0 ? '+' : ''}${egVsMa}%</span> vs. estimated MA dispensary average (~$${maAvgDispensary.toLocaleString()}/day)</li>
                 </ul>
 
