@@ -711,8 +711,10 @@
            ═══════════════════════════════════════════════════════════ */
 
         /* ── Tablet (≤1024px) ─────────────────────────────────────── */
-        /* Global mobile overflow prevention — applies at ALL widths */
-        html, body { overflow-x: hidden; }
+        /* Global mobile overflow prevention.
+           overflow-x:clip prevents horizontal scroll WITHOUT creating a new block formatting
+           context, so position:sticky on the header still works. (overflow:hidden breaks sticky.) */
+        html, body { overflow-x: clip; }
 
         @media (max-width: 1024px) {
             html, body { max-width: 100vw; }
@@ -2442,6 +2444,10 @@
                 }
             }
 
+            // Detect aggregate format: data has day="All" instead of per-day-of-week
+            const distinctDays = [...new Set(hourlyRows.map(r => r.day))];
+            const isAggregateFormat = distinctDays.length === 1 && distinctDays[0] === 'All';
+
             // Build lookup: day|hour → net. Hourly rows carry raw NET (refresh task responsibility).
             const cellValues = {};
             let viewMax = 0;
@@ -2491,16 +2497,15 @@
                 return (normalized > 0.20 && normalized < 0.75) ? '#000' : '#FFF';
             };
 
-            let html = '<thead><tr><th>Day / Hour</th>';
-            hours.forEach(h => html += '<th>' + h.replace(' ', '<br>') + '</th>');
-            html += '</tr></thead><tbody>';
-
-            days.forEach(day => {
-                // For single-day periods, only show the relevant day row
-                if (isYesterdayPeriod && day !== singleDayTargetDow) return;
-                html += '<tr><th style="text-align: left;">' + day + '</th>';
+            let html = '<thead><tr><th>' + (isAggregateFormat ? 'Hour' : 'Day / Hour') + '</th>';
+            // For aggregate format, show hours as rows instead of columns (single-row horizontal bar)
+            if (isAggregateFormat) {
+                // Aggregate: single row, hours as columns
+                hours.forEach(h => html += '<th>' + h.replace(' ', '<br>') + '</th>');
+                html += '</tr></thead><tbody>';
+                html += '<tr><th style="text-align: left;">All Days</th>';
                 hours.forEach(hour => {
-                    const key = day + '|' + hour;
+                    const key = 'All|' + hour;
                     if (cellValues.hasOwnProperty(key)) {
                         const netEst = cellValues[key] || 0;
                         const color = getColor(netEst);
@@ -2512,8 +2517,32 @@
                     }
                 });
                 html += '</tr>';
-            });
-            html += '</tbody>';
+                html += '</tbody>';
+            } else {
+                // Per-day-of-week format: full 7-row grid
+                hours.forEach(h => html += '<th>' + h.replace(' ', '<br>') + '</th>');
+                html += '</tr></thead><tbody>';
+
+                days.forEach(day => {
+                    // For single-day periods, only show the relevant day row
+                    if (isYesterdayPeriod && day !== singleDayTargetDow) return;
+                    html += '<tr><th style="text-align: left;">' + day + '</th>';
+                    hours.forEach(hour => {
+                        const key = day + '|' + hour;
+                        if (cellValues.hasOwnProperty(key)) {
+                            const netEst = cellValues[key] || 0;
+                            const color = getColor(netEst);
+                            const txt = getTextColor(netEst);
+                            const val = netEst > 1000 ? (netEst / 1000).toFixed(1) + 'k' : Math.round(netEst);
+                            html += `<td class="heatmap-cell" style="background-color: ${color}; color: ${txt}; font-weight:600;">$${val}</td>`;
+                        } else {
+                            html += '<td class="heatmap-cell" style="background-color:rgba(30,20,50,0.5);color:#444;font-size:10px;">—</td>';
+                        }
+                    });
+                    html += '</tr>';
+                });
+                html += '</tbody>';
+            }
 
             document.getElementById('heatmapTable').innerHTML = html;
 
@@ -2527,24 +2556,42 @@
             const peak2 = sorted[1] || sorted[0];
             const slowest = sorted[sorted.length - 1];
             const slow2 = sorted[sorted.length - 2] || sorted[sorted.length - 1];
-            const weekendTotal = sorted.filter(r => ['Friday','Saturday','Sunday'].includes(r.day)).reduce((a,r) => a + r.netEst, 0);
-            const weekdayTotal = sorted.filter(r => !['Friday','Saturday','Sunday'].includes(r.day)).reduce((a,r) => a + r.netEst, 0);
-            const totalHeatmapNet = weekendTotal + weekdayTotal;
-            const wkndPct = totalHeatmapNet > 0 ? ((weekendTotal / totalHeatmapNet) * 100).toFixed(0) : '0';
 
-            document.getElementById('heatmapInsights').innerHTML = `
-                <div class="insight-box">
-                    <h4>${badgeText} Traffic Pattern</h4>
-                    <p><strong>Peak hour:</strong> ${peakHour.day} ${peakHour.hour} at ~${formatCurrency(Math.round(peakHour.netEst))} est. net — your single strongest selling hour. <strong>${peak2.day} ${peak2.hour}</strong> is #2 at ~${formatCurrency(Math.round(peak2.netEst))}. These two hours alone account for ${totalHeatmapNet > 0 ? (((peakHour.netEst + peak2.netEst) / totalHeatmapNet) * 100).toFixed(1) : '0'}% of total revenue.</p>
-                    <p style="margin-top:8px;"><strong>Slowest periods:</strong> ${slowest.day} ${slowest.hour} (~${formatCurrency(Math.round(slowest.netEst))}) and ${slow2.day} ${slow2.hour} (~${formatCurrency(Math.round(slow2.netEst))}). Weekend (Fri-Sun) drives <strong>${wkndPct}%</strong> of weekly revenue — ${weekendTotal > weekdayTotal ? 'significantly outperforming' : 'roughly matching'} weekdays.</p>
-                </div>
+            // For aggregate ("All") format, show simpler insights without weekend/weekday split
+            if (isAggregateFormat) {
+                const totalNet = sorted.reduce((a, r) => a + r.netEst, 0);
+                const peakPct = totalNet > 0 ? ((peakHour.netEst / totalNet) * 100).toFixed(1) : '0';
+                const top2Pct = totalNet > 0 ? (((peakHour.netEst + peak2.netEst) / totalNet) * 100).toFixed(1) : '0';
+                // Use just the hour (no "All" day label) for cleaner display
+                document.getElementById('heatmapInsights').innerHTML = `
+                    <div class="insight-box">
+                        <h4>${badgeText} Traffic Pattern</h4>
+                        <p><strong>Peak hour:</strong> ${peakHour.hour} at ~${formatCurrency(Math.round(peakHour.netEst))} total net (${peakPct}% of period revenue). <strong>${peak2.hour}</strong> is #2 at ~${formatCurrency(Math.round(peak2.netEst))}. These two hours account for ${top2Pct}% of total revenue.</p>
+                        <p style="margin-top:8px;"><strong>Slowest hour:</strong> ${slowest.hour} at ~${formatCurrency(Math.round(slowest.netEst))}. Total ${badgeText.toLowerCase()} revenue across all hours: ${formatCurrency(Math.round(totalNet))}.</p>
+                    </div>`;
+            } else {
+                const weekendTotal = sorted.filter(r => ['Friday','Saturday','Sunday'].includes(r.day)).reduce((a,r) => a + r.netEst, 0);
+                const weekdayTotal = sorted.filter(r => !['Friday','Saturday','Sunday'].includes(r.day)).reduce((a,r) => a + r.netEst, 0);
+                const totalHeatmapNet = weekendTotal + weekdayTotal;
+                const wkndPct = totalHeatmapNet > 0 ? ((weekendTotal / totalHeatmapNet) * 100).toFixed(0) : '0';
+
+                document.getElementById('heatmapInsights').innerHTML = `
+                    <div class="insight-box">
+                        <h4>${badgeText} Traffic Pattern</h4>
+                        <p><strong>Peak hour:</strong> ${peakHour.day} ${peakHour.hour} at ~${formatCurrency(Math.round(peakHour.netEst))} est. net — your single strongest selling hour. <strong>${peak2.day} ${peak2.hour}</strong> is #2 at ~${formatCurrency(Math.round(peak2.netEst))}. These two hours alone account for ${totalHeatmapNet > 0 ? (((peakHour.netEst + peak2.netEst) / totalHeatmapNet) * 100).toFixed(1) : '0'}% of total revenue.</p>
+                        <p style="margin-top:8px;"><strong>Slowest periods:</strong> ${slowest.day} ${slowest.hour} (~${formatCurrency(Math.round(slowest.netEst))}) and ${slow2.day} ${slow2.hour} (~${formatCurrency(Math.round(slow2.netEst))}). Weekend (Fri-Sun) drives <strong>${wkndPct}%</strong> of weekly revenue — ${weekendTotal > weekdayTotal ? 'significantly outperforming' : 'roughly matching'} weekdays.</p>
+                    </div>`;
+            }
+
+            // Staffing insights — append to existing insights
+            const staffingHtml = `
                 <div class="insight-box opportunities">
                     <h4>Staffing & Promo Actions</h4>
-                    <p><strong>Staff scheduling:</strong> Double-staff ${peakHour.day}s 11am-3pm and all weekend 10am-6pm. Your peak hours generate ${((peakHour.netEst / (slowest.netEst || 1))).toFixed(1)}x more revenue than your slowest — staffing should reflect this ratio.</p>
-                    <p style="margin-top:6px;"><strong>Flash promotions:</strong> Run "Early Bird" deals (9-10am weekdays) to build morning traffic when the store is quietest. A 10% discount during slow hours costs less than the revenue you gain from incremental foot traffic.</p>
-                    <p style="margin-top:6px;"><strong>Weekend strategy:</strong> ${weekendTotal > weekdayTotal ? 'Weekends are your money-maker at ' + wkndPct + '% of revenue. Stock up Friday mornings, run premium product launches Saturday AM, and push impulse-buy items (edibles, beverages) near the register.' : 'Weekdays and weekends are roughly balanced. Consider weekend-exclusive deals to pull more traffic.'}</p>
+                    <p><strong>Staff scheduling:</strong> Your peak hour generates ${((peakHour.netEst / (slowest.netEst || 1))).toFixed(1)}x more revenue than your slowest — staffing should reflect this ratio. Focus extra coverage around ${peakHour.hour}${!isAggregateFormat ? ' on ' + peakHour.day + 's' : ''}.</p>
+                    <p style="margin-top:6px;"><strong>Flash promotions:</strong> Run "Early Bird" deals (9-10am) to build morning traffic when the store is quietest. A 10% discount during slow hours costs less than the revenue you gain from incremental foot traffic.</p>
                 </div>
             `;
+            document.getElementById('heatmapInsights').innerHTML += staffingHtml;
         }
 
         // Update Margin Analysis
