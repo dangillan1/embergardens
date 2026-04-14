@@ -346,6 +346,9 @@
         .kpi-card:nth-child(2) { border-left-color: #8B6BAE; }
         .kpi-card:nth-child(3) { border-left-color: #4CAF50; }
         .kpi-card:nth-child(4) { border-left-color: #D4A843; }
+        .kpi-card:nth-child(5) { border-left-color: #5BA4CF; }
+        .kpi-card:nth-child(6) { border-left-color: #E07A5F; }
+        .kpi-card:nth-child(7) { border-left-color: #81B29A; }
 
         .kpi-label {
             color: #999;
@@ -837,6 +840,9 @@
             .kpi-card:nth-child(2) { border-top-color: #8B6BAE; border-left: none; }
             .kpi-card:nth-child(3) { border-top-color: #4CAF50; border-left: none; }
             .kpi-card:nth-child(4) { border-top-color: #D4A843; border-left: none; }
+            .kpi-card:nth-child(5) { border-top-color: #5BA4CF; border-left: none; }
+            .kpi-card:nth-child(6) { border-top-color: #E07A5F; border-left: none; }
+            .kpi-card:nth-child(7) { border-top-color: #81B29A; border-left: none; }
             .kpi-value { font-size: 16px; }
             .kpi-label { font-size: 8px; margin-bottom: 2px; letter-spacing: 0.3px; }
             .kpi-subtext { font-size: 8px; }
@@ -1580,7 +1586,7 @@
         }
 
 
-        const MONTHLY_DATA = [{"month": "2025-03", "gross": 100139.37, "net": 89252.93, "cogs": 43946.591, "profit": 45306.34, "margin": 50.7617, "transactions": null, "has_null_txn_days": true}, {"month": "2025-04", "gross": 129099.35, "net": 109973.54, "cogs": 56224.152, "profit": 53749.39, "margin": 48.8748, "transactions": null, "has_null_txn_days": true}, {"month": "2025-05", "gross": 159397.11, "net": 140437.55, "cogs": 70264.734, "profit": 70172.82, "margin": 49.9673, "transactions": null, "has_null_txn_days": true}, {"month": "2025-06", "gross": 192429.57, "net": 173823.33, "cogs": 85185.37, "profit": 88637.96, "margin": 50.9931, "transactions": null, "has_null_txn_days": true}, {"month": "2025-07", "gross": 261311.18, "net": 231981.58, "cogs": 112730.966, "profit": 119250.61, "margin": 51.4052, "transactions": null, "has_null_txn_days": true}, {"month": "2025-08", "gross": 242956.2, "net": 218159.35, "cogs": 106329.332, "profit": 111830.02, "margin": 51.2607, "transactions": null, "has_null_txn_days": true}, {"month": "2025-09", "gross": 185592.59, "net": 166576.56, "cogs": 81716.522, "profit": 84860.04, "margin": 50.9436, "transactions": null, "has_null_txn_days": true}, {"month": "2025-10", "gross": 163557.39, "net": 146133.05, "cogs": 72192.819, "profit": 73940.23, "margin": 50.5979, "transactions": null, "has_null_txn_days": true}, {"month": "2025-11", "gross": 147868.61, "net": 128128.51, "cogs": 64056.805, "profit": 64071.71, "margin": 50.0058, "transactions": null, "has_null_txn_days": true}, {"month": "2025-12", "gross": 149837.49, "net": 132606.07, "cogs": 64972.599, "profit": 67633.47, "margin": 51.0033, "transactions": null, "has_null_txn_days": true}, {"month": "2026-01", "gross": 149425.91, "net": 132067.41, "cogs": 62269.442, "profit": 69797.97, "margin": 52.8503, "transactions": null, "has_null_txn_days": true}, {"month": "2026-02", "gross": 146533.22, "net": 128313.1, "cogs": 62262.061, "profit": 66051.04, "margin": 51.4765, "transactions": null, "has_null_txn_days": true}, {"month": "2026-03", "gross": 174809.15, "net": 151330.5, "cogs": 75620.791, "profit": 75709.7, "margin": 50.0294, "transactions": null, "has_null_txn_days": true}, {"month": "2026-04", "gross": 0.0, "net": 0.0, "cogs": 0.0, "profit": 0.0, "margin": null, "transactions": null, "has_null_txn_days": true}];
+        const MONTHLY_DATA = [{"month": "2025-03", "gross": 100139.37, "net": 89252.93, "cogs": 43946.591, "profit": 45306.34, "margin": 50.7617, "transactions": 2111, "has_null_txn_days": false, "avg_basket": 42.28}, {"month": "2025-04", "gross": 129099.35, "net": 109973.54, "cogs": 56224.152, "profit": 53749.39, "margin": 48.8748, "transactions": 2142, "has_null_txn_days": false, "avg_basket": 51.34}, {"month": "2025-05", "gross": 159397.11, "net": 140437.55, "cogs": 70264.734, "profit": 70172.82, "margin": 49.9673, "transactions": 2761, "has_null_txn_days": false, "avg_basket": 50.86}, {"month": "2025-06", "gross": 192429.57, "net": 173823.33, "cogs": 85185.37, "profit": 88637.96, "margin": 50.9931, "transactions": 3386, "has_null_txn_days": false, "avg_basket": 51.34}, {"month": "2025-07", "gross": 261311.18, "net": 231981.58, "cogs": 112730.966, "profit": 119250.61, "margin": 51.4052, "transactions": 4193, "has_null_txn_days": false, "avg_basket": 55.33}, {"month": "2025-08", "gross": 242956.2, "net": 218159.35, "cogs": 106329.332, "profit": 111830.02, "margin": 51.2607, "transactions": 4198, "has_null_txn_days": false, "avg_basket": 51.97}, {"month": "2025-09", "gross": 185592.59, "net": 166576.56, "cogs": 81716.522, "profit": 84860.04, "margin": 50.9436, "transactions": 3280, "has_null_txn_days": false, "avg_basket": 50.79}, {"month": "2025-10", "gross": 163557.39, "net": 146133.05, "cogs": 72192.819, "profit": 73940.23, "margin": 50.5979, "transactions": 2944, "has_null_txn_days": false, "avg_basket": 49.64}, {"month": "2025-11", "gross": 147868.61, "net": 128128.51, "cogs": 64056.805, "profit": 64071.71, "margin": 50.0058, "transactions": 2518, "has_null_txn_days": false, "avg_basket": 50.89}, {"month": "2025-12", "gross": 149837.49, "net": 132606.07, "cogs": 64972.599, "profit": 67633.47, "margin": 51.0033, "transactions": 2517, "has_null_txn_days": false, "avg_basket": 52.68}, {"month": "2026-01", "gross": 149425.91, "net": 132067.41, "cogs": 62269.442, "profit": 69797.97, "margin": 52.8503, "transactions": 2534, "has_null_txn_days": false, "avg_basket": 52.12}, {"month": "2026-02", "gross": 146533.22, "net": 128313.1, "cogs": 62262.061, "profit": 66051.04, "margin": 51.4765, "transactions": 2305, "has_null_txn_days": false, "avg_basket": 55.67}, {"month": "2026-03", "gross": 174809.15, "net": 151330.5, "cogs": 75620.791, "profit": 75709.7, "margin": 50.0294, "transactions": 2863, "has_null_txn_days": false, "avg_basket": 52.86}, {"month": "2026-04", "gross": 0.0, "net": 0.0, "cogs": 0.0, "profit": 0.0, "margin": null, "transactions": 1342, "has_null_txn_days": false}];
 
         // Timestamp of last data pull from Dutchie (set by scheduled task)
         const DATA_UPDATED = "2026-04-14T01:12:25-04:00";
@@ -1903,11 +1909,13 @@
             // Refresh writes `.cogs`; alias to .cost here. Day count is derived from DAILY_DATA length
             // (MONTHLY_DATA rows don't carry a `days` field).
             if (period === "lifetime") {
-                let totalNet = 0, totalCost = 0, totalProfit = 0;
+                let totalNet = 0, totalCost = 0, totalProfit = 0, totalTxn = 0, txnComplete = true;
                 MONTHLY_DATA.forEach(m => {
                     totalNet += m.net || 0;
                     totalCost += (m.cogs != null ? m.cogs : (m.cost || 0));
                     totalProfit += m.profit || 0;
+                    if (m.transactions != null) totalTxn += m.transactions;
+                    else txnComplete = false;
                 });
                 const totalDays = DAILY_DATA.length;
                 return {
@@ -1916,7 +1924,11 @@
                     profit: Math.round(totalProfit),
                     avgDaily: totalDays > 0 ? Math.round(totalNet / totalDays) : 0,
                     days: totalDays,
-                    dataComplete: true
+                    dataComplete: true,
+                    transactions: totalTxn,
+                    txnComplete: txnComplete,
+                    margin: totalNet > 0 ? (totalProfit / totalNet) * 100 : null,
+                    avgBasket: totalTxn > 0 ? totalNet / totalTxn : null
                 };
             }
 
@@ -1938,11 +1950,18 @@
                 var dataComplete = DAILY_DATA.length >= wantDays;
             }
 
-            let totalNet = 0, totalCost = 0, totalProfit = 0;
+            let totalNet = 0, totalCost = 0, totalProfit = 0, totalTxn = 0, netForTxn = 0, txnComplete = true;
             slice.forEach(d => {
                 totalNet += d.net || 0;
                 totalCost += (d.cogs != null ? d.cogs : (d.cost || 0));
                 totalProfit += d.profit || 0;
+                const t = (d.transactions != null) ? d.transactions : (d.transactionCount != null ? d.transactionCount : null);
+                if (t != null) {
+                    totalTxn += t;
+                    netForTxn += d.net || 0;
+                } else {
+                    txnComplete = false;
+                }
             });
 
             return {
@@ -1951,7 +1970,11 @@
                 profit: Math.round(totalProfit),
                 avgDaily: slice.length > 0 ? Math.round(totalNet / slice.length) : 0,
                 days: slice.length,
-                dataComplete: typeof dataComplete !== 'undefined' ? dataComplete : true
+                dataComplete: typeof dataComplete !== 'undefined' ? dataComplete : true,
+                transactions: totalTxn,
+                txnComplete: txnComplete,
+                margin: totalNet > 0 ? (totalProfit / totalNet) * 100 : null,
+                avgBasket: totalTxn > 0 ? netForTxn / totalTxn : null
             };
         }
 
@@ -2046,6 +2069,10 @@
             setBadge('kpiBadge', label, currentPeriod);
 
             const kpiGrid = document.getElementById('kpiGrid');
+            const partialMark = summary.txnComplete ? '' : '<span title="Partial — some days missing transaction data" style="color:#D4A843;font-weight:400;">*</span>';
+            const marginStr = (summary.margin != null) ? summary.margin.toFixed(1) + '%' : '—';
+            const txnStr = (summary.transactions > 0) ? summary.transactions.toLocaleString() + partialMark : '—';
+            const basketStr = (summary.avgBasket != null) ? '$' + summary.avgBasket.toFixed(2) + partialMark : '—';
             kpiGrid.innerHTML = `
                 <div class="kpi-card">
                     <div class="kpi-label">Net Sales</div>
@@ -2058,6 +2085,18 @@
                 <div class="kpi-card">
                     <div class="kpi-label">Gross Profit</div>
                     <div class="kpi-value">${formatCurrency(summary.profit)}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Net Margin</div>
+                    <div class="kpi-value">${marginStr}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Customers</div>
+                    <div class="kpi-value">${txnStr}</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Avg Basket</div>
+                    <div class="kpi-value">${basketStr}</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Avg Daily Net</div>
