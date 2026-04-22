@@ -1189,7 +1189,6 @@
             <div class="chapter-section">
                 <div class="chapter-section-label">Operations</div>
                 <a class="chapter-link" href="#section-inventory">SKU Analysis</a>
-                <a class="chapter-link" href="#section-sku-trends">SKU Trends</a>
                 <a class="chapter-link" href="#section-purchasing">Purchasing</a>
             </div>
             <div class="chapter-section">
@@ -1303,14 +1302,14 @@
             <div class="table-container" style="margin-top: 20px;">
                 <table class="data-table">
                     <colgroup><col class="col-name"><col class="col-num"><col class="col-num"><col class="col-num"><col class="col-num"><col class="col-num"></colgroup>
-                    <thead>
+                    <thead id="brandTableHead">
                         <tr>
-                            <th>Brand</th>
-                            <th class="num-cell">Net Sales</th>
-                            <th class="num-cell">Margin</th>
-                            <th class="num-cell">Profit</th>
-                            <th class="num-cell">$/Day</th>
-                            <th class="num-cell">SKUs</th>
+                            <th data-sort="name" style="cursor:pointer;user-select:none;" onclick="setBrandSort('name')">Brand <span class="sort-ind"></span></th>
+                            <th class="num-cell" data-sort="sales" style="cursor:pointer;user-select:none;" onclick="setBrandSort('sales')">Net Sales <span class="sort-ind"></span></th>
+                            <th class="num-cell" data-sort="margin" style="cursor:pointer;user-select:none;" onclick="setBrandSort('margin')">Margin <span class="sort-ind"></span></th>
+                            <th class="num-cell" data-sort="profit" style="cursor:pointer;user-select:none;" onclick="setBrandSort('profit')">Profit <span class="sort-ind"></span></th>
+                            <th class="num-cell" data-sort="daily" style="cursor:pointer;user-select:none;" onclick="setBrandSort('daily')">$/Day <span class="sort-ind"></span></th>
+                            <th class="num-cell" data-sort="skus" style="cursor:pointer;user-select:none;" onclick="setBrandSort('skus')">SKUs <span class="sort-ind"></span></th>
                         </tr>
                     </thead>
                     <tbody id="brandTableBody"></tbody>
@@ -1388,18 +1387,21 @@
                     <tbody id="inventoryTableBody"></tbody>
                 </table>
             </div>
-        </div>
 
-        <!-- Cannabis SKU Trend -->
-        <div class="card" id="section-sku-trends">
-            <div class="card-header">
-                <span class="card-title">Cannabis SKU Count Over Time</span>
-                <span class="period-badge">Monthly Trend</span>
+            <!-- SKU count trend over time — folded into the SKU Analysis card 2026-04-22.
+                 This used to be its own #section-sku-trends card. Now it's the footer of
+                 the SKU Analysis section, scoped as "how the active-SKU count moves month
+                 over month" context below the current snapshot. -->
+            <div style="margin-top:28px;padding-top:20px;border-top:1px solid #2A2A4E;">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;">
+                    <span style="font-size:13px;font-weight:600;color:#E0E0E0;">Cannabis SKU Count Over Time</span>
+                    <span style="font-size:10px;color:#999;text-transform:uppercase;letter-spacing:0.5px;">Monthly Trend</span>
+                </div>
+                <div style="height:240px;position:relative;">
+                    <canvas id="skuTrendChart"></canvas>
+                </div>
+                <div class="insights" id="skuTrendInsights"></div>
             </div>
-            <div style="height:280px;position:relative;">
-                <canvas id="skuTrendChart"></canvas>
-            </div>
-            <div class="insights" id="skuTrendInsights"></div>
         </div>
 
         <!-- Purchasing Plan -->
@@ -2370,11 +2372,27 @@
             `;
         }
 
-        // Update Brand Chart + unified ranked-by-margin table (click-to-drill).
+        // Brand table sort state — default is net sales desc. Clicking a column header
+        // toggles direction (desc first, then asc, then back to desc). Non-name columns
+        // default to desc on first click (bigger = more interesting); name defaults to asc.
+        let brandSortKey = 'sales';
+        let brandSortDir = 'desc';
+
+        function setBrandSort(key) {
+            if (brandSortKey === key) {
+                brandSortDir = brandSortDir === 'desc' ? 'asc' : 'desc';
+            } else {
+                brandSortKey = key;
+                brandSortDir = (key === 'name') ? 'asc' : 'desc';
+            }
+            updateBrandChart();
+        }
+
+        // Update Brand Chart + unified click-to-sort, click-to-drill table.
         // Merged 2026-04-22 — old "Highest Margin Brands" section folded in here. The
-        // horizontal bar chart still shows top-10 by NET SALES (revenue view), but the
-        // table is ranked by MARGIN desc so you can see who's most profitable at a glance.
-        // Rows click to expand the per-SKU drill (toggleBrandDrill / renderBrandDrill).
+        // horizontal bar chart always shows top-10 by NET SALES (the revenue story stays
+        // constant regardless of table sort). The table defaults to Net Sales desc and
+        // resorts in place when any column header is clicked.
         function updateBrandChart() {
             const data = getBrandsForPeriod(currentPeriod);
             const label = PERIOD_DATA[currentPeriod].label;
@@ -2398,7 +2416,10 @@
                 return;
             }
 
-            // Ranked-by-margin view (descending). SKU count pulled from products_* for this period.
+            // SKU count — prefer the rollup's authoritative count (b.skus, written by the pull
+            // script pre-truncation). Fall back to live count in products_{period} only if
+            // missing. This is critical for longer periods: brands with small-dollar SKUs all
+            // fall below the 500-SKU cap, so live counting under-reports.
             const products = getProductsForPeriod(currentPeriod) || [];
             const skuByBrand = {};
             for (const p of products) {
@@ -2406,23 +2427,65 @@
                 if (!k) continue;
                 skuByBrand[k] = (skuByBrand[k] || 0) + 1;
             }
-            const sortedByMargin = [...qualified].sort((a, b) => parseFloat(b.margin) - parseFloat(a.margin));
             const colorFor = (m) => m >= 55 ? '#4CAF50' : m >= 50 ? '#8BC34A' : m >= 45 ? '#D4A843' : m >= 40 ? '#E0E0E0' : m >= 35 ? '#D4A843' : '#E57373';
 
-            tbody.innerHTML = sortedByMargin.map(b => {
+            // Compute daily and skuCount once so sort comparators can reference them
+            const enriched = qualified.map(b => ({
+                ...b,
+                _daily: b.profit / periodDays,
+                _skus: (b.skus != null ? b.skus : (skuByBrand[b.name.trim().toLowerCase()] || 0))
+            }));
+
+            // Apply current sort state
+            const sortFns = {
+                name:   (a, b) => a.name.localeCompare(b.name),
+                sales:  (a, b) => a.sales - b.sales,
+                margin: (a, b) => parseFloat(a.margin) - parseFloat(b.margin),
+                profit: (a, b) => a.profit - b.profit,
+                daily:  (a, b) => a._daily - b._daily,
+                skus:   (a, b) => a._skus - b._skus
+            };
+            const cmp = sortFns[brandSortKey] || sortFns.sales;
+            const sorted = [...enriched].sort(cmp);
+            if (brandSortDir === 'desc') sorted.reverse();
+
+            // Update header sort indicators (▼/▲ next to the active column)
+            const head = document.getElementById('brandTableHead');
+            if (head) {
+                head.querySelectorAll('th').forEach(th => {
+                    const ind = th.querySelector('.sort-ind');
+                    const k = th.dataset.sort;
+                    if (!ind) return;
+                    if (k === brandSortKey) {
+                        ind.textContent = brandSortDir === 'desc' ? ' ▼' : ' ▲';
+                        ind.style.color = '#D4A843';
+                        th.style.color = '#E0E0E0';
+                    } else {
+                        ind.textContent = '';
+                        th.style.color = '';
+                    }
+                });
+            }
+
+            tbody.innerHTML = sorted.map(b => {
                 const m = parseFloat(b.margin);
-                const dailyProfit = Math.round(b.profit / periodDays);
-                const skuCount = skuByBrand[b.name.trim().toLowerCase()] || 0;
+                const dailyProfit = Math.round(b._daily);
                 const cleanName = b.name.replace(/, (LLC|Inc\.|Inc)/, '');
+                const skuDisplay = b._skus || '—';
                 return `<tr class="margin-brand-row" data-brand="${encodeURIComponent(b.name)}" onclick="toggleBrandDrill(this)" style="cursor:pointer;">
                     <td style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;" title="${b.name}"><span class="brand-caret" style="display:inline-block;width:10px;color:#999;">▸</span> ${cleanName}</td>
                     <td class="num-cell">${formatCurrency(b.sales)}</td>
                     <td class="num-cell" style="color:${colorFor(m)};font-weight:600;">${b.margin}%</td>
                     <td class="num-cell">${formatCurrency(b.profit)}</td>
                     <td class="num-cell" style="color:#D4A843;">${formatCurrency(dailyProfit)}</td>
-                    <td class="num-cell" style="color:#999;">${skuCount || '—'}</td>
+                    <td class="num-cell" style="color:#999;">${skuDisplay}</td>
                 </tr>`;
             }).join('');
+
+            // Rebind `sortedByMargin` for downstream insights (margin leader / tail ranking
+            // is independent of user's table sort choice — insights always frame the story
+            // around top seller, margin leader, and tail)
+            const sortedByMargin = [...enriched].sort((a, b) => parseFloat(b.margin) - parseFloat(a.margin));
 
             // Chart — top 10 by NET SALES (revenue ranking stays the bar-chart story)
             const topBySales = [...qualified].sort((a, b) => b.sales - a.sales).slice(0, 10);
@@ -2515,7 +2578,22 @@
             const targetKey = brandName.trim().toLowerCase();
             const brandSkus = products.filter(p => (p.brand || '').trim().toLowerCase() === targetKey);
             if (brandSkus.length === 0) {
-                return `<div style="padding:14px;color:#999;font-size:12px;font-style:italic;">No SKU data for ${brandName} in this period.</div>`;
+                // Brand total exists in brands_{period} but none of its SKUs ranked inside the
+                // pull's per-period top-500 cap. Common for long periods (180/365/lt) where
+                // brands with many small-dollar SKUs get summed correctly at the brand level
+                // but their individual rows fall below the cut. Tell the user that instead of
+                // the misleading "no SKU data" message.
+                const brandEntry = (getBrandsForPeriod(currentPeriod) || []).find(b => b.name === brandName);
+                const claimedSkus = brandEntry && brandEntry.skus != null ? brandEntry.skus : null;
+                const periodLabel = PERIOD_DATA[currentPeriod] ? PERIOD_DATA[currentPeriod].label : currentPeriod;
+                return `<div style="padding:14px;color:#BBB;font-size:12px;line-height:1.6;">
+                    <div style="font-size:13px;color:#E0E0E0;margin-bottom:6px;"><strong>${brandName}</strong> — ${periodLabel}</div>
+                    <div style="color:#999;font-style:italic;">
+                        ${claimedSkus != null ? `This brand moved ${claimedSkus} SKUs in the ${periodLabel.toLowerCase()} window. ` : ''}
+                        None of those SKUs ranked inside the pull's top-500 per-period cap — that's why the per-SKU drill is empty here.
+                        Try a shorter period (MTD / 30d / 60d) where the cap is deeper relative to this brand, or the next full refresh will raise the cap.
+                    </div>
+                </div>`;
             }
             // Full SKU list for this brand, sorted high→low by margin.
             // NO net>0 filter — show every SKU Dutchie reported for this brand in this period,
