@@ -1302,13 +1302,15 @@
             </div>
             <div class="table-container" style="margin-top: 20px;">
                 <table class="data-table">
-                    <colgroup><col class="col-name"><col class="col-num"><col class="col-num"><col class="col-num"></colgroup>
+                    <colgroup><col class="col-name"><col class="col-num"><col class="col-num"><col class="col-num"><col class="col-num"><col class="col-num"></colgroup>
                     <thead>
                         <tr>
                             <th>Brand</th>
                             <th class="num-cell">Net Sales</th>
-                            <th class="num-cell">Cost</th>
                             <th class="num-cell">Margin</th>
+                            <th class="num-cell">Profit</th>
+                            <th class="num-cell">$/Day</th>
+                            <th class="num-cell">SKUs</th>
                         </tr>
                     </thead>
                     <tbody id="brandTableBody"></tbody>
@@ -1363,56 +1365,6 @@
                 </table>
             </div>
             <div class="insights" id="discountInsights"></div>
-        </div>
-
-        <!-- Highest Margin Brands -->
-        <div class="card" id="section-margin-brands">
-            <div class="card-header">
-                <span class="card-title">Highest Margin Brands</span>
-                <span class="period-badge" id="marginBrandBadge">30-Day Data</span>
-            </div>
-            <div style="font-size: 12px; color: #999; margin-bottom: 15px;">
-                Click any brand to drill into its highest &amp; lowest margin SKUs for the selected period.
-            </div>
-            <div style="display:flex;flex-direction:column;gap:24px;">
-                <div>
-                    <h3 style="font-size:13px;color:#4CAF50;margin-bottom:10px;">Top Margin Brands</h3>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <colgroup><col style="width:40%;"><col style="width:18%;"><col style="width:14%;"><col style="width:14%;"><col style="width:14%;"></colgroup>
-                            <thead>
-                                <tr>
-                                    <th>Brand</th>
-                                    <th class="num-cell">Net Sales</th>
-                                    <th class="num-cell">Margin</th>
-                                    <th class="num-cell">Profit</th>
-                                    <th class="num-cell">$/Day</th>
-                                </tr>
-                            </thead>
-                            <tbody id="topMarginBrandsBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div>
-                    <h3 style="font-size:13px;color:#E57373;margin-bottom:10px;">Lowest Margin Brands</h3>
-                    <div class="table-container">
-                        <table class="data-table">
-                            <colgroup><col style="width:40%;"><col style="width:18%;"><col style="width:14%;"><col style="width:14%;"><col style="width:14%;"></colgroup>
-                            <thead>
-                                <tr>
-                                    <th>Brand</th>
-                                    <th class="num-cell">Net Sales</th>
-                                    <th class="num-cell">Margin</th>
-                                    <th class="num-cell">Profit</th>
-                                    <th class="num-cell">$/Day</th>
-                                </tr>
-                            </thead>
-                            <tbody id="lowMarginBrandsBody"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="insights" id="marginBrandInsights"></div>
         </div>
 
         <!-- SKU Analysis -->
@@ -2418,34 +2370,72 @@
             `;
         }
 
-        // Update Brand Chart
+        // Update Brand Chart + unified ranked-by-margin table (click-to-drill).
+        // Merged 2026-04-22 — old "Highest Margin Brands" section folded in here. The
+        // horizontal bar chart still shows top-10 by NET SALES (revenue view), but the
+        // table is ranked by MARGIN desc so you can see who's most profitable at a glance.
+        // Rows click to expand the per-SKU drill (toggleBrandDrill / renderBrandDrill).
         function updateBrandChart() {
             const data = getBrandsForPeriod(currentPeriod);
             const label = PERIOD_DATA[currentPeriod].label;
+            const periodDays = PERIOD_DATA[currentPeriod].days;
             setBadge('brandBadge', label, currentPeriod);
 
-            // Update table
-            const tbody = document.getElementById('brandTableBody');
-            tbody.innerHTML = data.slice(0, 12).map(d => `
-                <tr>
-                    <td>${d.name}</td>
-                    <td class="num-cell">${formatCurrency(d.sales)}</td>
-                    <td class="num-cell">${formatCurrency(d.cost)}</td>
-                    <td class="num-cell">${d.margin}%</td>
-                </tr>
-            `).join('');
+            // Sales-threshold to strip noise brands (same tuning as the old Margin Brands section)
+            const brandThresholds = {'yesterday':25,'mtd':100,'last_month':500,'7d':100,'30d':500,'60d':800,'90d':1000,'180d':1500,'365d':3000,'lifetime':5000};
+            const brandThreshold = brandThresholds[currentPeriod] || 500;
+            const qualified = data.filter(b => b.sales >= brandThreshold);
 
-            // Update chart
+            const tbody = document.getElementById('brandTableBody');
+
+            // Empty state — no data or no qualifiers
+            if (qualified.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:20px;color:#999;font-size:11px;font-style:italic;">No ${label.toLowerCase()} brand data available. ${data.length === 0 ? 'Waiting for nightly refresh.' : 'No brands met the $' + brandThreshold.toLocaleString() + ' sales threshold.'}</td></tr>`;
+                const ctx0 = document.getElementById('brandChart').getContext('2d');
+                if (brandChart) brandChart.destroy();
+                brandChart = null;
+                document.getElementById('brandInsights').innerHTML = `<div class="insight-box"><h4>${label} Brand Performance</h4><p style="color:#999;font-style:italic;">Insufficient ${label.toLowerCase()} data to analyze brand performance.</p></div>`;
+                return;
+            }
+
+            // Ranked-by-margin view (descending). SKU count pulled from products_* for this period.
+            const products = getProductsForPeriod(currentPeriod) || [];
+            const skuByBrand = {};
+            for (const p of products) {
+                const k = (p.brand || '').trim().toLowerCase();
+                if (!k) continue;
+                skuByBrand[k] = (skuByBrand[k] || 0) + 1;
+            }
+            const sortedByMargin = [...qualified].sort((a, b) => parseFloat(b.margin) - parseFloat(a.margin));
+            const colorFor = (m) => m >= 55 ? '#4CAF50' : m >= 50 ? '#8BC34A' : m >= 45 ? '#D4A843' : m >= 40 ? '#E0E0E0' : m >= 35 ? '#D4A843' : '#E57373';
+
+            tbody.innerHTML = sortedByMargin.map(b => {
+                const m = parseFloat(b.margin);
+                const dailyProfit = Math.round(b.profit / periodDays);
+                const skuCount = skuByBrand[b.name.trim().toLowerCase()] || 0;
+                const cleanName = b.name.replace(/, (LLC|Inc\.|Inc)/, '');
+                return `<tr class="margin-brand-row" data-brand="${encodeURIComponent(b.name)}" onclick="toggleBrandDrill(this)" style="cursor:pointer;">
+                    <td style="font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;" title="${b.name}"><span class="brand-caret" style="display:inline-block;width:10px;color:#999;">▸</span> ${cleanName}</td>
+                    <td class="num-cell">${formatCurrency(b.sales)}</td>
+                    <td class="num-cell" style="color:${colorFor(m)};font-weight:600;">${b.margin}%</td>
+                    <td class="num-cell">${formatCurrency(b.profit)}</td>
+                    <td class="num-cell" style="color:#D4A843;">${formatCurrency(dailyProfit)}</td>
+                    <td class="num-cell" style="color:#999;">${skuCount || '—'}</td>
+                </tr>`;
+            }).join('');
+
+            // Chart — top 10 by NET SALES (revenue ranking stays the bar-chart story)
+            const topBySales = [...qualified].sort((a, b) => b.sales - a.sales).slice(0, 10);
             const ctx = document.getElementById('brandChart').getContext('2d');
             if (brandChart) brandChart.destroy();
 
             brandChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.slice(0, 10).map(d => d.name.split(',')[0]),
+                    labels: topBySales.map(d => d.name.split(',')[0]),
                     datasets: [{
                         label: 'Net Sales',
-                        data: data.slice(0, 10).map(d => d.sales),
+                        data: topBySales.map(d => d.sales),
                         backgroundColor: '#C87DAB',
                         borderRadius: 4
                     }]
@@ -2454,44 +2444,39 @@
                     indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
-                        x: {
-                            ticks: { color: '#666' },
-                            grid: { color: '#2A2A4E' }
-                        },
-                        y: {
-                            ticks: { color: '#999', font: { size: 10 } },
-                            grid: { display: false }
-                        }
+                        x: { ticks: { color: '#666' }, grid: { color: '#2A2A4E' } },
+                        y: { ticks: { color: '#999', font: { size: 10 } }, grid: { display: false } }
                     }
                 }
             });
 
-            // Insights — fully period-specific
-            const top = data[0];
-            const second = data[1];
-            const third = data[2];
-            const totalBrandSales = data.reduce((a, d) => a + d.sales, 0);
-            const topPct = totalBrandSales > 0 ? ((top.sales / totalBrandSales) * 100).toFixed(1) : '0';
-            const highMarginBrands = data.slice(0, 10).filter(d => parseFloat(d.margin) > 55);
-            const lowMarginBrands = data.slice(0, 10).filter(d => parseFloat(d.margin) < 40);
-            const periodDays = PERIOD_DATA[currentPeriod].days;
-            const topDaily = Math.round(top.sales / periodDays);
+            // Insights — draw from BOTH rankings (top-seller + margin leader + margin tail)
+            const topSeller = topBySales[0];
+            const secondSeller = topBySales[1] || topBySales[0];
+            const totalBrandSales = qualified.reduce((a, d) => a + d.sales, 0);
+            const topSellerPct = totalBrandSales > 0 ? ((topSeller.sales / totalBrandSales) * 100).toFixed(1) : '0';
+            const topSellerDaily = Math.round(topSeller.sales / periodDays);
+            const marginLeader = sortedByMargin[0];
+            const marginTail = sortedByMargin[sortedByMargin.length - 1];
+            const avgMargin = (qualified.reduce((a, d) => a + parseFloat(d.margin), 0) / qualified.length).toFixed(1);
+            const spreadPts = marginLeader && marginTail ? (parseFloat(marginLeader.margin) - parseFloat(marginTail.margin)).toFixed(1) : '0';
+            const cleanLeader = marginLeader ? marginLeader.name.replace(/, (LLC|Inc\.|Inc)/, '') : '';
+            const cleanTail = marginTail ? marginTail.name.replace(/, (LLC|Inc\.|Inc)/, '') : '';
+            const cleanTopSeller = topSeller.name.replace(/, (LLC|Inc\.|Inc)/, '');
 
             document.getElementById('brandInsights').innerHTML = `
                 <div class="insight-box">
-                    <h4>${label} Brand Analysis</h4>
-                    <p><strong>${top.name}</strong> leads with ${formatCurrency(top.sales)} (${topPct}% of brand revenue) at ${top.margin}% margin — generating ${formatCurrency(top.profit)} profit over ${periodDays} days (~${formatCurrency(topDaily)}/day). <strong>${second.name}</strong> follows at ${formatCurrency(second.sales)} (${second.margin}% margin) and <strong>${third.name}</strong> at ${formatCurrency(third.sales)}.</p>
-                    <p style="margin-top:8px;">Top 3 brands account for ${((data.slice(0,3).reduce((a,d) => a + d.sales, 0) / totalBrandSales) * 100).toFixed(0)}% of total sales.${highMarginBrands.length > 0 ? ' <strong style="color:#4CAF50;">High-margin performers (55%+):</strong> ' + highMarginBrands.map(b => b.name + ' (' + b.margin + '%)').join(', ') + '.' : ''}${lowMarginBrands.length > 0 ? ' <span style="color:#E57373;"><strong>Low-margin concern (under 40%):</strong> ' + lowMarginBrands.map(b => b.name + ' (' + b.margin + '%)').join(', ') + '.</span>' : ''}</p>
+                    <h4>${label} Brand Performance</h4>
+                    <p><strong>Top seller:</strong> ${cleanTopSeller} at ${formatCurrency(topSeller.sales)} (${topSellerPct}% of brand revenue, ${topSeller.margin}% margin) — ~${formatCurrency(topSellerDaily)}/day. <strong>Margin leader:</strong> ${cleanLeader} at <span style="color:#4CAF50;">${marginLeader.margin}%</span> on ${formatCurrency(marginLeader.sales)} in sales (${formatCurrency(Math.round(marginLeader.profit / periodDays))}/day profit).</p>
+                    <p style="margin-top:8px;">Portfolio spans <strong>${qualified.length} qualified brands</strong> (≥ ${formatCurrency(brandThreshold)} in ${label.toLowerCase()}). Average blended margin: <strong>${avgMargin}%</strong>. Margin spread top-to-tail: <strong>${spreadPts}%</strong>${marginTail ? ` — ${cleanTail} anchors the bottom at <span style="color:#E57373;">${marginTail.margin}%</span>.` : '.'}</p>
                 </div>
                 <div class="insight-box opportunities">
                     <h4>Actions This ${periodDays <= 30 ? 'Week' : 'Period'}</h4>
-                    <p><strong>Shelf priority:</strong> ${top.name} generates ${formatCurrency(topDaily)}/day — ensure eye-level placement and full stock. ${second.name} at ${formatCurrency(second.sales)} deserves secondary prominence.</p>
-                    <p style="margin-top:6px;"><strong>Margin play:</strong>${highMarginBrands.length > 0 ? ' Push ' + highMarginBrands[0].name + ' harder — at ' + highMarginBrands[0].margin + '% margin, every $1K in extra sales adds $' + Math.round(parseFloat(highMarginBrands[0].margin) * 10) + ' to profit.' : ''} ${lowMarginBrands.length > 0 ? 'Consider reducing ' + lowMarginBrands[0].name + ' facings (' + lowMarginBrands[0].margin + '% margin) unless it drives foot traffic.' : 'All top brands above 40% margin — healthy mix.'}</p>
-                    <p style="margin-top:6px;"><strong>Vendor strategy:</strong> Your top 5 brands control ${((data.slice(0,5).reduce((a,d) => a + d.sales, 0) / totalBrandSales) * 100).toFixed(0)}% of revenue. Use this leverage for better wholesale terms — even 1-2% improvement on ${top.name} costs adds ${formatCurrency(Math.round(top.cost * 0.015))} to your bottom line.</p>
+                    <p><strong>Shelf priority:</strong> ${cleanTopSeller} drives ${formatCurrency(topSellerDaily)}/day — full stock + eye-level placement. ${secondSeller !== topSeller ? `${secondSeller.name.replace(/, (LLC|Inc\.|Inc)/, '')} earns secondary prominence at ${formatCurrency(secondSeller.sales)}.` : ''}</p>
+                    <p style="margin-top:6px;"><strong>Margin play:</strong> Lean on ${cleanLeader} — at ${marginLeader.margin}% margin, every extra $1K in sales drops ${formatCurrency(Math.round(parseFloat(marginLeader.margin) * 10))} to profit. ${marginTail && parseFloat(marginTail.margin) < 40 ? `Renegotiate cost on ${cleanTail} (${marginTail.margin}%) or cut facings unless it's a traffic driver.` : 'Tail margins are healthy (40%+) — hold the line.'}</p>
+                    <p style="margin-top:6px;"><strong>Vendor leverage:</strong> Top 5 brands by revenue control ${((topBySales.slice(0,5).reduce((a,d) => a + d.sales, 0) / totalBrandSales) * 100).toFixed(0)}% of brand sales. A 1–2% cost improvement on ${cleanTopSeller} alone adds ${formatCurrency(Math.round(topSeller.cost * 0.015))} to the bottom line over this period.</p>
                 </div>
             `;
         }
@@ -2754,7 +2739,7 @@
             const NON_CANNABIS = ['Accessories', 'Snacks', 'Apparel', 'Gift Card'];
             const totalSKUs = INVENTORY_DATA.reduce((s, d) => s + d.activeSKUs, 0);
             const inactiveSKUs = INVENTORY_DATA.reduce((s, d) => s + (d.skus - d.activeSKUs), 0);
-            const cannabisSKUs = INVENTORY_DATA.filter(d => !NON_CANNABIS.includes(d.name)).reduce((s, d) => s + d.activeSKUs, 0);
+            const cannabisSKUs = INVENTORY_DATA.filter(d => !NON_CANNABIS.some(nc => d.name.startsWith(nc))).reduce((s, d) => s + d.activeSKUs, 0);
             const totalRetail = INVENTORY_DATA.reduce((s, d) => s + d.retailValue, 0);
             const totalUnits = INVENTORY_DATA.reduce((s, d) => s + d.qty, 0);
 
@@ -2781,18 +2766,93 @@
                 </div>
             `;
 
+            // Group INVENTORY_DATA by parent category for click-to-drill view.
+            // INVENTORY_DATA rows are already named "Parent - Subcategory" (e.g. "Pre-Rolls - Infused",
+            // "Edibles - Gummies") — split on " - " to get the parent. Rows with no dash ("Tinctures",
+            // "Topicals", "Accessories", "Snacks") are single-bucket categories with no children.
+            const byParent = {};
+            INVENTORY_DATA.forEach(d => {
+                const idx = d.name.indexOf(' - ');
+                const parent = idx === -1 ? d.name : d.name.slice(0, idx);
+                const subName = idx === -1 ? null : d.name.slice(idx + 3);
+                if (!byParent[parent]) byParent[parent] = { name: parent, skus:0, activeSKUs:0, qty:0, retailValue:0, potentialProfit:0, children: [] };
+                byParent[parent].skus += d.skus;
+                byParent[parent].activeSKUs += d.activeSKUs;
+                byParent[parent].qty += d.qty;
+                byParent[parent].retailValue += d.retailValue;
+                byParent[parent].potentialProfit += d.potentialProfit;
+                if (subName) byParent[parent].children.push({ ...d, subName });
+            });
+
+            // Order parents by retail value desc so biggest categories lead
+            const parents = Object.values(byParent).sort((a, b) => b.retailValue - a.retailValue);
+
             const tbody = document.getElementById('inventoryTableBody');
-            tbody.innerHTML = INVENTORY_DATA.map(d => {
-                const isCannabis = !NON_CANNABIS.includes(d.name);
-                const inactive = d.skus - d.activeSKUs;
-                return `<tr>
-                    <td>${d.name}${!isCannabis ? ' <span style="color:#666;font-size:10px;">non-cannabis</span>' : ''}</td>
-                    <td class="num-cell">${d.activeSKUs}${inactive > 0 ? ' <span style="color:#666;font-size:10px;">(+' + inactive + ' inactive)</span>' : ''}</td>
-                    <td class="num-cell">${formatNum(d.qty)}</td>
-                    <td class="num-cell">${formatCurrency(d.retailValue)}</td>
-                    <td class="num-cell">${formatCurrency(d.potentialProfit)}</td>
+            tbody.innerHTML = parents.map(p => {
+                const isCannabis = !NON_CANNABIS.includes(p.name);
+                const inactive = p.skus - p.activeSKUs;
+                const hasChildren = p.children.length > 0;
+                const parentKey = encodeURIComponent(p.name);
+                const caret = hasChildren ? `<span class="cat-caret" style="display:inline-block;width:10px;color:#999;">▸</span>` : `<span style="display:inline-block;width:10px;"></span>`;
+                const clickAttr = hasChildren ? `onclick="toggleCategoryDrill(this)" style="cursor:pointer;"` : '';
+                return `<tr class="category-parent-row" data-parent="${parentKey}" ${clickAttr}>
+                    <td>${caret} ${p.name}${!isCannabis ? ' <span style="color:#666;font-size:10px;">non-cannabis</span>' : ''}${hasChildren ? ' <span style="color:#666;font-size:10px;">(' + p.children.length + ' subs)</span>' : ''}</td>
+                    <td class="num-cell">${p.activeSKUs}${inactive > 0 ? ' <span style="color:#666;font-size:10px;">(+' + inactive + ' inactive)</span>' : ''}</td>
+                    <td class="num-cell">${formatNum(p.qty)}</td>
+                    <td class="num-cell">${formatCurrency(p.retailValue)}</td>
+                    <td class="num-cell">${formatCurrency(p.potentialProfit)}</td>
                 </tr>`;
             }).join('');
+        }
+
+        // Category → Subcategory drill. Expands a parent row (Pre-Rolls, Edibles, Vapes, etc.)
+        // to reveal its subcategory breakdown. Only one parent expanded at a time within the
+        // SKU Analysis card. Same interaction pattern as toggleBrandDrill.
+        function toggleCategoryDrill(tr) {
+            const card = tr.closest('.card');
+            const currentDrill = card ? card.querySelector('tr.category-drill-row') : null;
+            const wasOpenForThis = currentDrill && currentDrill.previousElementSibling === tr;
+            if (currentDrill) {
+                currentDrill.remove();
+                if (card) card.querySelectorAll('.cat-caret').forEach(c => { c.textContent = '▸'; c.style.color = '#999'; });
+            }
+            if (wasOpenForThis) return;
+
+            const parentName = decodeURIComponent(tr.dataset.parent || '');
+            const caret = tr.querySelector('.cat-caret');
+            if (caret) { caret.textContent = '▾'; caret.style.color = '#D4A843'; }
+
+            // Rebuild children list from INVENTORY_DATA (small array; no perf concern)
+            const children = INVENTORY_DATA.filter(d => {
+                const idx = d.name.indexOf(' - ');
+                return idx !== -1 && d.name.slice(0, idx) === parentName;
+            }).map(d => ({ ...d, subName: d.name.slice(d.name.indexOf(' - ') + 3) }))
+              .sort((a, b) => b.retailValue - a.retailValue);
+
+            const row = (c) => {
+                const inactive = c.skus - c.activeSKUs;
+                return `<tr>
+                    <td style="font-size:11px;color:#DDD;padding-left:28px;">${c.subName}</td>
+                    <td class="num-cell" style="font-size:11px;">${c.activeSKUs}${inactive > 0 ? ' <span style="color:#666;font-size:10px;">(+' + inactive + ')</span>' : ''}</td>
+                    <td class="num-cell" style="font-size:11px;color:#BBB;">${formatNum(c.qty)}</td>
+                    <td class="num-cell" style="font-size:11px;">${formatCurrency(c.retailValue)}</td>
+                    <td class="num-cell" style="font-size:11px;color:#999;">${formatCurrency(c.potentialProfit)}</td>
+                </tr>`;
+            };
+
+            const cols = tr.children.length || 5;
+            const drillRow = document.createElement('tr');
+            drillRow.className = 'category-drill-row';
+            drillRow.innerHTML = `<td colspan="${cols}" style="padding:0;background:#161229;">
+                <div style="padding:14px;">
+                    <div style="font-size:11px;color:#999;margin-bottom:8px;"><strong style="color:#E0E0E0;">${parentName}</strong> breakdown — ${children.length} subcategories</div>
+                    <table class="data-table" style="margin:0;">
+                        <thead><tr><th style="font-size:10px;">Subcategory</th><th class="num-cell" style="font-size:10px;">SKUs</th><th class="num-cell" style="font-size:10px;">Quantity</th><th class="num-cell" style="font-size:10px;">Retail Value</th><th class="num-cell" style="font-size:10px;">Potential Profit</th></tr></thead>
+                        <tbody>${children.map(row).join('')}</tbody>
+                    </table>
+                </div>
+            </td>`;
+            tr.after(drillRow);
         }
 
         function renderSkuTrendChart() {
@@ -2896,95 +2956,9 @@
             `;
         }
 
-        // Update Margin Brands
-        // Aggregates directly from products_* so brand names match the SKU drill source.
-        // The Dutchie "brands" endpoint returns parent-company names (Cresco Labs, GTI) which
-        // don't match the retail brand names on products (Good News, Dogwalkers) — causing
-        // drill-downs to show "no SKU data". Building brand aggregates from products_* fixes that.
-        function updateMarginBrands() {
-            const label = PERIOD_DATA[currentPeriod].label;
-            const periodDays = PERIOD_DATA[currentPeriod].days;
-            setBadge('marginBrandBadge', label, currentPeriod);
-
-            const products = getProductsForPeriod(currentPeriod) || [];
-
-            // Aggregate SKU-level data into brand totals.
-            // Key on LOWERCASE brand so "Dogwalkers" and "dogwalkers" roll up together;
-            // preserve the first-seen casing as the display name.
-            const byBrand = {};
-            for (const p of products) {
-                const raw = (p.brand || '').trim();
-                if (!raw) continue;
-                const key = raw.toLowerCase();
-                if (!byBrand[key]) byBrand[key] = {name: raw, sales: 0, cost: 0, profit: 0, qty: 0, skuCount: 0};
-                byBrand[key].sales  += (p.net    || 0);
-                byBrand[key].cost   += (p.cogs   || 0);
-                byBrand[key].profit += (p.profit || 0);
-                byBrand[key].qty    += (p.qty    || 0);
-                byBrand[key].skuCount += 1;
-            }
-            const brands = Object.values(byBrand).map(b => {
-                const margin = b.sales > 0 ? ((b.profit / b.sales) * 100) : 0;
-                return {...b, margin: margin.toFixed(1)};
-            });
-
-            // Minimum sales threshold to filter out noise — brands below this threshold aren't ranked
-            const brandThresholds = {'yesterday':25,'mtd':100,'last_month':500,'7d':100,'30d':500,'60d':800,'90d':1000,'180d':1500,'365d':3000,'lifetime':5000};
-            const brandThreshold = brandThresholds[currentPeriod] || 500;
-
-            const qualified = brands.filter(b => b.sales >= brandThreshold);
-
-            // Empty state if the real pool is empty or too thin
-            if (qualified.length === 0) {
-                const emptyMsg = `<tr><td colspan="5" style="text-align:center;padding:20px;color:#999;font-size:11px;font-style:italic;">No ${label.toLowerCase()} brand data available. ${brands.length === 0 ? 'Waiting for nightly refresh to populate this period.' : 'No brands met the $' + brandThreshold + ' sales threshold.'}</td></tr>`;
-                document.getElementById('topMarginBrandsBody').innerHTML = emptyMsg;
-                document.getElementById('lowMarginBrandsBody').innerHTML = emptyMsg;
-                document.getElementById('marginBrandInsights').innerHTML = `<div class="insight-box"><h4>${label} Brand Margin Analysis</h4><p style="color:#999;font-style:italic;">Insufficient ${label.toLowerCase()} data to analyze brand margins.</p></div>`;
-                return;
-            }
-
-            // Show up to 15 brands on each side (was 8 — Dan wants more coverage since brand count
-            // scales with period length). Still guarded by brandThreshold so tiny noise brands are cut.
-            const BRAND_ROWS = 15;
-            const sortedByMargin = [...qualified].sort((a, b) => parseFloat(b.margin) - parseFloat(a.margin));
-            const topBrands = sortedByMargin.slice(0, BRAND_ROWS);
-            const bottomBrands = [...qualified].sort((a, b) => parseFloat(a.margin) - parseFloat(b.margin)).slice(0, BRAND_ROWS);
-
-            const renderRow = (b, colorFn) => {
-                const dailyProfit = (b.profit / periodDays).toFixed(0);
-                const m = parseFloat(b.margin);
-                return `<tr class="margin-brand-row" data-brand="${encodeURIComponent(b.name)}" onclick="toggleBrandDrill(this)" style="cursor:pointer;">
-                    <td style="font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px;" title="${b.name}"><span class="brand-caret" style="display:inline-block;width:10px;color:#999;">▸</span> ${b.name.replace(/, (LLC|Inc\.|Inc)/, '').substring(0, 28)}</td>
-                    <td class="num-cell">${formatCurrency(b.sales)}</td>
-                    <td class="num-cell" style="color:${colorFn(m)};">${b.margin}%</td>
-                    <td class="num-cell">${formatCurrency(b.profit)}</td>
-                    <td class="num-cell" style="color:#D4A843;">${formatCurrency(parseInt(dailyProfit))}</td>
-                </tr>`;
-            };
-
-            document.getElementById('topMarginBrandsBody').innerHTML = topBrands.map(b =>
-                renderRow(b, m => m >= 55 ? '#4CAF50' : m >= 50 ? '#8BC34A' : '#D4A843')
-            ).join('');
-
-            document.getElementById('lowMarginBrandsBody').innerHTML = bottomBrands.map(b =>
-                renderRow(b, m => m < 35 ? '#E57373' : m < 45 ? '#D4A843' : '#E0E0E0')
-            ).join('');
-
-            // Insights
-            const top1 = topBrands[0];
-            const bot1 = bottomBrands[0];
-            const avgMargin = qualified.length > 0 ? (qualified.reduce((a,b) => a + parseFloat(b.margin), 0) / qualified.length).toFixed(1) : '0';
-            const spreadPct = top1 && bot1 ? (parseFloat(top1.margin) - parseFloat(bot1.margin)).toFixed(1) : '0';
-
-            document.getElementById('marginBrandInsights').innerHTML = `
-                <div class="insight-box">
-                    <h4>${label} Brand Margin Analysis</h4>
-                    <p>${top1 ? `<strong>Highest margin brand:</strong> ${top1.name.replace(/, (LLC|Inc\.)/, '')} at <span style="color:#4CAF50;">${top1.margin}%</span> generating $${(top1.profit / periodDays).toFixed(0)}/day in profit from ${formatCurrency(top1.sales)} sales.` : ''} ${bot1 ? `<strong>Lowest:</strong> ${bot1.name.replace(/, (LLC|Inc\.)/, '')} at <span style="color:#E57373;">${bot1.margin}%</span>.` : ''} The margin spread across your vendor portfolio is <strong>${spreadPct} percentage points</strong>, with an average of ${avgMargin}%.</p>
-                    <p style="margin-top:8px;"><strong>Action:</strong> ${bot1 && parseFloat(bot1.margin) < 40 ? `Renegotiate cost on ${bot1.name.replace(/, (LLC|Inc\.)/, '')} — at ${bot1.margin}% they\'re dragging your blended margin down. Target 45%+ or consider replacing with higher-margin alternatives.` : 'All brands are performing at acceptable margins.'} ${top1 ? `Double down on ${top1.name.replace(/, (LLC|Inc\.)/, '')} — their ${top1.margin}% margin and ${formatCurrency(top1.sales)} volume make them your most profitable vendor relationship.` : ''}</p>
-                </div>
-            `;
-        }
-
+        // NOTE: updateMarginBrands() was removed 2026-04-22. Its functionality — ranking
+        // brands by margin with click-to-drill — is now part of updateBrandChart() above.
+        // The Highest Margin Brands section was folded into Brand Performance.
 
         function updatePurchasingPlan() {
             document.getElementById('purchaseBadge').textContent = currentCoverage + '-Day Coverage';
@@ -3893,19 +3867,47 @@
             });
             tilesEl.innerHTML = tilesHtml;
 
-            const topRows = rows.slice(0, 25);
+            // Group-by-source table: each row is a source (Loyalty, Bundle, Promo, ...) with
+            // aggregate totals; click to expand the individual discounts inside. Sources are
+            // sorted by $ desc so the biggest driver leads. 2026-04-22 refactor — was previously
+            // a flat top-25 list which made it hard to see source-level patterns.
+            // Build per-source discount buckets sorted by $ desc
+            const bySrcDiscounts = {};
+            rows.forEach(r => {
+                const s = r.source || "Other";
+                if (!bySrcDiscounts[s]) bySrcDiscounts[s] = [];
+                bySrcDiscounts[s].push(r);
+            });
+            Object.keys(bySrcDiscounts).forEach(s => bySrcDiscounts[s].sort((a, b) => (b.total || 0) - (a.total || 0)));
+
+            // Stash buckets on the tbody element so the drill-down lookup doesn't need a global
+            bodyEl._discountBuckets = bySrcDiscounts;
+            bodyEl._discountTotal = total;
+
+            // Render source rows in $ desc order — not a fixed source order; the source with
+            // the most markdown $ leads regardless of category.
+            const sourceRows = Object.entries(bySrcDiscounts)
+                .map(([src, list]) => ({
+                    src,
+                    total: list.reduce((s, r) => s + (r.total || 0), 0),
+                    uses:  list.reduce((s, r) => s + (r.uses  || 0), 0),
+                    count: list.length
+                }))
+                .sort((a, b) => b.total - a.total);
+
             let html = '';
-            topRows.forEach(r => {
-                const pct = total > 0 ? (r.total / total * 100).toFixed(1) : "0.0";
-                const color = srcColors[r.source] || "#999";
-                const shortName = (r.name || "").length > 50 ? r.name.slice(0, 47) + "..." : (r.name || "");
+            sourceRows.forEach(sr => {
+                const pct = total > 0 ? (sr.total / total * 100).toFixed(1) : "0.0";
+                const avg = sr.uses > 0 ? sr.total / sr.uses : 0;
+                const color = srcColors[sr.src] || "#999";
+                const srcKey = encodeURIComponent(sr.src);
                 html += `
-                    <tr>
-                        <td style="font-size:12px;">${shortName}</td>
-                        <td><span style="display:inline-block;padding:2px 8px;border-radius:10px;background:${color}22;color:${color};font-size:10px;font-weight:600;">${r.source}</span></td>
-                        <td style="text-align:right;font-weight:600;">${formatCurrency(r.total)}</td>
-                        <td style="text-align:right;">${r.uses.toLocaleString()}</td>
-                        <td style="text-align:right;">${formatCurrency(r.avg)}</td>
+                    <tr class="discount-source-row" data-source="${srcKey}" onclick="toggleDiscountSourceDrill(this)" style="cursor:pointer;">
+                        <td style="font-size:12px;"><span class="disc-caret" style="display:inline-block;width:10px;color:#999;">▸</span> <strong>${sr.src}</strong> <span style="color:#666;font-size:10px;">(${sr.count} discount${sr.count === 1 ? '' : 's'})</span></td>
+                        <td><span style="display:inline-block;padding:2px 8px;border-radius:10px;background:${color}22;color:${color};font-size:10px;font-weight:600;">${sr.src}</span></td>
+                        <td style="text-align:right;font-weight:600;">${formatCurrency(sr.total)}</td>
+                        <td style="text-align:right;">${sr.uses.toLocaleString()}</td>
+                        <td style="text-align:right;">${formatCurrency(avg)}</td>
                         <td style="text-align:right;color:#999;">${pct}%</td>
                     </tr>`;
             });
@@ -3925,6 +3927,62 @@
                 </div>`;
         }
 
+        // Discount source → individual-discount drill. Expands a source row (Loyalty, Bundle,
+        // Promo, ...) to reveal the discrete discounts inside. Only one source expanded at a
+        // time within the Discount Attribution card. Same interaction pattern as the brand and
+        // category drills. Pulls bucket data from tbody._discountBuckets staged in updateDiscounts.
+        function toggleDiscountSourceDrill(tr) {
+            const card = tr.closest('.card');
+            const tbody = tr.closest('tbody');
+            const currentDrill = card ? card.querySelector('tr.discount-source-drill-row') : null;
+            const wasOpenForThis = currentDrill && currentDrill.previousElementSibling === tr;
+            if (currentDrill) {
+                currentDrill.remove();
+                if (card) card.querySelectorAll('.disc-caret').forEach(c => { c.textContent = '▸'; c.style.color = '#999'; });
+            }
+            if (wasOpenForThis) return;
+
+            const source = decodeURIComponent(tr.dataset.source || '');
+            const caret = tr.querySelector('.disc-caret');
+            if (caret) { caret.textContent = '▾'; caret.style.color = '#D4A843'; }
+
+            const buckets = tbody && tbody._discountBuckets ? tbody._discountBuckets : {};
+            const total = tbody && tbody._discountTotal ? tbody._discountTotal : 0;
+            const discounts = buckets[source] || [];
+
+            const srcColors = {"Promo": "#E57373", "Loyalty": "#D4A843", "Manager": "#A881AF", "Medical": "#81C784", "Employee": "#64B5F6", "Bundle": "#FF9E6B", "Other": "#999999"};
+            const color = srcColors[source] || '#999';
+
+            const row = (r) => {
+                const pct = total > 0 ? (r.total / total * 100).toFixed(1) : '0.0';
+                const shortName = (r.name || '').length > 60 ? r.name.slice(0, 57) + '...' : (r.name || '');
+                return `<tr>
+                    <td style="font-size:11px;color:#DDD;padding-left:28px;">${shortName}</td>
+                    <td></td>
+                    <td class="num-cell" style="font-size:11px;">${formatCurrency(r.total)}</td>
+                    <td class="num-cell" style="font-size:11px;color:#BBB;">${(r.uses || 0).toLocaleString()}</td>
+                    <td class="num-cell" style="font-size:11px;">${formatCurrency(r.avg || 0)}</td>
+                    <td class="num-cell" style="font-size:11px;color:#999;">${pct}%</td>
+                </tr>`;
+            };
+
+            const cols = tr.children.length || 6;
+            const drillRow = document.createElement('tr');
+            drillRow.className = 'discount-source-drill-row';
+            drillRow.innerHTML = `<td colspan="${cols}" style="padding:0;background:#161229;">
+                <div style="padding:12px 14px 6px 14px;border-bottom:1px solid #2A2A4E;font-size:11px;color:#999;">
+                    <strong style="color:${color};font-size:13px;">${source}</strong>
+                    &nbsp;·&nbsp;${discounts.length} discount${discounts.length === 1 ? '' : 's'}
+                </div>
+                <div style="padding:4px 14px 14px 14px;">
+                    <table class="data-table" style="margin:0;">
+                        <tbody>${discounts.map(row).join('')}</tbody>
+                    </table>
+                </div>
+            </td>`;
+            tr.after(drillRow);
+        }
+
         function updateAllCharts() {
             try { updateKPIs(); } catch(e) { console.error('KPI error:', e); }
             try { updateRevenueChart(); } catch(e) { console.error('Revenue chart error:', e); }
@@ -3932,7 +3990,6 @@
             try { updateBrandChart(); } catch(e) { console.error('Brand chart error:', e); }
             try { updateHeatmap(); } catch(e) { console.error('Heatmap error:', e); }
             try { updateDiscounts(); } catch(e) { console.error('Discount error:', e); }
-            try { updateMarginBrands(); } catch(e) { console.error('Margin brands error:', e); }
             try { updatePurchasingPlan(); } catch(e) { console.error('Purchasing error:', e); }
         }
 
